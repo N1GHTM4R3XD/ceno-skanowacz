@@ -27,7 +27,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    fetch("/data/tracker-data.json")
+    fetch(`${import.meta.env.BASE_URL}data/tracker-data.json`)
       .then((res) => res.json())
       .then((data) => {
         setProfiles(data || {});
