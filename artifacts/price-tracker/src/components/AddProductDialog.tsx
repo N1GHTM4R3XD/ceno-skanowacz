@@ -42,17 +42,28 @@ interface FormState {
 const EMPTY: FormState = {
   nazwa: "",
   zdjecie_url: "",
-  kategoria: "",
+  kategoria: "Inne",
   alert_wlaczony: true,
   oferty: [
     { sklep: "", url: "", cena: "", koszt_dostawy: "0" }
   ],
 };
 
+function getShopNameFromUrl(url: string) {
+  try {
+    const u = new URL(url);
+    let hostname = u.hostname.replace('www.', '');
+    return hostname.charAt(0).toUpperCase() + hostname.slice(1);
+  } catch {
+    return "Sklep internetowy";
+  }
+}
+
 export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) {
   const { addProduct } = useAppContext();
   const [form, setForm] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<Partial<FormState>>({});
+  const [isAdvancedMode, setIsAdvancedMode] = useState(false);
 
   const set = (field: keyof FormState, value: string | boolean) =>
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -63,10 +74,13 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
     
     const ofertyErrs = form.oferty.map(o => {
       const err: any = {};
-      if (!o.sklep.trim()) err.sklep = "Podaj sklep";
       if (!o.url.trim()) err.url = "Podaj URL";
-      const cenaNum = parseFloat(o.cena.replace(",", "."));
-      if (!o.cena.trim() || isNaN(cenaNum) || cenaNum <= 0) err.cena = "Błędna cena";
+      
+      if (isAdvancedMode) {
+        if (!o.sklep.trim()) err.sklep = "Podaj sklep";
+        const cenaNum = parseFloat(o.cena.replace(",", "."));
+        if (!o.cena.trim() || isNaN(cenaNum) || cenaNum < 0) err.cena = "Błędna cena";
+      }
       return err;
     });
 
@@ -74,7 +88,7 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
       errs.oferty = ofertyErrs;
     }
 
-    if (!form.kategoria) errs.kategoria = "Wybierz kategorię";
+    if (isAdvancedMode && !form.kategoria) errs.kategoria = "Wybierz kategorię";
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -83,15 +97,22 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
   const handleSubmit = () => {
     if (!validate()) return;
     
-    const dzisiaj = new Date().toISOString().split("T")[0];
     const oferty: Oferta[] = form.oferty.map((o, index) => {
-      const cena = parseFloat(o.cena.replace(",", "."));
-      const dostawa = parseFloat(o.koszt_dostawy.replace(",", ".")) || 0;
+      let cena = parseFloat(o.cena.replace(",", "."));
+      let dostawa = parseFloat(o.koszt_dostawy.replace(",", ".")) || 0;
+      let sklep = o.sklep.trim();
+
+      if (!isAdvancedMode) {
+        cena = 0;
+        dostawa = 0;
+        sklep = getShopNameFromUrl(o.url);
+      }
+
       return {
         id: `off${Date.now()}${index}`,
-        sklep: o.sklep.trim(),
+        sklep,
         url: o.url.trim(),
-        cena,
+        cena: isNaN(cena) ? 0 : cena,
         koszt_dostawy: dostawa,
         darmowa_dostawa_z: dostawa === 0 ? "" : null,
       };
@@ -99,8 +120,8 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
 
     addProduct({
       nazwa: form.nazwa.trim(),
-      zdjecie_url: form.zdjecie_url.trim(),
-      kategoria: (form.kategoria as Kategoria) || undefined,
+      zdjecie_url: isAdvancedMode ? form.zdjecie_url.trim() : "",
+      kategoria: (isAdvancedMode ? form.kategoria : "Inne") as Kategoria,
       waluta: "PLN",
       trend: "brak_zmian",
       alert_wlaczony: form.alert_wlaczony,
@@ -108,12 +129,14 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
     });
     setForm(EMPTY);
     setErrors({});
+    setIsAdvancedMode(false);
     onOpenChange(false);
   };
 
   const handleClose = () => {
     setForm(EMPTY);
     setErrors({});
+    setIsAdvancedMode(false);
     onOpenChange(false);
   };
 
@@ -121,9 +144,22 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-md mx-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <PackagePlus className="w-5 h-5 text-primary" />
-            Dodaj produkt
+          <DialogTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <PackagePlus className="w-5 h-5 text-primary" />
+              Dodaj produkt
+            </div>
+            <div className="flex items-center gap-2 mt-1 mr-4">
+              <Label htmlFor="advanced-mode" className="text-xs text-muted-foreground cursor-pointer">
+                Zaawansowane
+              </Label>
+              <Switch
+                id="advanced-mode"
+                checked={isAdvancedMode}
+                onCheckedChange={setIsAdvancedMode}
+                className="scale-75 data-[state=checked]:bg-primary"
+              />
+            </div>
           </DialogTitle>
         </DialogHeader>
 
@@ -140,48 +176,52 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
             {errors.nazwa && <p className="text-xs text-destructive">{errors.nazwa}</p>}
           </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="prod-kategoria">Kategoria *</Label>
-            <Select 
-              value={form.kategoria} 
-              onValueChange={(val) => { set("kategoria", val); setErrors((p: any) => ({ ...p, kategoria: "" })); }}
-            >
-              <SelectTrigger id="prod-kategoria" className={(errors as any).kategoria ? "border-destructive" : ""}>
-                <SelectValue placeholder="Wybierz kategorię..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Elektronika">Elektronika</SelectItem>
-                <SelectItem value="Dom i AGD">Dom i AGD</SelectItem>
-                <SelectItem value="Odzież">Odzież</SelectItem>
-                <SelectItem value="Sport">Sport</SelectItem>
-                <SelectItem value="Zabawki/Dzieci">Zabawki/Dzieci</SelectItem>
-                <SelectItem value="Inne">Inne</SelectItem>
-              </SelectContent>
-            </Select>
-            {(errors as any).kategoria && <p className="text-xs text-destructive">{(errors as any).kategoria}</p>}
-          </div>
+          {isAdvancedMode && (
+            <>
+              <div className="space-y-1.5">
+                <Label htmlFor="prod-kategoria">Kategoria *</Label>
+                <Select 
+                  value={form.kategoria} 
+                  onValueChange={(val) => { set("kategoria", val); setErrors((p: any) => ({ ...p, kategoria: "" })); }}
+                >
+                  <SelectTrigger id="prod-kategoria" className={(errors as any).kategoria ? "border-destructive" : ""}>
+                    <SelectValue placeholder="Wybierz kategorię..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Elektronika">Elektronika</SelectItem>
+                    <SelectItem value="Dom i AGD">Dom i AGD</SelectItem>
+                    <SelectItem value="Odzież">Odzież</SelectItem>
+                    <SelectItem value="Sport">Sport</SelectItem>
+                    <SelectItem value="Zabawki/Dzieci">Zabawki/Dzieci</SelectItem>
+                    <SelectItem value="Inne">Inne</SelectItem>
+                  </SelectContent>
+                </Select>
+                {(errors as any).kategoria && <p className="text-xs text-destructive">{(errors as any).kategoria}</p>}
+              </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="prod-img">Link do zdjęcia (opcjonalnie)</Label>
-            <Input
-              id="prod-img"
-              type="url"
-              placeholder="https://… (jeśli puste, użyjemy ikony)"
-              value={form.zdjecie_url}
-              onChange={(e) => set("zdjecie_url", e.target.value)}
-            />
-          </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="prod-img">Link do zdjęcia (opcjonalnie)</Label>
+                <Input
+                  id="prod-img"
+                  type="url"
+                  placeholder="https://…"
+                  value={form.zdjecie_url}
+                  onChange={(e) => set("zdjecie_url", e.target.value)}
+                />
+              </div>
+            </>
+          )}
 
           <div className="pt-2">
             <div className="flex items-center justify-between mb-2">
-              <Label>Oferty ({form.oferty.length})</Label>
+              <Label>Sklepy i linki ({form.oferty.length})</Label>
               <Button 
                 variant="outline" 
                 size="sm" 
                 className="h-7 text-xs" 
                 onClick={() => set("oferty", [...form.oferty, { sklep: "", url: "", cena: "", koszt_dostawy: "0" }])}
               >
-                <Plus className="w-3 h-3 mr-1" /> Dodaj ofertę
+                <Plus className="w-3 h-3 mr-1" /> Dodaj link
               </Button>
             </div>
             
@@ -205,25 +245,73 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
                       </Button>
                     )}
                     
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="space-y-1">
-                        <Label className="text-xs">Sklep *</Label>
-                        <Input 
-                          className={`h-8 text-xs ${oErr.sklep ? 'border-destructive' : ''}`}
-                          placeholder="np. Allegro" 
-                          value={o.sklep}
-                          onChange={e => {
-                            const newOffers = [...form.oferty];
-                            newOffers[i].sklep = e.target.value;
-                            set("oferty", newOffers);
-                          }}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs">URL *</Label>
+                    {isAdvancedMode ? (
+                      <>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="space-y-1">
+                            <Label className="text-xs">Sklep *</Label>
+                            <Input 
+                              className={`h-8 text-xs ${oErr.sklep ? 'border-destructive' : ''}`}
+                              placeholder="np. Allegro" 
+                              value={o.sklep}
+                              onChange={e => {
+                                const newOffers = [...form.oferty];
+                                newOffers[i].sklep = e.target.value;
+                                set("oferty", newOffers);
+                              }}
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">URL *</Label>
+                            <Input 
+                              className={`h-8 text-xs ${oErr.url ? 'border-destructive' : ''}`}
+                              placeholder="https://..." 
+                              value={o.url}
+                              onChange={e => {
+                                const newOffers = [...form.oferty];
+                                newOffers[i].url = e.target.value;
+                                set("oferty", newOffers);
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="space-y-1">
+                            <Label className="text-xs">Cena *</Label>
+                            <Input 
+                              type="number"
+                              className={`h-8 text-xs ${oErr.cena ? 'border-destructive' : ''}`}
+                              placeholder="0.00" 
+                              value={o.cena}
+                              onChange={e => {
+                                const newOffers = [...form.oferty];
+                                newOffers[i].cena = e.target.value;
+                                set("oferty", newOffers);
+                              }}
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Dostawa</Label>
+                            <Input 
+                              type="number"
+                              className="h-8 text-xs"
+                              placeholder="0.00" 
+                              value={o.koszt_dostawy}
+                              onChange={e => {
+                                const newOffers = [...form.oferty];
+                                newOffers[i].koszt_dostawy = e.target.value;
+                                set("oferty", newOffers);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="space-y-1 pr-6">
+                        <Label className="text-xs">Link do oferty *</Label>
                         <Input 
                           className={`h-8 text-xs ${oErr.url ? 'border-destructive' : ''}`}
-                          placeholder="https://..." 
+                          placeholder="Wklej pełny adres URL (np. https://allegro.pl/...)" 
                           value={o.url}
                           onChange={e => {
                             const newOffers = [...form.oferty];
@@ -231,54 +319,13 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
                             set("oferty", newOffers);
                           }}
                         />
+                        {oErr.url && <p className="text-[10px] text-destructive">{oErr.url}</p>}
                       </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="space-y-1">
-                        <Label className="text-xs">Cena *</Label>
-                        <Input 
-                          type="number"
-                          className={`h-8 text-xs ${oErr.cena ? 'border-destructive' : ''}`}
-                          placeholder="0.00" 
-                          value={o.cena}
-                          onChange={e => {
-                            const newOffers = [...form.oferty];
-                            newOffers[i].cena = e.target.value;
-                            set("oferty", newOffers);
-                          }}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs">Dostawa</Label>
-                        <Input 
-                          type="number"
-                          className="h-8 text-xs"
-                          placeholder="0.00" 
-                          value={o.koszt_dostawy}
-                          onChange={e => {
-                            const newOffers = [...form.oferty];
-                            newOffers[i].koszt_dostawy = e.target.value;
-                            set("oferty", newOffers);
-                          }}
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 );
               })}
             </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="prod-img">Link do zdjęcia (opcjonalnie)</Label>
-            <Input
-              id="prod-img"
-              type="url"
-              placeholder="https://…"
-              value={form.zdjecie_url}
-              onChange={(e) => set("zdjecie_url", e.target.value)}
-            />
           </div>
 
           <div className="flex items-center justify-between pt-1">
