@@ -1,38 +1,10 @@
 {
-  "joms27b3p6": {
+  "joms27cmxh": {
     "imie": "jo",
     "email": "",
     "powiadomieniaEmail": false,
     "globalneAlerty": true,
-    "avatarColor": "#0891B2",
-    "produkty": [
-      {
-        "nazwa": "trawa",
-        "zdjecie_url": "",
-        "kategoria": "Inne",
-        "waluta": "PLN",
-        "trend": "brak_zmian",
-        "alert_wlaczony": true,
-        "oferty": [
-          {
-            "id": "off17850947636440",
-            "sklep": "Amazon.pl",
-            "url": "https://www.amazon.pl/Trixie-Tx-4235-Kocia-Trawa-Zielony/dp/B000WFG714/ref=sr_1_6?__mk_pl_PL=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3JM0TB20AI5CP&keywords=cat+bowl&qid=1694602938&s=pet-supplies&sprefix=cat+bowl%2Cpets%2C91&sr=1-6",
-            "cena": 0,
-            "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
-          },
-          {
-            "id": "off17850947636441",
-            "sklep": "Bitiba.pl",
-            "url": "https://www.bitiba.pl/shop/karma_dla_kota/przysmaki_dla_kota/trawa_dla_kota/trawa/379048?variantId=379048.1&freelisting=1&utm_source=google&utm_medium=google_shopping&utm_campaign=24010189400&utm_term=379048.1&utm_content=pla&utm_id=24010189400_197846367829&gclsrc=aw.ds&gad_source=1&gad_campaignid=24010189400&gbraid=0AAAAADr2hacUNFf6URFwf_vxxPC-KkgJA&gclid=EAIaIQobChMIw-abj4zxlQMVIQqiAx11eBgjEAQYAiABEgKm2fD_BwE&activeVariant=379048.1",
-            "cena": 0,
-            "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
-          }
-        ],
-        "id": "pms27byws"
-      }
-    ]
+    "avatarColor": "#D97706",
+    "produkty": []
   }
 }
