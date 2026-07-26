@@ -46,13 +46,16 @@ jobs:
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
+      - name: Prepare Pages
+        run: |
+          cd artifacts/price-tracker/dist
+          touch .nojekyll
+          ls -la
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './artifacts/price-tracker/dist/public'
+          path: './artifacts/price-tracker/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
