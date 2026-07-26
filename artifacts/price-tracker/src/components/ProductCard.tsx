@@ -140,16 +140,17 @@ export function ProductCard({ produkt }: ProductCardProps) {
               <>
                 <div className="flex items-end gap-2 mb-1">
                   <span className="text-3xl font-bold tracking-tight text-foreground">
-                    {bestOffer.cena}
+                    {bestOffer.cena > 0 ? bestOffer.cena : "---"}
                   </span>
                   <span className="text-sm font-medium text-muted-foreground pb-1">
-                    {produkt.waluta}
+                    {bestOffer.cena > 0 ? produkt.waluta : ""}
                   </span>
                 </div>
                 
                 <div className="text-xs text-muted-foreground mt-1 mb-2">
                   w {bestOffer.sklep} 
                   {bestOffer.koszt_dostawy > 0 ? ` (+${bestOffer.koszt_dostawy} dostawa)` : ' (Darmowa dostawa)'}
+                  {oferty.length > 1 && ` i ${oferty.length - 1} innych`}
                 </div>
                 
                 <div className="flex items-center gap-2 mt-1">

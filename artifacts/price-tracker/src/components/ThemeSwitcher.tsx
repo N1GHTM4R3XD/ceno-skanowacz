@@ -8,7 +8,6 @@ export function ThemeSwitcher() {
 
   const cycleTheme = () => {
     if (theme === "jasny") setTheme("ciemny");
-    else if (theme === "ciemny") setTheme("kolorowy");
     else setTheme("jasny");
   };
 
@@ -22,7 +21,6 @@ export function ThemeSwitcher() {
     >
       {theme === "jasny" && <Sun className="h-5 w-5 text-amber-500" />}
       {theme === "ciemny" && <Moon className="h-5 w-5 text-blue-400" />}
-      {theme === "kolorowy" && <Palette className="h-5 w-5 text-purple-500" />}
       <span className="sr-only">Przełącz motyw</span>
     </Button>
   );

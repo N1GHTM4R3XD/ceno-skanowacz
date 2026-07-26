@@ -54,6 +54,7 @@ jobs:
         run: |
           cd artifacts/price-tracker/dist
           touch .nojekyll
+          cp index.html 404.html
           ls -la
 
       - name: Upload artifact

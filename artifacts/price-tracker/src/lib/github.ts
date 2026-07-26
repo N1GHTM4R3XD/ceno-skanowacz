@@ -23,7 +23,7 @@ export async function saveDataToGitHub(
   // 1. Pobierz aktualny plik, żeby zdobyć SHA
   let sha = "";
   try {
-    const getRes = await fetch(url, { headers });
+    const getRes = await fetch(`${url}?t=${Date.now()}`, { headers, cache: "no-store" });
     if (!getRes.ok) {
       if (getRes.status === 404) {
         // Plik nie istnieje, będziemy tworzyć nowy (brak sha)

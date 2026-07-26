@@ -20,7 +20,7 @@ interface ProductDetailsProps {
 export function ProductDetails({ produkt }: ProductDetailsProps) {
   const chartData = useMemo(() => {
     // Ensure data is sorted by date ascending for the chart
-    return [...produkt.historia].sort(
+    return [...(produkt.historia || [])].sort(
       (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()
     ).map(entry => ({
       ...entry,
