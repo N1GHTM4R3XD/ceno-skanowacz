@@ -1,1 +1,10 @@
-{}
+{
+  "joms27b3p6": {
+    "imie": "jo",
+    "email": "",
+    "powiadomieniaEmail": false,
+    "globalneAlerty": true,
+    "avatarColor": "#0891B2",
+    "produkty": []
+  }
+}
