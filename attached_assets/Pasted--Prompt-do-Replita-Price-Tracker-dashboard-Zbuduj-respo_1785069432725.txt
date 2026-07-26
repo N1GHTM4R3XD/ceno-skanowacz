@@ -1,0 +1,78 @@
+# Prompt do Replita – Price Tracker (dashboard)
+
+Zbuduj responsywną stronę webową (React + Tailwind) do śledzenia cen produktów dla kilku użytkowników bez logowania hasłem — dostęp odbywa się przez unikalny link/token w URL (np. `?u=mama123`).
+
+## Core funkcjonalność
+
+### Identyfikacja użytkownika
+- Użytkownik jest rozpoznawany po parametrze w URL (np. `?u=token`)
+- Jeśli token nie istnieje w danych, pokaż prosty ekran "Nie znaleziono profilu"
+- Dane wszystkich userów trzymane w jednym pliku JSON (mock/przykładowe dane na start), struktura:
+```json
+{
+  "mama123": {
+    "imie": "Mama",
+    "email": "opcjonalny@mail.pl",
+    "produkty": [
+      {
+        "id": "1",
+        "nazwa": "Ekspres do kawy DeLonghi",
+        "url": "https://sklep.pl/produkt",
+        "zdjecie_url": "https://...",
+        "cena_obecna": 899,
+        "cena_poprzednia": 950,
+        "waluta": "PLN",
+        "trend": "spadek",
+        "alert_wlaczony": true,
+        "historia": [
+          {"data": "2026-07-01", "cena": 999},
+          {"data": "2026-07-15", "cena": 950},
+          {"data": "2026-07-25", "cena": 899}
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Menu główne / nawigacja
+- Dashboard (główny widok z kartami produktów)
+- Historia (wszystkie zmiany cen, wszystkie produkty, w formie listy/tabeli, sortowalnej po dacie)
+- Profil (imię, email do powiadomień, ustawienia alertów)
+
+### Karty produktów (Dashboard)
+Każda karta pokazuje:
+- Nazwa produktu + zdjęcie (jeśli jest)
+- Cena obecna (duża, wyraźna)
+- Trend: strzałka w dół (zielona) jeśli cena spadła, w górę (czerwona) jeśli wzrosła, poziomo (szara) jeśli bez zmian
+- Link "Przejdź do sklepu" (otwiera `url` w nowej karcie)
+- Przycisk/ikonka rozwijania "Więcej informacji" — po kliknięciu pokazuje:
+  - Mini wykres historii ceny (line chart, np. recharts)
+  - Pełną historię zmian w formie listy dat + cen
+- Toggle "Alert włączony/wyłączony" na każdej karcie (włącza/wyłącza powiadomienia dla tego konkretnego produktu)
+
+### Alerty / Powiadomienia
+- Osobna sekcja "Alerty" widoczna z poziomu dashboardu (np. dzwoneczek z licznikiem w headerze) — lista produktów, których cena spadła od ostatniego sprawdzenia
+- Każdy produkt z alertem ma widoczne oznaczenie także na karcie (np. badge "Cena spadła!")
+- W Profilu: pole do wpisania maila + checkbox "wysyłaj powiadomienia mailem" (na razie samo UI, bez realnej wysyłki maila — to podłączymy później przez backend)
+- Możliwość globalnego wyłączenia wszystkich alertów w Profilu, niezależnie od ustawień per-produkt
+
+### Motywy kolorystyczne
+- Ikonka w rogu (np. prawy górny róg headera) przełącza między 3 trybami: jasny / ciemny / kolorowy (bardziej żywa, radosna paleta zamiast standardowego jasny/ciemny)
+- Wybrany motyw zapamiętany w stanie aplikacji (React state wystarczy, bez localStorage)
+
+## Styl wizualny
+- Nowoczesny, czysty layout: karty z zaokrąglonymi rogami, delikatne cienie, dużo białej/pustej przestrzeni w trybie jasnym
+- Tryb ciemny: głębokie granaty/czerń z akcentami (nie czysty czarny)
+- Tryb kolorowy: żywsze akcenty (np. gradient w tle nagłówków kart, kolorowe badge'e trendów)
+- Responsywność: karty produktów w gridzie, który układa się w 1 kolumnę na mobile, 2-3 na desktopie
+
+## Dane techniczne
+- React + Tailwind, wykresy przez recharts
+- Dane na start jako statyczny mock (kilka przykładowych produktów dla 2 przykładowych userów), żeby UI dało się przetestować bez backendu
+- Kod podzielony na komponenty: `Dashboard`, `ProductCard`, `ProductDetails`, `AlertsPanel`, `Profile`, `ThemeSwitcher`
+
+## Czego na razie NIE robimy
+- Prawdziwego scrapowania cen (to osobny skrypt/Action, podłączymy dane później)
+- Realnej wysyłki maili (samo UI z checkboxem)
+- Logowania hasłem

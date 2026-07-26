@@ -1,0 +1,40 @@
+name: Check Prices
+
+on:
+  schedule:
+    # Run twice a day at 8:00 and 20:00
+    - cron: '0 8,20 * * *'
+  workflow_dispatch: # allow manual triggering
+
+jobs:
+  check-prices:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        working-directory: ./scripts
+        run: npm install
+
+      - name: Run price checker
+        working-directory: ./scripts
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: node check-prices.js
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add ../artifacts/price-tracker/public/data/tracker-data.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automatyczna aktualizacja cen" && git push)
