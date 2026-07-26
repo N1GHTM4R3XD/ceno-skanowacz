@@ -64,6 +64,7 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
   const [form, setForm] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const set = (field: keyof FormState, value: string | boolean) =>
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -94,9 +95,10 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validate()) return;
     
+    setIsSubmitting(true);
     const oferty: Oferta[] = form.oferty.map((o, index) => {
       let cena = parseFloat(o.cena.replace(",", "."));
       let dostawa = parseFloat(o.koszt_dostawy.replace(",", ".")) || 0;
@@ -118,19 +120,25 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
       };
     });
 
-    addProduct({
-      nazwa: form.nazwa.trim(),
-      zdjecie_url: isAdvancedMode ? form.zdjecie_url.trim() : "",
-      kategoria: (isAdvancedMode ? form.kategoria : "Inne") as Kategoria,
-      waluta: "PLN",
-      trend: "brak_zmian",
-      alert_wlaczony: form.alert_wlaczony,
-      oferty,
-    });
-    setForm(EMPTY);
-    setErrors({});
-    setIsAdvancedMode(false);
-    onOpenChange(false);
+    try {
+      await addProduct({
+        nazwa: form.nazwa.trim(),
+        zdjecie_url: isAdvancedMode ? form.zdjecie_url.trim() : "",
+        kategoria: (isAdvancedMode ? form.kategoria : "Inne") as Kategoria,
+        waluta: "PLN",
+        trend: "brak_zmian",
+        alert_wlaczony: form.alert_wlaczony,
+        oferty,
+      });
+      setForm(EMPTY);
+      setErrors({});
+      setIsAdvancedMode(false);
+      onOpenChange(false);
+    } catch (error) {
+      // Błąd jest już obsługiwany przez toast w AppContext
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleClose = () => {
@@ -342,11 +350,11 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
         </div>
 
         <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={handleClose} className="flex-1">
+          <Button variant="outline" onClick={handleClose} className="flex-1" disabled={isSubmitting}>
             Anuluj
           </Button>
-          <Button onClick={handleSubmit} className="flex-1">
-            Dodaj produkt
+          <Button onClick={handleSubmit} className="flex-1" disabled={isSubmitting}>
+            {isSubmitting ? "Zapisywanie..." : "Dodaj produkt"}
           </Button>
         </DialogFooter>
       </DialogContent>

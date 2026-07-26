@@ -45,6 +45,10 @@ jobs:
         run: pnpm --filter @workspace/price-tracker build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_GITHUB_TOKEN: ${{ secrets.VITE_GITHUB_TOKEN }}
+          VITE_GITHUB_OWNER: ${{ secrets.VITE_GITHUB_OWNER }}
+          VITE_GITHUB_REPO: ${{ secrets.VITE_GITHUB_REPO }}
+          VITE_GITHUB_FILE_PATH: ${{ secrets.VITE_GITHUB_FILE_PATH }}
 
       - name: Prepare Pages
         run: |

@@ -22,6 +22,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,6 +44,7 @@ export function ProductCard({ produkt }: ProductCardProps) {
   const { theme, updateProductAlert, userProfile, removeProduct } = useAppContext();
   const [expanded, setExpanded] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Zabezpieczenie przed pustymi ofertami
   const oferty = produkt.oferty || [];
@@ -261,13 +263,23 @@ export function ProductCard({ produkt }: ProductCardProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Anuluj</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => removeProduct(produkt.id)}
+            <AlertDialogCancel disabled={isDeleting}>Anuluj</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              disabled={isDeleting}
+              onClick={async () => {
+                setIsDeleting(true);
+                try {
+                  await removeProduct(produkt.id);
+                } catch (e) {
+                  setIsDeleting(false);
+                  setConfirmDelete(false);
+                }
+              }}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Usuń
-            </AlertDialogAction>
+              {isDeleting ? "Usuwanie..." : "Usuń"}
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -29,8 +29,9 @@ export function ProfilePicker() {
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState(DEFAULT_AVATAR_COLOR);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     const trimmed = newName.trim();
     if (!trimmed) {
       setError("Podaj imię.");
@@ -40,11 +41,18 @@ export function ProfilePicker() {
       setError("Imię może mieć max. 30 znaków.");
       return;
     }
-    addProfile(trimmed, newColor);
-    setNewName("");
-    setNewColor(DEFAULT_AVATAR_COLOR);
-    setError("");
-    setShowForm(false);
+    setIsSubmitting(true);
+    try {
+      await addProfile(trimmed, newColor);
+      setNewName("");
+      setNewColor(DEFAULT_AVATAR_COLOR);
+      setError("");
+      setShowForm(false);
+    } catch (e) {
+      // Toast błędu z kontekstu
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCancel = () => {
@@ -200,11 +208,11 @@ export function ProfilePicker() {
               </div>
 
               <div className="flex gap-2 mt-6">
-                <Button variant="outline" className="flex-1" onClick={handleCancel}>
+                <Button variant="outline" className="flex-1" onClick={handleCancel} disabled={isSubmitting}>
                   Anuluj
                 </Button>
-                <Button className="flex-1" onClick={handleAdd}>
-                  Dodaj profil
+                <Button className="flex-1" onClick={handleAdd} disabled={isSubmitting}>
+                  {isSubmitting ? "Zapisywanie..." : "Dodaj profil"}
                 </Button>
               </div>
             </motion.div>
