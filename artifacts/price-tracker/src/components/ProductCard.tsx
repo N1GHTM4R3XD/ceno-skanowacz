@@ -175,11 +175,11 @@ export function ProductCard({ produkt }: ProductCardProps) {
                     Bez zmian
                   </Badge>
                 )}
+                </div>
               </>
             ) : (
               <div className="text-sm text-muted-foreground mt-2">Brak ofert.</div>
             )}
-            </div>
           </CardContent>
 
           <CardFooter className="p-4 flex flex-col gap-3 border-t bg-muted/20">
