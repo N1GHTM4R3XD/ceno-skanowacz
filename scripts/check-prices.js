@@ -63,6 +63,24 @@ async function fetchPrice(browser, url) {
       } else if (urlString.includes('empik.com')) {
         const el = document.querySelector('meta[itemprop="price"]') || document.querySelector('[data-ta="price"]') || document.querySelector('.css-price') || document.querySelector('.price');
         if (el) priceText = el.tagName === 'META' ? el.getAttribute('content') : el.innerText;
+      } else if (urlString.includes('orlybeauty.pl')) {
+        // Cena widoczna jako tekst "49,00 cena dla detalistów" – szukamy linka z ceną
+        const el = document.querySelector('a[href*="koszyk"], .cena, [class*="cena"], [class*="price"], a.add_to_cart');
+        if (el) {
+          priceText = el.innerText;
+        } else {
+          // Fallback: szukaj w treści linków
+          const links = Array.from(document.querySelectorAll('a'));
+          const priceLink = links.find(a => /\d+[,.]\d{2}\s*(zł|pln)/i.test(a.innerText));
+          if (priceLink) priceText = priceLink.innerText;
+        }
+      } else if (urlString.includes('wearmedicine.com')) {
+        const el = document.querySelector('meta[itemprop="price"]')
+          || document.querySelector('[class*="price"]')
+          || document.querySelector('[class*="Price"]')
+          || document.querySelector('.product-price')
+          || document.querySelector('[itemprop="price"]');
+        if (el) priceText = el.tagName === 'META' ? el.getAttribute('content') : el.innerText;
       }
 
       // Mechanizm ratunkowy: regex
