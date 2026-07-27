@@ -64,7 +64,7 @@
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
-        "alert_wlaczony": true,
+        "alert_wlaczony": false,
         "oferty": [
           {
             "id": "off17851468943170",
@@ -145,13 +145,5 @@
     "globalneAlerty": true,
     "avatarColor": "#7C3AED",
     "produkty": []
-  },
-  "_meta": {
-    "ostatnia_synchronizacja": "2026-07-27T10:40:00.000Z",
-    "status": "sukces",
-    "sprawdzono": 8,
-    "sukces": 5,
-    "bledy": 0,
-    "pominieto": 3
   }
 }
