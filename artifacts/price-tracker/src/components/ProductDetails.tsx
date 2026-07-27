@@ -133,8 +133,8 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
                       </div>
                     ) : (
                       <div className="flex items-center gap-1 mt-1 mb-1">
-                        <Badge variant="outline" className="text-[10px] border-orange-200 bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:border-orange-800 dark:text-orange-400 cursor-help" title="Sklep blokuje automatyczne odczytywanie. Wpisz cenę ręcznie.">
-                          Sprawdź ręcznie
+                        <Badge variant="outline" className="text-[10px] border-orange-200 bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:border-orange-800 dark:text-orange-400 cursor-help" title={oferta.cena === 0 ? "Sklep blokuje automatyczne odczytywanie. Wpisz cenę ręcznie." : "Cena została podana ręcznie."}>
+                          {oferta.cena === 0 ? "Sprawdź ręcznie" : "Cena wpisana ręcznie"}
                         </Badge>
                         <button 
                           onClick={() => {

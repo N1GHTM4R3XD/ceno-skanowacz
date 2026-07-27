@@ -228,9 +228,9 @@ async function main() {
             hasChanges = true;
           }
           
-          if (currentData.fetchedTitle && !oferta.nazwa_ze_sklepu) {
-            oferta.nazwa_ze_sklepu = currentData.fetchedTitle;
-            console.log(`[Zaktualizowano nazwę oferty] Pobrano nazwę ze sklepu: ${currentData.fetchedTitle}`);
+          if (currentData.fetchedTitle && !product.nazwa_edytowana_recznie && product.nazwa !== currentData.fetchedTitle) {
+            product.nazwa = currentData.fetchedTitle;
+            console.log(`[Zaktualizowano nazwę produktu] Pobrano nazwę ze sklepu: ${currentData.fetchedTitle}`);
             hasChanges = true;
           }
           

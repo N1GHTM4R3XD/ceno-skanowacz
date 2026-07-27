@@ -15,6 +15,7 @@ interface AppContextType {
   addProduct: (product: Omit<Produkt, "id">) => Promise<void>;
   removeProduct: (productId: string) => Promise<void>;
   updateProductAlert: (productId: string, alert_wlaczony: boolean) => Promise<void>;
+  updateProductInfo: (productId: string, newName: string, newImageUrl: string) => Promise<void>;
   updateManualPrice: (productId: string, offerId: string, newPrice: number) => Promise<void>;
   updateProfileSettings: (email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean) => Promise<void>;
   updateAvatarColor: (color: string) => Promise<void>;
@@ -147,6 +148,37 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateProductInfo = async (productId: string, newName: string, newImageUrl: string) => {
+    if (!selectedToken) return;
+    try {
+      const profile = profiles[selectedToken];
+      const product = profile.produkty.find(p => p.id === productId);
+      if (!product) return;
+
+      const isNameChanged = product.nazwa !== newName;
+      const updatedProfile = {
+        ...profile,
+        produkty: profile.produkty.map(p =>
+          p.id === productId ? { 
+            ...p, 
+            nazwa: newName, 
+            zdjecie_url: newImageUrl,
+            nazwa_edytowana_recznie: isNameChanged ? true : p.nazwa_edytowana_recznie 
+          } : p
+        ),
+      };
+
+      const newProfiles = { ...profiles, [selectedToken]: updatedProfile };
+      await saveDataToGitHub(newProfiles, `Edycja produktu: ${newName}`);
+      setProfiles(newProfiles);
+      setUserProfile(updatedProfile);
+      toast({ title: "Zapisano", description: "Dane produktu zostały zaktualizowane." });
+    } catch (err: any) {
+      toast({ title: "Błąd zapisu", description: err.message, variant: "destructive" });
+      throw err;
+    }
+  };
+
   const updateManualPrice = async (productId: string, offerId: string, newPrice: number) => {
     if (!selectedToken) return;
     try {
@@ -273,6 +305,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         addProfile,
         addProduct,
         removeProduct,
+        updateProductInfo,
         updateProductAlert,
         updateManualPrice,
         updateProfileSettings,

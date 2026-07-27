@@ -16,8 +16,10 @@ import {
   Home,
   Shirt,
   Dumbbell,
-  Baby
+  Baby,
+  Edit2
 } from "lucide-react";
+import { EditProductDialog } from "./EditProductDialog";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -44,6 +46,7 @@ export function ProductCard({ produkt }: ProductCardProps) {
   const { theme, updateProductAlert, userProfile, removeProduct } = useAppContext();
   const [expanded, setExpanded] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Zabezpieczenie przed pustymi ofertami
@@ -114,9 +117,22 @@ export function ProductCard({ produkt }: ProductCardProps) {
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
+          
+          {/* Edit button */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setEditOpen(true);
+            }}
+            className="absolute top-3 right-11 z-10 w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-primary transition-all duration-200"
+            title="Edytuj produkt"
+          >
+            <Edit2 className="w-3.5 h-3.5" />
+          </button>
 
           <div
-            className={`aspect-video w-full overflow-hidden bg-muted relative flex items-center justify-center ${
+            className={`aspect-video w-full overflow-hidden bg-gray-50 dark:bg-gray-900/50 relative flex items-center justify-center ${
               theme === "kolorowy" ? "p-1 colorful-card-header" : ""
             }`}
           >
@@ -125,7 +141,7 @@ export function ProductCard({ produkt }: ProductCardProps) {
               <img
                 src={produkt.zdjecie_url}
                 alt={produkt.nazwa}
-                className="w-full h-full object-cover rounded-t-[calc(var(--radius)-1px)] group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-contain p-2 rounded-t-[calc(var(--radius)-1px)] group-hover:scale-105 transition-transform duration-500"
               />
             ) : (
               getCategoryIcon()
@@ -296,6 +312,12 @@ export function ProductCard({ produkt }: ProductCardProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      
+      <EditProductDialog 
+        produkt={produkt} 
+        open={editOpen} 
+        onOpenChange={setEditOpen} 
+      />
     </>
   );
 }

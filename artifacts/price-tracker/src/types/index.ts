@@ -29,7 +29,8 @@ export interface Produkt {
   trend: Trend;
   alert_wlaczony: boolean;
   oferty: Oferta[];
-  historia?: HistoriaZnak[]; // opcjonalna ogólna historia najniższej ceny
+  historia?: HistoriaZnak[];
+  nazwa_edytowana_recznie?: boolean;
 }
 
 export interface UserProfile {
