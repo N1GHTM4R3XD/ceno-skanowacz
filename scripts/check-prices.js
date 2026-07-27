@@ -322,13 +322,20 @@ async function main() {
   }
   console.log("--------------------------------\n");
 
-  if (hasChanges) {
-    console.log("Zapisywanie zmian w pliku JSON...");
-    await fs.writeFile(DATA_PATH, JSON.stringify(profiles, null, 2), 'utf-8');
-    console.log("Gotowe.");
-  } else {
-    console.log("Brak zmian w cenach, nie nadpisuję pliku.");
-  }
+  // Zapisz metadane ostatniej synchronizacji (zawsze, niezależnie od zmian cen)
+  const allSucceeded = stats.failed === 0;
+  profiles._meta = {
+    ostatnia_synchronizacja: new Date().toISOString(),
+    status: allSucceeded ? "sukces" : "czesciowy_blad",
+    sprawdzono: stats.checked,
+    sukces: stats.success,
+    bledy: stats.failed,
+    pominieto: stats.skipped,
+  };
+
+  console.log("Zapisywanie danych...");
+  await fs.writeFile(DATA_PATH, JSON.stringify(profiles, null, 2), 'utf-8');
+  console.log("Gotowe.");
 }
 
 main().catch(err => {

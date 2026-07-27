@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { UserProfile, Theme, Produkt } from "../types";
+import { UserProfile, Theme, Produkt, SyncMeta } from "../types";
 import { saveDataToGitHub } from "../lib/github";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,12 +20,14 @@ interface AppContextType {
   updateProfileSettings: (email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean) => Promise<void>;
   updateAvatarColor: (color: string) => Promise<void>;
   allTokens: string[];
+  syncMeta: SyncMeta | null;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [profiles, setProfiles] = useState<Record<string, UserProfile>>({});
+  const [syncMeta, setSyncMeta] = useState<SyncMeta | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const { toast } = useToast();
 
@@ -48,6 +50,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           }
         } catch (e) {}
         
+        if (finalData._meta) {
+          setSyncMeta(finalData._meta);
+        }
         setProfiles(finalData);
         setIsLoaded(true);
       })
@@ -332,6 +337,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         updateProfileSettings,
         updateAvatarColor,
         allTokens,
+        syncMeta,
       }}
     >
       {children}

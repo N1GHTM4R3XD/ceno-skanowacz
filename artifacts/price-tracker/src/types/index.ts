@@ -42,8 +42,18 @@ export interface UserProfile {
   produkty: Produkt[];
 }
 
+export interface SyncMeta {
+  ostatnia_synchronizacja: string; // ISO string
+  status: "sukces" | "czesciowy_blad" | "blad";
+  sprawdzono?: number;
+  sukces?: number;
+  bledy?: number;
+  pominieto?: number;
+}
+
 export interface MockData {
   [key: string]: UserProfile;
+  _meta?: SyncMeta;
 }
 
 export type Theme = "jasny" | "ciemny" | "kolorowy";

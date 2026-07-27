@@ -163,15 +163,19 @@ export function ProductCard({ produkt }: ProductCardProps) {
                       <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
                       Sprawdź ręcznie
                     </Badge>
-                  ) : (
+                  ) : bestOffer.cena > 0 ? (
                     <>
                       <span className="text-3xl font-bold tracking-tight text-foreground">
-                        {bestOffer.cena > 0 ? bestOffer.cena : "---"}
+                        {bestOffer.cena}
                       </span>
                       <span className="text-sm font-medium text-muted-foreground pb-1">
-                        {bestOffer.cena > 0 ? produkt.waluta : ""}
+                        {produkt.waluta}
                       </span>
                     </>
+                  ) : (
+                    <p className="text-xs text-muted-foreground leading-snug max-w-[180px]">
+                      Nie udało się pobrać aktualnej ceny. Dane zostaną odświeżone podczas kolejnej synchronizacji.
+                    </p>
                   )}
                 </div>
                 

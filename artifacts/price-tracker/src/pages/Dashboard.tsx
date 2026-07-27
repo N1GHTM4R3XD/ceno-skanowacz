@@ -11,8 +11,22 @@ const container = {
   show: { opacity: 1, transition: { staggerChildren: 0.08 } },
 };
 
+function formatSyncDate(isoString: string): string {
+  try {
+    const d = new Date(isoString);
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const yyyy = d.getFullYear();
+    const hh = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
+  } catch {
+    return isoString;
+  }
+}
+
 export function Dashboard() {
-  const { userProfile } = useAppContext();
+  const { userProfile, syncMeta } = useAppContext();
   const [addOpen, setAddOpen] = useState(false);
 
   if (!userProfile) return null;
@@ -20,6 +34,9 @@ export function Dashboard() {
   const totalProducts = userProfile.produkty.length;
   const priceDrops = userProfile.produkty.filter((p) => p.trend === "spadek").length;
   const activeAlerts = userProfile.produkty.filter((p) => p.alert_wlaczony).length;
+
+  const statusDot = !syncMeta ? null : syncMeta.status === "sukces" ? "🟢" : syncMeta.status === "czesciowy_blad" ? "🟡" : "🔴";
+  const statusLabel = !syncMeta ? null : syncMeta.status === "sukces" ? "Aktualne" : syncMeta.status === "czesciowy_blad" ? "Częściowe błędy" : "Błąd synchronizacji";
 
   return (
     <div className="space-y-6 pb-12">
@@ -62,6 +79,16 @@ export function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* Sync status bar */}
+        {syncMeta && (
+          <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/40 rounded-lg px-3 py-2 border border-border/50">
+            <span>{statusDot}</span>
+            <span className="font-medium">{statusLabel}</span>
+            <span className="mx-1 text-border">·</span>
+            <span>Ostatnia aktualizacja: {formatSyncDate(syncMeta.ostatnia_synchronizacja)}</span>
+          </div>
+        )}
       </section>
 
       <section className="space-y-4">
