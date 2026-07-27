@@ -112,7 +112,7 @@ export function ProductCard({ produkt }: ProductCardProps) {
               e.stopPropagation();
               setConfirmDelete(true);
             }}
-            className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-destructive transition-all duration-200"
+            className="absolute top-3 right-3 z-20 w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-destructive transition-all duration-200"
             title="Usuń produkt"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -125,7 +125,7 @@ export function ProductCard({ produkt }: ProductCardProps) {
               e.stopPropagation();
               setEditOpen(true);
             }}
-            className="absolute top-3 right-11 z-10 w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-primary transition-all duration-200"
+            className="absolute top-3 right-11 z-20 w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-primary transition-all duration-200"
             title="Edytuj produkt"
           >
             <Edit2 className="w-3.5 h-3.5" />
@@ -177,7 +177,13 @@ export function ProductCard({ produkt }: ProductCardProps) {
                 
                 <div className="text-xs text-muted-foreground mt-1 mb-2">
                   w {bestOffer.sklep} 
-                  {bestOffer.koszt_dostawy === 0 ? ' (Darmowa dostawa)' : bestOffer.koszt_dostawy ? ` (+${bestOffer.koszt_dostawy} dostawa)` : ' (Dostawa: sprawdź w sklepie)'}
+                  {bestOffer.koszt_dostawy === 0 
+                    ? ' (Darmowa dostawa)' 
+                    : bestOffer.koszt_dostawy !== null && bestOffer.koszt_dostawy !== undefined
+                    ? ` (+${bestOffer.koszt_dostawy} dostawa)` 
+                    : bestOffer.darmowa_dostawa_z 
+                    ? ` (${bestOffer.darmowa_dostawa_z})` 
+                    : ''}
                   {oferty.length > 1 && ` i ${oferty.length - 1} innych`}
                 </div>
                 
