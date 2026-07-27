@@ -39,18 +39,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         let finalData = data || {};
         try {
           const cacheTsStr = localStorage.getItem("tracker-profiles-cache-ts");
-          if (cacheTsStr) {
+          const cacheDataStr = localStorage.getItem("tracker-profiles-cache");
+          if (cacheTsStr && cacheDataStr) {
             const cacheTs = parseInt(cacheTsStr, 10);
-            if (!isNaN(cacheTs) && Date.now() - cacheTs < 5 * 60 * 1000) {
-              const cacheDataStr = localStorage.getItem("tracker-profiles-cache");
-              if (cacheDataStr) {
-                finalData = JSON.parse(cacheDataStr);
-                console.log("Użyto danych z lokalnego cache (GitHub Pages jeszcze się nie zaktualizował).");
-              }
+            // Czas ostatniej synchronizacji scrapera z pobranego pliku
+            const scraperSyncTs = data?._meta?.ostatnia_synchronizacja
+              ? new Date(data._meta.ostatnia_synchronizacja).getTime()
+              : 0;
+            // Użyj cache'u TYLKO jeśli:
+            // 1. Zapis cache'u jest świeższy niż 5 minut (okno propagacji GitHub Pages)
+            // 2. ORAZ zapis cache'u jest nowszy niż ostatnia synchronizacja scrapera
+            //    (żeby nie ukrywać nowych danych ze scrapera)
+            const cacheIsRecent = !isNaN(cacheTs) && Date.now() - cacheTs < 5 * 60 * 1000;
+            const cacheIsNewerThanScraper = cacheTs > scraperSyncTs;
+            if (cacheIsRecent && cacheIsNewerThanScraper) {
+              finalData = JSON.parse(cacheDataStr);
+              console.log("Użyto lokalnego cache (nowszy niż dane ze scrapera).");
+            } else if (scraperSyncTs > cacheTs) {
+              // Scraper zaktualizował dane – usuń stary cache żeby nie używać go przy kolejnym załadowaniu
+              localStorage.removeItem("tracker-profiles-cache");
+              localStorage.removeItem("tracker-profiles-cache-ts");
+              console.log("Użyto danych ze scrapera (nowsze niż cache).");
             }
           }
         } catch (e) {}
-        
+
         if (finalData._meta) {
           setSyncMeta(finalData._meta);
         }
@@ -68,6 +81,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setIsLoaded(true);
       });
   }, []);
+
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [theme, setTheme] = useState<Theme>("jasny");
