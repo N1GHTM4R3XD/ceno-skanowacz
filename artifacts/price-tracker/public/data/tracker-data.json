@@ -86,32 +86,6 @@
         ]
       },
       {
-        "nazwa": "ekspres",
-        "zdjecie_url": "",
-        "kategoria": "Inne",
-        "waluta": "PLN",
-        "trend": "brak_zmian",
-        "alert_wlaczony": true,
-        "oferty": [
-          {
-            "id": "off17851455216840",
-            "sklep": "Mediaexpert.pl",
-            "url": "https://www.mediaexpert.pl/agd-male/ekspresy-i-kawa/ekspresy-cisnieniowe/ekspres-saeco-xelsis-deluxe-sm8782-30",
-            "cena": 0,
-            "koszt_dostawy": null,
-            "darmowa_dostawa_z": "",
-            "wymaga_recznego_sprawdzenia": true
-          }
-        ],
-        "id": "pms31jw2c",
-        "historia": [
-          {
-            "data": "2026-07-27",
-            "cena": 0
-          }
-        ]
-      },
-      {
         "nazwa": "buty",
         "zdjecie_url": "",
         "kategoria": "Inne",
