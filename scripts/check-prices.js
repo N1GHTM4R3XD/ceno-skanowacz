@@ -34,7 +34,8 @@ async function fetchPrice(browser, url) {
   const page = await context.newPage();
   
   try {
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+    await page.waitForTimeout(4000); // Oczekujemy dodatkowe sekundy na wyrenderowanie JS i challenge Cloudflare
     
     console.log(`[Debug] Tytuł strony: ${await page.title()}`);
     // Zrzuty ekranu i HTML można włączyć lokalnie odkomentowując poniższe linie:
@@ -61,7 +62,7 @@ async function fetchPrice(browser, url) {
 
       // Mechanizm ratunkowy: regex (szukanie czegokolwiek co wygląda jak cena w treści strony)
       if (!priceText) {
-        const regex = /\d+[ ,.]\d{2}\s?(zł|PLN)?/gi;
+        const regex = /\d{1,5}(?:[,.]\d{2})?\s?(?:zł|pln)/gi;
         const matches = document.body.innerText.match(regex);
         if (matches && matches.length > 0) {
           // Bierzemy pierwszą pasującą cenę.
