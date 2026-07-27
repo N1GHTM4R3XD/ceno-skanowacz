@@ -24,6 +24,44 @@
           }
         ],
         "id": "pms27hpxz"
+      },
+      {
+        "nazwa": "trawa",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
+          {
+            "id": "off17850962423800",
+            "sklep": "Amazon.pl",
+            "url": "https://www.amazon.pl/Trixie-Tx-4235-Kocia-Trawa-Zielony/dp/B000WFG714/ref=sr_1_6?__mk_pl_PL=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3JM0TB20AI5CP&keywords=cat+bowl&qid=1694602938&s=pet-supplies&sprefix=cat+bowl%2Cpets%2C91&sr=1-6",
+            "cena": 0,
+            "koszt_dostawy": 0,
+            "darmowa_dostawa_z": ""
+          }
+        ],
+        "id": "pms287nws"
+      },
+      {
+        "nazwa": "sukienka",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
+          {
+            "id": "off17850962761290",
+            "sklep": "Renee.pl",
+            "url": "https://www.renee.pl/czarna-sukienka-z-bawelny-na-ramiaczkach-o-rozkloszowanym-kroju-z-marszczona-gora-christten?utm_source=google&utm_medium=cpc&utm_campaign=PMax%20%3E%20Wszystkie%20kategorie%20%3E%20product_push%20%3E%20lato&device=c&utm_id=22165849107&campaign_id=22165849107&gad_source=1&gad_campaignid=22176048886&gbraid=0AAAAADM70hMoZuRK56BMcvaneS_arcX6r&gclid=EAIaIQobChMIn7n-3pHxlQMViheiAx0SaSjBEAQYAiABEgIByvD_BwE",
+            "cena": 0,
+            "koszt_dostawy": 0,
+            "darmowa_dostawa_z": ""
+          }
+        ],
+        "id": "pms288dy9"
       }
     ]
   }
