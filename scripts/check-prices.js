@@ -79,10 +79,24 @@ async function fetchPrice(browser, url) {
     const price = priceData.cena;
     console.log(`[Debug] Metoda znalezienia ceny: ${priceData.method}${priceData.raw ? ` (surowy tekst: ${priceData.raw})` : ''}`);
 
-    await context.close();
     if (price === null) {
-      console.warn(`[!] Nie znaleziono ceny dla: ${url}`);
+      console.warn(`[!] Nie znaleziono ceny dla: ${url}. Zapisuję dane debugowania...`);
+      try {
+        await fs.mkdir(path.join(__dirname, 'debug'), { recursive: true });
+        const domain = new URL(url).hostname.replace(/[^a-z0-9]/gi, '_');
+        const timestamp = Date.now();
+        const baseName = path.join(__dirname, 'debug', `${domain}_${timestamp}`);
+        
+        await page.screenshot({ path: `${baseName}.png`, fullPage: true });
+        const html = await page.content();
+        await fs.writeFile(`${baseName}.html`, html, 'utf-8');
+        console.log(`[Debug] Zapisano zrzut ekranu i HTML do folderu debug (${domain}_${timestamp}).`);
+      } catch (debugErr) {
+        console.error("[Błąd] Nie udało się zapisać plików debugowania:", debugErr.message);
+      }
     }
+
+    await context.close();
     return price;
   } catch (error) {
     console.error(`[Błąd] Scrapowanie ${url}:`, error.message);
