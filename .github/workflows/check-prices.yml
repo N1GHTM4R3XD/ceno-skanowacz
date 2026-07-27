@@ -25,6 +25,10 @@ jobs:
         working-directory: ./scripts
         run: npm install
 
+      - name: Install Playwright Browsers
+        working-directory: ./scripts
+        run: npx playwright install --with-deps chromium
+
       - name: Run price checker
         working-directory: ./scripts
         env:

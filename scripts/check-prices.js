@@ -1,7 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import axios from 'axios';
-import * as cheerio from 'cheerio';
+import { chromium } from 'playwright';
 import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
 
@@ -9,58 +8,70 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DATA_PATH = path.join(__dirname, '../artifacts/price-tracker/public/data/tracker-data.json');
 
-// Helper do scrapowania różnych sklepów
-async function fetchPrice(url) {
+const USER_AGENTS = [
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+];
+
+function getRandomUserAgent() {
+  return USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
+}
+
+const delay = (min, max) => new Promise(r => setTimeout(r, Math.floor(Math.random() * (max - min + 1) + min)));
+
+async function fetchPrice(browser, url) {
+  const userAgent = getRandomUserAgent();
+  const context = await browser.newContext({
+    userAgent,
+    viewport: { width: 1920, height: 1080 },
+    locale: 'pl-PL',
+    timezoneId: 'Europe/Warsaw'
+  });
+  
+  const page = await context.newPage();
+  
   try {
-    const { data } = await axios.get(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7',
-        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'document',
-        'sec-fetch-mode': 'navigate',
-        'sec-fetch-site': 'none',
-        'sec-fetch-user': '?1',
-        'upgrade-insecure-requests': '1'
-      },
-      timeout: 10000
-    });
-    const $ = cheerio.load(data);
-    let priceText = null;
-
-    if (url.includes('allegro.pl')) {
-      // Przykład dla allegro
-      priceText = $('div[aria-label^="cena"] > span, meta[itemprop="price"]').first().text() || $('meta[itemprop="price"]').attr('content');
-    } else if (url.includes('x-kom.pl')) {
-      // Przykład dla x-kom
-      priceText = $('meta[itemprop="price"]').attr('content') || $('span[data-name="productPrice"]').text();
-    } else if (url.includes('amazon.pl')) {
-      // Przykład dla amazon
-      priceText = $('.a-price .a-offscreen').first().text();
-    }
-
-    if (!priceText) {
-      console.warn(`[!] Nie znaleziono ceny dla: ${url}`);
-      return null;
-    }
-
-    // Wyciągnij liczby
-    const cleaned = priceText.replace(/[^\d.,]/g, '').replace(',', '.');
-    const cena = parseFloat(cleaned);
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
     
-    if (isNaN(cena)) return null;
-    return cena;
+    // Evaluate logic directly in browser
+    const price = await page.evaluate(() => {
+      const urlString = window.location.href;
+      let priceText = null;
+      
+      if (urlString.includes('allegro.pl')) {
+        const el = document.querySelector('div[aria-label^="cena"] > span') || document.querySelector('meta[itemprop="price"]');
+        if (el) priceText = el.tagName === 'META' ? el.getAttribute('content') : el.innerText;
+      } else if (urlString.includes('x-kom.pl')) {
+        const el = document.querySelector('meta[itemprop="price"]') || document.querySelector('span[data-name="productPrice"]');
+        if (el) priceText = el.tagName === 'META' ? el.getAttribute('content') : el.innerText;
+      } else if (urlString.includes('amazon.pl')) {
+        const el = document.querySelector('.a-price .a-offscreen');
+        if (el) priceText = el.innerText;
+      }
+
+      if (!priceText) return null;
+      const cleaned = priceText.replace(/[^\d.,]/g, '').replace(',', '.');
+      const cena = parseFloat(cleaned);
+      return isNaN(cena) ? null : cena;
+    });
+
+    await context.close();
+    if (price === null) {
+      console.warn(`[!] Nie znaleziono ceny dla: ${url}`);
+    }
+    return price;
   } catch (error) {
     console.error(`[Błąd] Scrapowanie ${url}:`, error.message);
+    await context.close();
     return null;
   }
 }
 
 async function main() {
-  console.log("Rozpoczynam sprawdzanie cen...");
+  console.log("Rozpoczynam sprawdzanie cen (Playwright)...");
   
   let rawData;
   try {
@@ -81,50 +92,69 @@ async function main() {
   });
 
   let hasChanges = false;
+  
+  // Uruchomienie Chromium
+  const browser = await chromium.launch({ headless: true });
+
+  const stats = {
+    checked: 0,
+    success: 0,
+    failed: 0,
+    failedUrls: []
+  };
 
   for (const [token, profile] of Object.entries(profiles)) {
     for (const product of profile.produkty) {
       for (const oferta of product.oferty || []) {
-        console.log(`Sprawdzam: ${product.nazwa} w ${oferta.sklep}...`);
+        stats.checked++;
+        console.log(`\nSprawdzam: ${product.nazwa} w ${oferta.sklep}... (${oferta.url})`);
         
-        const currentScrapedPrice = await fetchPrice(oferta.url);
-        if (currentScrapedPrice !== null && currentScrapedPrice !== oferta.cena) {
-          console.log(`Znalazłem nową cenę! Stara: ${oferta.cena}, Nowa: ${currentScrapedPrice}`);
-          
-          // Cena spadła?
-          if (currentScrapedPrice < oferta.cena) {
-            // Czy wysłać maila?
-            if (profile.email && profile.powiadomieniaEmail && profile.globalneAlerty && product.alert_wlaczony) {
-              console.log(`Wysyłam powiadomienie do ${profile.email}...`);
-              if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-                try {
-                  await transporter.sendMail({
-                    from: `"Price Tracker" <${process.env.GMAIL_USER}>`,
-                    to: profile.email,
-                    subject: `Spadek ceny! ${product.nazwa}`,
-                    text: `Dobra wiadomość!\nCena produktu ${product.nazwa} w sklepie ${oferta.sklep} spadła z ${oferta.cena} PLN na ${currentScrapedPrice} PLN.\n\nLink do oferty: ${oferta.url}`
-                  });
-                  console.log("Wysłano e-mail pomyślnie.");
-                } catch (e) {
-                  console.error("Błąd wysyłania e-maila:", e.message);
+        const currentScrapedPrice = await fetchPrice(browser, oferta.url);
+        
+        if (currentScrapedPrice !== null) {
+          stats.success++;
+          if (currentScrapedPrice !== oferta.cena) {
+            console.log(`Znalazłem nową cenę! Stara: ${oferta.cena}, Nowa: ${currentScrapedPrice}`);
+            
+            // Ignorujemy pierwszą zmianę z 0 (gdy użytkownik dodał ofertę z samej wklejki)
+            if (currentScrapedPrice < oferta.cena && oferta.cena !== 0) {
+              if (profile.email && profile.powiadomieniaEmail && profile.globalneAlerty && product.alert_wlaczony) {
+                console.log(`Wysyłam powiadomienie do ${profile.email}...`);
+                if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+                  try {
+                    await transporter.sendMail({
+                      from: `"Price Tracker" <${process.env.GMAIL_USER}>`,
+                      to: profile.email,
+                      subject: `Spadek ceny! ${product.nazwa}`,
+                      text: `Dobra wiadomość!\nCena produktu ${product.nazwa} w sklepie ${oferta.sklep} spadła z ${oferta.cena} PLN na ${currentScrapedPrice} PLN.\n\nLink do oferty: ${oferta.url}`
+                    });
+                    console.log("Wysłano e-mail pomyślnie.");
+                  } catch (e) {
+                    console.error("Błąd wysyłania e-maila:", e.message);
+                  }
+                } else {
+                  console.log("Pominięto wysyłkę e-mail: Brak konfiguracji GMAIL (secrets).");
                 }
-              } else {
-                console.log("Pominięto wysyłkę e-mail: Brak konfiguracji GMAIL (secrets).");
               }
             }
+  
+            oferta.cena = currentScrapedPrice;
+            hasChanges = true;
+          } else {
+            console.log(`Cena bez zmian (${currentScrapedPrice} PLN).`);
           }
-
-          // Zaktualizuj cenę w obiekcie
-          oferta.cena = currentScrapedPrice;
-          
-          // Dodaj historię na poziomie oferty (lub produktu w zaleznosci od potrzeb). Dla uproszczenia zaktualizujmy historię w produkcie jako min. 
-          hasChanges = true;
+        } else {
+          stats.failed++;
+          stats.failedUrls.push(oferta.url);
         }
-        // Mała przerwa anty-ban
-        await new Promise(r => setTimeout(r, 2000));
+        
+        // Losowe opóźnienie anty-ban (3 do 8 sekund)
+        const delayMs = Math.floor(Math.random() * 5000) + 3000;
+        console.log(`Odczekuję ${delayMs}ms...`);
+        await delay(delayMs, delayMs);
       }
       
-      // Aktualizuj trend i ogólną historię produktu bazując na najniższej cenie ze wszystkich ofert
+      // Aktualizuj trend i historię
       if (hasChanges && product.oferty && product.oferty.length > 0) {
         const lowestOffer = product.oferty.reduce((min, o) => 
           (o.cena + o.koszt_dostawy < min.cena + min.koszt_dostawy) ? o : min, product.oferty[0]);
@@ -134,13 +164,11 @@ async function main() {
         const lastHistory = product.historia.length > 0 ? product.historia[product.historia.length - 1] : null;
         
         if (!lastHistory || lastHistory.data !== today || lastHistory.cena !== minTotal) {
-           // jeśli dzisiaj jeszcze nie było wpisu lub cena się zmieniła
            if (lastHistory && lastHistory.data === today) {
              lastHistory.cena = minTotal;
            } else {
              product.historia.push({ data: today, cena: minTotal });
            }
-           // Ustal trend
            if (lastHistory) {
              if (minTotal < lastHistory.cena) product.trend = "spadek";
              else if (minTotal > lastHistory.cena) product.trend = "wzrost";
@@ -151,12 +179,25 @@ async function main() {
     }
   }
 
+  await browser.close();
+
+  // Podsumowanie
+  console.log("\n--- PODSUMOWANIE SCRAPOWANIA ---");
+  console.log(`Sprawdzono ofert: ${stats.checked}`);
+  console.log(`Zakończono sukcesem: ${stats.success}`);
+  console.log(`Zakończono błędem: ${stats.failed}`);
+  if (stats.failed > 0) {
+    console.log("Nieudane adresy URL:");
+    stats.failedUrls.forEach(url => console.log(` - ${url}`));
+  }
+  console.log("--------------------------------\n");
+
   if (hasChanges) {
     console.log("Zapisywanie zmian w pliku JSON...");
     await fs.writeFile(DATA_PATH, JSON.stringify(profiles, null, 2), 'utf-8');
     console.log("Gotowe.");
   } else {
-    console.log("Brak zmian w cenach.");
+    console.log("Brak zmian w cenach, nie nadpisuję pliku.");
   }
 }
 
