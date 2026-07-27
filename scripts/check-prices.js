@@ -84,7 +84,7 @@ async function fetchPrice(browser, url) {
       }
 
       // Mechanizm ratunkowy: regex
-      if (!priceText) {
+      if (!priceText || !/\d/.test(priceText)) {
         const priceContainer = document.querySelector('.product-price, .price, [class*="price"], [itemprop="offers"]');
         const textToSearch = priceContainer ? priceContainer.innerText : document.body.innerText;
         
@@ -196,6 +196,8 @@ async function main() {
   };
 
   for (const [token, profile] of Object.entries(profiles)) {
+    if (!profile.produkty || !Array.isArray(profile.produkty)) continue;
+    
     for (const product of profile.produkty) {
       for (const oferta of product.oferty || []) {
         stats.checked++;
