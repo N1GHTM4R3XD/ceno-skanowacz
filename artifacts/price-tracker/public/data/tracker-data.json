@@ -7,7 +7,7 @@
     "avatarColor": "#059669",
     "produkty": [
       {
-        "nazwa": "trawa",
+        "nazwa": "Trixie Tx",
         "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
@@ -137,8 +137,8 @@
         ]
       },
       {
-        "nazwa": "pizama",
-        "zdjecie_url": "",
+        "nazwa": "Piżama damska bawełniana z nadrukiem - MEDICINE",
+        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.med.png",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -148,12 +148,18 @@
             "id": "off17851500819050",
             "sklep": "Wearmedicine.com",
             "url": "https://wearmedicine.com/p/pizama-damska-bawelniana-z-nadrukiem-multicolor-rs26-pjd900-1053294",
-            "cena": 0,
+            "cena": 119.9,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms349mr5"
+        "id": "pms349mr5",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 119.9
+          }
+        ]
       }
     ]
   },
@@ -165,8 +171,8 @@
     "avatarColor": "#D97706",
     "produkty": [
       {
-        "nazwa": "Orly Heart Beet",
-        "zdjecie_url": "",
+        "nazwa": "ORLY",
+        "zdjecie_url": "https://pro-fra-s3-productsassets.rossmann.pl/product_1_large/2075021_1280_720_1727388665.webp",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -176,15 +182,15 @@
             "id": "off17851511885810",
             "sklep": "Rossmann.pl",
             "url": "https://www.rossmann.pl/Produkt/Lakiery-klasyczne/Orly-Breathable-lakier-do-paznokci-Heart-Beet-11-ml,2075021,13035?srsltid=AfmBOor7VLFKHJUMiqdvUOKOanjuJFlas4r5vL8W2Mz3tYyW2C_PzLHf",
-            "cena": 0,
+            "cena": 51.99,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": "od 199  zł"
           },
           {
             "id": "off17851511885811",
             "sklep": "Orlybeauty.pl",
             "url": "https://orlybeauty.pl/pl/p,1291-orly_breathable_20992_heart_beet",
-            "cena": 0,
+            "cena": 49,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null
           },
@@ -197,8 +203,22 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms34xco5"
+        "id": "pms34xco5",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 0
+          }
+        ]
       }
     ]
+  },
+  "_meta": {
+    "ostatnia_synchronizacja": "2026-07-27T11:32:02.782Z",
+    "status": "czesciowy_blad",
+    "sprawdzono": 9,
+    "sukces": 7,
+    "bledy": 2,
+    "pominieto": 0
   }
 }
