@@ -83,7 +83,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [theme, setTheme] = useState<Theme>("jasny");
+  const [theme, setTheme] = useState<Theme>(() => {
+    try {
+      const saved = localStorage.getItem("price-tracker-theme");
+      if (saved === "jasny" || saved === "ciemny" || saved === "kolorowy") {
+        return saved as Theme;
+      }
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "ciemny";
+      }
+    } catch (e) {}
+    return "jasny";
+  });
 
   const allTokens = Object.keys(profiles).filter((key) => key !== "_meta");
 
@@ -166,6 +177,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     root.classList.remove("dark", "colorful");
     if (theme === "ciemny") root.classList.add("dark");
     else if (theme === "kolorowy") root.classList.add("colorful");
+    
+    try {
+      localStorage.setItem("price-tracker-theme", theme);
+    } catch (e) {}
   }, [theme]);
 
   const updateProductAlert = async (productId: string, alert_wlaczony: boolean) => {
