@@ -73,11 +73,22 @@ async function fetchPrice(browser, url) {
       if (!priceText) return { cena: null, method: 'none', debugText: document.body.innerText.substring(0, 200) };
       const cleaned = priceText.replace(/[^\d.,]/g, '').replace(',', '.');
       const cena = parseFloat(cleaned);
-      return { cena: isNaN(cena) ? null : cena, method, raw: priceText };
+      
+      let freeDeliveryThreshold = null;
+      const freeDeliveryRegex = /(darmow|bezpłatn)[a-ząćęłńóśźż]*\s+(dostaw|wysyłk)[a-ząćęłńóśźż]*\s+od\s+(\d+[ ,.]?\d*)\s?(zł|pln)/i;
+      const deliveryMatch = document.body.innerText.match(freeDeliveryRegex);
+      if (deliveryMatch) {
+        freeDeliveryThreshold = `od ${deliveryMatch[3]} zł`;
+      }
+
+      return { cena: isNaN(cena) ? null : cena, method, raw: priceText, freeDeliveryThreshold };
     });
 
     const price = priceData.cena;
     console.log(`[Debug] Metoda znalezienia ceny: ${priceData.method}${priceData.raw ? ` (surowy tekst: ${priceData.raw})` : ''}`);
+    if (priceData.freeDeliveryThreshold) {
+      console.log(`[Debug] Znaleziono darmową dostawę: ${priceData.freeDeliveryThreshold}`);
+    }
 
     if (price === null) {
       console.warn(`[!] Nie znaleziono ceny dla: ${url}. Zapisuję dane debugowania...`);
@@ -97,7 +108,7 @@ async function fetchPrice(browser, url) {
     }
 
     await context.close();
-    return price;
+    return priceData;
   } catch (error) {
     console.error(`[Błąd] Scrapowanie ${url}:`, error.message);
     await context.close();
@@ -144,10 +155,20 @@ async function main() {
         stats.checked++;
         console.log(`\nSprawdzam: ${product.nazwa} w ${oferta.sklep}... (${oferta.url})`);
         
-        const currentScrapedPrice = await fetchPrice(browser, oferta.url);
+        const currentData = await fetchPrice(browser, oferta.url);
         
-        if (currentScrapedPrice !== null) {
+        if (currentData !== null && currentData.cena !== null) {
           stats.success++;
+          const currentScrapedPrice = currentData.cena;
+          
+          if (currentData.freeDeliveryThreshold) {
+            if (oferta.darmowa_dostawa_z !== currentData.freeDeliveryThreshold) {
+              oferta.darmowa_dostawa_z = currentData.freeDeliveryThreshold;
+              console.log(`Zaktualizowano próg darmowej dostawy: ${currentData.freeDeliveryThreshold}`);
+              hasChanges = true;
+            }
+          }
+
           if (currentScrapedPrice !== oferta.cena) {
             console.log(`Znalazłem nową cenę! Stara: ${oferta.cena}, Nowa: ${currentScrapedPrice}`);
             
