@@ -160,7 +160,7 @@
   "mamams34v99l": {
     "imie": "Mama",
     "email": "molizzipl@gmail.com",
-    "powiadomieniaEmail": true,
+    "powiadomieniaEmail": false,
     "globalneAlerty": true,
     "avatarColor": "#D97706",
     "produkty": [
