@@ -2,8 +2,8 @@ name: Check Prices
 
 on:
   schedule:
-    # Run twice a day at 8:00 and 20:00
-    - cron: '0 8,20 * * *'
+    # Run twice a day at 8:00 and 16:00 Polish time (UTC+2 in summer = 6:00 and 14:00 UTC)
+    - cron: '0 6,14 * * *'
   workflow_dispatch: # allow manual triggering
 
 jobs:
