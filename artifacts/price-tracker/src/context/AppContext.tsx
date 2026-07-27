@@ -33,11 +33,32 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     fetch(`${import.meta.env.BASE_URL}data/tracker-data.json?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
-        setProfiles(data || {});
+        let finalData = data || {};
+        try {
+          const cacheTsStr = localStorage.getItem("tracker-profiles-cache-ts");
+          if (cacheTsStr) {
+            const cacheTs = parseInt(cacheTsStr, 10);
+            if (!isNaN(cacheTs) && Date.now() - cacheTs < 5 * 60 * 1000) {
+              const cacheDataStr = localStorage.getItem("tracker-profiles-cache");
+              if (cacheDataStr) {
+                finalData = JSON.parse(cacheDataStr);
+                console.log("Użyto danych z lokalnego cache (GitHub Pages jeszcze się nie zaktualizował).");
+              }
+            }
+          }
+        } catch (e) {}
+        
+        setProfiles(finalData);
         setIsLoaded(true);
       })
       .catch((err) => {
         console.error("Failed to fetch tracker-data.json", err);
+        try {
+          const cacheDataStr = localStorage.getItem("tracker-profiles-cache");
+          if (cacheDataStr) {
+            setProfiles(JSON.parse(cacheDataStr));
+          }
+        } catch (e) {}
         setIsLoaded(true);
       });
   }, []);

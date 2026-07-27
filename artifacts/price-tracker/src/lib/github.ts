@@ -66,4 +66,9 @@ export async function saveDataToGitHub(
     console.error("Błąd zapisu do GitHuba:", errorData);
     throw new Error(errorData.message || `Błąd podczas zapisu: ${putRes.status}`);
   }
+  
+  try {
+    localStorage.setItem("tracker-profiles-cache", JSON.stringify(newData));
+    localStorage.setItem("tracker-profiles-cache-ts", Date.now().toString());
+  } catch (e) {}
 }

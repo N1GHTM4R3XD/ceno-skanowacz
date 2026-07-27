@@ -85,18 +85,22 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
                     <span className="font-medium text-sm">{oferta.sklep}</span>
                     {isBest && <Badge variant="default" className="text-[10px] h-4 px-1.5">Najlepsza</Badge>}
                   </div>
-                  <div className="flex items-center gap-1.5 mt-1 text-xs text-muted-foreground">
-                    <Truck className="w-3.5 h-3.5" />
-                    {isFreeDelivery ? (
-                      <span className="text-emerald-500 dark:text-emerald-400 font-medium">
-                        Darmowa dostawa {oferta.darmowa_dostawa_z && `(${oferta.darmowa_dostawa_z})`}
-                      </span>
-                    ) : oferta.koszt_dostawy ? (
-                      <span>Dostawa: {oferta.koszt_dostawy} {produkt.waluta}</span>
-                    ) : (
-                      <span>Dostawa: sprawdź w sklepie</span>
-                    )}
-                  </div>
+                  {oferta.koszt_dostawy !== null || oferta.darmowa_dostawa_z ? (
+                    <div className="flex items-center gap-1.5 mt-1 text-xs text-muted-foreground">
+                      <Truck className="w-3.5 h-3.5" />
+                      {oferta.koszt_dostawy === 0 ? (
+                        <span className="text-emerald-500 dark:text-emerald-400 font-medium">
+                          Darmowa dostawa
+                        </span>
+                      ) : oferta.koszt_dostawy !== null ? (
+                        <span>Dostawa: {oferta.koszt_dostawy} {produkt.waluta}</span>
+                      ) : (
+                        <span className="text-emerald-500 dark:text-emerald-400 font-medium">
+                          {oferta.darmowa_dostawa_z}
+                        </span>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
                 
                 <div className="flex flex-col items-end gap-1">
