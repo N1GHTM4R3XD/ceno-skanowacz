@@ -124,6 +124,25 @@
             "cena": 0
           }
         ]
+      },
+      {
+        "nazwa": "ksiazka",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
+          {
+            "id": "off17851468943170",
+            "sklep": "Empik.com",
+            "url": "https://www.empik.com/bezprawie-mroz-remigiusz,p1756220043,ebooki-i-mp3-p",
+            "cena": 0,
+            "koszt_dostawy": 0,
+            "darmowa_dostawa_z": ""
+          }
+        ],
+        "id": "pms32db71"
       }
     ]
   },
