@@ -11,11 +11,11 @@ const DATA_PATH = path.join(__dirname, '../artifacts/price-tracker/public/data/t
 const BLOCKED_DOMAINS = ['allegro.pl', 'mediaexpert.pl', 'zalando.pl'];
 
 const USER_AGENTS = [
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0'
 ];
 
 function getRandomUserAgent() {
@@ -60,16 +60,21 @@ async function fetchPrice(browser, url) {
       } else if (urlString.includes('amazon.pl')) {
         const el = document.querySelector('.a-price .a-offscreen');
         if (el) priceText = el.innerText;
+      } else if (urlString.includes('empik.com')) {
+        const el = document.querySelector('meta[itemprop="price"]') || document.querySelector('[data-ta="price"]') || document.querySelector('.css-price') || document.querySelector('.price');
+        if (el) priceText = el.tagName === 'META' ? el.getAttribute('content') : el.innerText;
       }
 
-      // Mechanizm ratunkowy: regex (szukanie czegokolwiek co wygląda jak cena w treści strony)
+      // Mechanizm ratunkowy: regex
       if (!priceText) {
+        const priceContainer = document.querySelector('.product-price, .price, [class*="price"], [itemprop="offers"]');
+        const textToSearch = priceContainer ? priceContainer.innerText : document.body.innerText;
+        
         const regex = /\d{1,5}(?:[,.]\d{2})?\s?(?:zł|pln)/gi;
-        const matches = document.body.innerText.match(regex);
+        const matches = textToSearch.match(regex);
         if (matches && matches.length > 0) {
-          // Bierzemy pierwszą pasującą cenę.
           priceText = matches[0];
-          method = 'regex';
+          method = priceContainer ? 'regex-container' : 'regex-body';
         }
       }
 
@@ -193,13 +198,25 @@ async function main() {
           }
         } catch(e) {}
         
-        // Jeśli wcześniej wymagała ręcznego sprawdzenia, a teraz to usunęliśmy z listy blokowanych
         if (oferta.wymaga_recznego_sprawdzenia) {
           oferta.wymaga_recznego_sprawdzenia = false;
           hasChanges = true;
         }
 
-        const currentData = await fetchPrice(browser, oferta.url);
+        let currentData = null;
+        const isAmazon = oferta.url.includes('amazon.pl');
+        const maxAttempts = isAmazon ? 3 : 1;
+
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+          currentData = await fetchPrice(browser, oferta.url);
+          if (currentData !== null && currentData.cena !== null) {
+            break; // Sukces
+          }
+          if (attempt < maxAttempts) {
+            console.log(`[Amazon] Próba ${attempt} nieudana (możliwa captcha). Ponawiam za chwilę...`);
+            await delay(3000, 6000);
+          }
+        }
         
         if (currentData !== null && currentData.cena !== null) {
           stats.success++;
