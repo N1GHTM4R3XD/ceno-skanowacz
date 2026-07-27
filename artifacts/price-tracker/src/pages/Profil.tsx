@@ -27,7 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 import { DEFAULT_AVATAR_COLOR } from "../data/avatarOptions";
 
 export function Profil() {
-  const { userProfile, updateProfileSettings, updateAvatarColor, selectedToken, removeProfile } = useAppContext();
+  const { userProfile, updateProfileSettings, selectedToken, removeProfile } = useAppContext();
   const { toast } = useToast();
 
   const [imie, setImie] = useState(userProfile?.imie || "");
@@ -44,8 +44,7 @@ export function Profil() {
   if (!userProfile) return null;
 
   const handleSave = () => {
-    updateProfileSettings(imie, email, emailAlerts, globalAlerts, avatarUrl);
-    updateAvatarColor(avatarColor);
+    updateProfileSettings(imie, email, emailAlerts, globalAlerts, avatarUrl, avatarColor);
     toast({
       title: "Zapisano zmiany",
       description: "Twoje ustawienia profilu zostały zaktualizowane.",

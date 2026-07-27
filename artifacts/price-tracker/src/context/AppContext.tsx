@@ -17,8 +17,7 @@ interface AppContextType {
   updateProductAlert: (productId: string, alert_wlaczony: boolean) => Promise<void>;
   updateProductInfo: (productId: string, newName: string, newImageUrl: string) => Promise<void>;
   updateManualPrice: (productId: string, offerId: string, newPrice: number) => Promise<void>;
-  updateProfileSettings: (imie: string, email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean, avatarUrl?: string) => Promise<void>;
-  updateAvatarColor: (color: string) => Promise<void>;
+  updateProfileSettings: (imie: string, email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean, avatarUrl: string | undefined, avatarColor: string) => Promise<void>;
   removeProfile: (token: string) => Promise<void>;
   allTokens: string[];
   syncMeta: SyncMeta | null;
@@ -292,7 +291,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     email: string,
     powiadomieniaEmail: boolean,
     globalneAlerty: boolean,
-    avatarUrl?: string
+    avatarUrl: string | undefined,
+    avatarColor: string
   ) => {
     if (!selectedToken) return;
     try {
@@ -303,30 +303,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         powiadomieniaEmail,
         globalneAlerty,
         avatarUrl,
+        avatarColor,
       };
       const newProfiles = { ...profiles, [selectedToken]: updatedProfile };
       await saveDataToGitHub(newProfiles, `Zaktualizowano ustawienia profilu`);
       setProfiles(newProfiles);
       setUserProfile(updatedProfile);
       toast({ title: "Zapisano", description: "Ustawienia zostały zaktualizowane." });
-    } catch (err: any) {
-      toast({ title: "Błąd zapisu", description: err.message, variant: "destructive" });
-      throw err;
-    }
-  };
-
-  const updateAvatarColor = async (color: string) => {
-    if (!selectedToken) return;
-    try {
-      const updatedProfile = {
-        ...profiles[selectedToken],
-        avatarColor: color,
-      };
-      const newProfiles = { ...profiles, [selectedToken]: updatedProfile };
-      await saveDataToGitHub(newProfiles, `Zmieniono kolor awatara`);
-      setProfiles(newProfiles);
-      setUserProfile(updatedProfile);
-      toast({ title: "Zapisano", description: "Kolor awatara został zaktualizowany." });
     } catch (err: any) {
       toast({ title: "Błąd zapisu", description: err.message, variant: "destructive" });
       throw err;
