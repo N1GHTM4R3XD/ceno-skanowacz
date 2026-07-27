@@ -149,7 +149,7 @@
             "id": "off17851468943170",
             "sklep": "Empik.com",
             "url": "https://www.empik.com/bezprawie-mroz-remigiusz,p1756220043,ebooki-i-mp3-p",
-            "cena": 60,
+            "cena": 30.99,
             "koszt_dostawy": 0,
             "darmowa_dostawa_z": "",
             "nazwa_ze_sklepu": "Bezprawie - ebook EPUB"
@@ -159,7 +159,7 @@
         "historia": [
           {
             "data": "2026-07-27",
-            "cena": 60
+            "cena": 30.99
           }
         ]
       },
