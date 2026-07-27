@@ -85,7 +85,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [theme, setTheme] = useState<Theme>("jasny");
 
-  const allTokens = Object.keys(profiles);
+  const allTokens = Object.keys(profiles).filter((key) => key !== "_meta");
 
   const selectUser = (token: string) => {
     if (profiles[token]) {
