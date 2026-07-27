@@ -44,7 +44,7 @@
             "id": "off17850962761290",
             "sklep": "Renee.pl",
             "url": "https://www.renee.pl/czarna-sukienka-z-bawelny-na-ramiaczkach-o-rozkloszowanym-kroju-z-marszczona-gora-christten?utm_source=google&utm_medium=cpc&utm_campaign=PMax%20%3E%20Wszystkie%20kategorie%20%3E%20product_push%20%3E%20lato&device=c&utm_id=22165849107&campaign_id=22165849107&gad_source=1&gad_campaignid=22176048886&gbraid=0AAAAADM70hMoZuRK56BMcvaneS_arcX6r&gclid=EAIaIQobChMIn7n-3pHxlQMViheiAx0SaSjBEAQYAiABEgIByvD_BwE",
-            "cena": 1000,
+            "cena": 49.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "",
             "nazwa_ze_sklepu": "Renee"
@@ -111,7 +111,7 @@
         ]
       },
       {
-        "nazwa": "medicine blusja",
+        "nazwa": "Bluzka hiszpanka damska w kratkę - MEDICINE",
         "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.med.png",
         "kategoria": "Inne",
         "waluta": "PLN",
@@ -216,11 +216,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-27T19:39:17.020Z",
+    "ostatnia_synchronizacja": "2026-07-27T19:46:48.325Z",
     "status": "czesciowy_blad",
     "sprawdzono": 9,
-    "sukces": 6,
-    "bledy": 3,
+    "sukces": 7,
+    "bledy": 2,
     "pominieto": 0
   }
 }
