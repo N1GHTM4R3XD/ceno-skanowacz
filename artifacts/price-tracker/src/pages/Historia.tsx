@@ -42,7 +42,7 @@ export function Historia() {
   const allHistory: HistoryEntry[] = [];
 
   userProfile.produkty.forEach((produkt) => {
-    const sortedChronological = [...produkt.historia].sort(
+    const sortedChronological = [...(produkt.historia || [])].sort(
       (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()
     );
     sortedChronological.forEach((wpis, index) => {

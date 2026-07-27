@@ -84,7 +84,12 @@ async function fetchPrice(browser, url) {
         freeDeliveryThreshold = `od ${deliveryMatch[3]} zł`;
       }
 
-      return { cena: isNaN(cena) ? null : cena, method, raw: priceText, freeDeliveryThreshold };
+      let ogImage = document.querySelector('meta[property="og:image"]')?.getAttribute('content');
+      if (!ogImage) {
+        ogImage = document.querySelector('meta[name="twitter:image"]')?.getAttribute('content');
+      }
+
+      return { cena: isNaN(cena) ? null : cena, method, raw: priceText, freeDeliveryThreshold, ogImage };
     });
 
     const price = priceData.cena;
@@ -185,6 +190,12 @@ async function main() {
         if (currentData !== null && currentData.cena !== null) {
           stats.success++;
           const currentScrapedPrice = currentData.cena;
+          
+          if (!product.zdjecie_url && currentData.ogImage) {
+            product.zdjecie_url = currentData.ogImage;
+            console.log(`[Zaktualizowano zdjęcie] Pobrano zdjęcie ze sklepu: ${currentData.ogImage}`);
+            hasChanges = true;
+          }
           
           if (currentData.freeDeliveryThreshold) {
             if (oferta.darmowa_dostawa_z !== currentData.freeDeliveryThreshold) {

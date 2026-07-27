@@ -39,7 +39,7 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
   const sortedOffers = useMemo(() => {
     if (!produkt.oferty) return [];
     return [...produkt.oferty].sort(
-      (a, b) => (a.cena + a.koszt_dostawy) - (b.cena + b.koszt_dostawy)
+      (a, b) => (a.cena + (a.koszt_dostawy || 0)) - (b.cena + (b.koszt_dostawy || 0))
     );
   }, [produkt.oferty]);
 
@@ -52,7 +52,7 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
           {sortedOffers.map((oferta, index) => {
             const isBest = index === 0;
             const isFreeDelivery = oferta.koszt_dostawy === 0;
-            const totalPrice = oferta.cena + oferta.koszt_dostawy;
+            const totalPrice = oferta.cena + (oferta.koszt_dostawy || 0);
             
             return (
               <div 
@@ -70,8 +70,10 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
                       <span className="text-emerald-500 dark:text-emerald-400 font-medium">
                         Darmowa dostawa {oferta.darmowa_dostawa_z && `(${oferta.darmowa_dostawa_z})`}
                       </span>
-                    ) : (
+                    ) : oferta.koszt_dostawy ? (
                       <span>Dostawa: {oferta.koszt_dostawy} {produkt.waluta}</span>
+                    ) : (
+                      <span>Dostawa: sprawdź w sklepie</span>
                     )}
                   </div>
                 </div>

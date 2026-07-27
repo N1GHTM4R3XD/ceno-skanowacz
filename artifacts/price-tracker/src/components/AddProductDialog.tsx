@@ -46,7 +46,7 @@ const EMPTY: FormState = {
   kategoria: "Inne",
   alert_wlaczony: true,
   oferty: [
-    { sklep: "", url: "", cena: "", koszt_dostawy: "0" }
+    { sklep: "", url: "", cena: "", koszt_dostawy: "" }
   ],
 };
 
@@ -111,12 +111,14 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
     setIsSubmitting(true);
     const oferty: Oferta[] = form.oferty.map((o, index) => {
       let cena = parseFloat(o.cena.replace(",", "."));
-      let dostawa = parseFloat(o.koszt_dostawy.replace(",", ".")) || 0;
+      let dostawaStr = o.koszt_dostawy.trim().replace(",", ".");
+      let dostawa: number | null = dostawaStr === "" ? null : parseFloat(dostawaStr);
+      if (dostawa !== null && isNaN(dostawa)) dostawa = null;
       let sklep = o.sklep.trim();
 
       if (!isAdvancedMode) {
         cena = 0;
-        dostawa = 0;
+        dostawa = null;
         sklep = getShopNameFromUrl(o.url);
       }
 
@@ -240,7 +242,7 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
                 variant="outline" 
                 size="sm" 
                 className="h-7 text-xs" 
-                onClick={() => set("oferty", [...form.oferty, { sklep: "", url: "", cena: "", koszt_dostawy: "0" }])}
+                onClick={() => set("oferty", [...form.oferty, { sklep: "", url: "", cena: "", koszt_dostawy: "" }])}
               >
                 <Plus className="w-3 h-3 mr-1" /> Dodaj link
               </Button>

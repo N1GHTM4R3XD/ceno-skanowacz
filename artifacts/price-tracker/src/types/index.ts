@@ -10,7 +10,7 @@ export interface Oferta {
   sklep: string;
   url: string;
   cena: number;
-  koszt_dostawy: number;
+  koszt_dostawy: number | null;
   darmowa_dostawa_z: string | null;
   wymaga_recznego_sprawdzenia?: boolean;
   historia?: HistoriaZnak[];

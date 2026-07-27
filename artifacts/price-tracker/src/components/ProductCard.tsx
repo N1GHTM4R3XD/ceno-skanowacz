@@ -53,10 +53,10 @@ export function ProductCard({ produkt }: ProductCardProps) {
   // Znajdź najtańszą ofertę (cena + dostawa), preferując te, które mają cenę > 0 i nie wymagają ręcznego sprawdzenia
   const validOffers = oferty.filter(o => !o.wymaga_recznego_sprawdzenia && o.cena > 0);
   const bestOffer = validOffers.length > 0 
-    ? validOffers.reduce((min, o) => (o.cena + o.koszt_dostawy < min.cena + min.koszt_dostawy) ? o : min, validOffers[0])
+    ? validOffers.reduce((min, o) => (o.cena + (o.koszt_dostawy || 0) < min.cena + (min.koszt_dostawy || 0)) ? o : min, validOffers[0])
     : (hasOffers ? oferty[0] : null);
 
-  const currentTotal = bestOffer ? bestOffer.cena + bestOffer.koszt_dostawy : 0;
+  const currentTotal = bestOffer ? bestOffer.cena + (bestOffer.koszt_dostawy || 0) : 0;
   const previousTotal = produkt.historia && produkt.historia.length > 0 
     ? produkt.historia[produkt.historia.length - 1].cena // zakładamy najnowszą historię jako poprzednią, albo trzeba obliczyć trend, uprośćmy
     : currentTotal; 
@@ -104,8 +104,12 @@ export function ProductCard({ produkt }: ProductCardProps) {
 
           {/* Delete button */}
           <button
-            onClick={() => setConfirmDelete(true)}
-            className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 hover:bg-destructive transition-all duration-200"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setConfirmDelete(true);
+            }}
+            className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-destructive transition-all duration-200"
             title="Usuń produkt"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -157,7 +161,7 @@ export function ProductCard({ produkt }: ProductCardProps) {
                 
                 <div className="text-xs text-muted-foreground mt-1 mb-2">
                   w {bestOffer.sklep} 
-                  {bestOffer.koszt_dostawy > 0 ? ` (+${bestOffer.koszt_dostawy} dostawa)` : ' (Darmowa dostawa)'}
+                  {bestOffer.koszt_dostawy === 0 ? ' (Darmowa dostawa)' : bestOffer.koszt_dostawy ? ` (+${bestOffer.koszt_dostawy} dostawa)` : ' (Dostawa: sprawdź w sklepie)'}
                   {oferty.length > 1 && ` i ${oferty.length - 1} innych`}
                 </div>
                 
