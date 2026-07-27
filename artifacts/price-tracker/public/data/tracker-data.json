@@ -137,8 +137,8 @@
         ]
       },
       {
-        "nazwa": "pizama",
-        "zdjecie_url": "",
+        "nazwa": "Piżama damska bawełniana z nadrukiem - MEDICINE",
+        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.med.png",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -148,12 +148,18 @@
             "id": "off17851500819050",
             "sklep": "Wearmedicine.com",
             "url": "https://wearmedicine.com/p/pizama-damska-bawelniana-z-nadrukiem-multicolor-rs26-pjd900-1053294",
-            "cena": 0,
+            "cena": 119.9,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms349mr5"
+        "id": "pms349mr5",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 119.9
+          }
+        ]
       }
     ]
   },
@@ -164,5 +170,13 @@
     "globalneAlerty": true,
     "avatarColor": "#7C3AED",
     "produkty": []
+  },
+  "_meta": {
+    "ostatnia_synchronizacja": "2026-07-27T11:03:45.780Z",
+    "status": "czesciowy_blad",
+    "sprawdzono": 6,
+    "sukces": 4,
+    "bledy": 2,
+    "pominieto": 0
   }
 }
