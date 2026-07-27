@@ -62,7 +62,7 @@
             "id": "off17850962761290",
             "sklep": "Renee.pl",
             "url": "https://www.renee.pl/czarna-sukienka-z-bawelny-na-ramiaczkach-o-rozkloszowanym-kroju-z-marszczona-gora-christten?utm_source=google&utm_medium=cpc&utm_campaign=PMax%20%3E%20Wszystkie%20kategorie%20%3E%20product_push%20%3E%20lato&device=c&utm_id=22165849107&campaign_id=22165849107&gad_source=1&gad_campaignid=22176048886&gbraid=0AAAAADM70hMoZuRK56BMcvaneS_arcX6r&gclid=EAIaIQobChMIn7n-3pHxlQMViheiAx0SaSjBEAQYAiABEgIByvD_BwE",
-            "cena": 4822,
+            "cena": 49.99,
             "koszt_dostawy": 0,
             "darmowa_dostawa_z": ""
           }
@@ -71,7 +71,7 @@
         "historia": [
           {
             "data": "2026-07-27",
-            "cena": 4822
+            "cena": 49.99
           }
         ]
       },
@@ -92,7 +92,13 @@
             "darmowa_dostawa_z": ""
           }
         ],
-        "id": "pms31jw2c"
+        "id": "pms31jw2c",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 0
+          }
+        ]
       },
       {
         "nazwa": "buty",
@@ -111,7 +117,13 @@
             "darmowa_dostawa_z": ""
           }
         ],
-        "id": "pms31kc93"
+        "id": "pms31kc93",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 0
+          }
+        ]
       }
     ]
   }
