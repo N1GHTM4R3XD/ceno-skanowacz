@@ -77,9 +77,15 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
                 </div>
                 
                 <div className="flex flex-col items-end gap-1">
-                  <div className="font-bold text-sm">
-                    {totalPrice} {produkt.waluta}
-                  </div>
+                  {oferta.wymaga_recznego_sprawdzenia ? (
+                    <Badge variant="outline" className="text-[10px] border-orange-200 bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:border-orange-800 dark:text-orange-400 mt-1 mb-1">
+                      Sprawdź ręcznie
+                    </Badge>
+                  ) : (
+                    <div className="font-bold text-sm">
+                      {totalPrice} {produkt.waluta}
+                    </div>
+                  )}
                   <a
                     href={oferta.url}
                     target="_blank"

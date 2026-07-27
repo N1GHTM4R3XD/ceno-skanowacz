@@ -50,12 +50,11 @@ export function ProductCard({ produkt }: ProductCardProps) {
   const oferty = produkt.oferty || [];
   const hasOffers = oferty.length > 0;
   
-  // Znajdź najtańszą ofertę (cena + dostawa)
-  const bestOffer = hasOffers 
-    ? oferty.reduce((min, o) => 
-        (o.cena + o.koszt_dostawy < min.cena + min.koszt_dostawy) ? o : min
-      , oferty[0])
-    : null;
+  // Znajdź najtańszą ofertę (cena + dostawa), preferując te, które mają cenę > 0 i nie wymagają ręcznego sprawdzenia
+  const validOffers = oferty.filter(o => !o.wymaga_recznego_sprawdzenia && o.cena > 0);
+  const bestOffer = validOffers.length > 0 
+    ? validOffers.reduce((min, o) => (o.cena + o.koszt_dostawy < min.cena + min.koszt_dostawy) ? o : min, validOffers[0])
+    : (hasOffers ? oferty[0] : null);
 
   const currentTotal = bestOffer ? bestOffer.cena + bestOffer.koszt_dostawy : 0;
   const previousTotal = produkt.historia && produkt.historia.length > 0 
@@ -139,12 +138,21 @@ export function ProductCard({ produkt }: ProductCardProps) {
             {bestOffer ? (
               <>
                 <div className="flex items-end gap-2 mb-1">
-                  <span className="text-3xl font-bold tracking-tight text-foreground">
-                    {bestOffer.cena > 0 ? bestOffer.cena : "---"}
-                  </span>
-                  <span className="text-sm font-medium text-muted-foreground pb-1">
-                    {bestOffer.cena > 0 ? produkt.waluta : ""}
-                  </span>
+                  {bestOffer.wymaga_recznego_sprawdzenia ? (
+                    <Badge variant="outline" className="text-sm border-orange-200 bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:border-orange-800 dark:text-orange-400 mb-1">
+                      <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
+                      Sprawdź ręcznie
+                    </Badge>
+                  ) : (
+                    <>
+                      <span className="text-3xl font-bold tracking-tight text-foreground">
+                        {bestOffer.cena > 0 ? bestOffer.cena : "---"}
+                      </span>
+                      <span className="text-sm font-medium text-muted-foreground pb-1">
+                        {bestOffer.cena > 0 ? produkt.waluta : ""}
+                      </span>
+                    </>
+                  )}
                 </div>
                 
                 <div className="text-xs text-muted-foreground mt-1 mb-2">

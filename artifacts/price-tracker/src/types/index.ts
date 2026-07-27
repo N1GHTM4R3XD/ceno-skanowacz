@@ -12,6 +12,7 @@ export interface Oferta {
   cena: number;
   koszt_dostawy: number;
   darmowa_dostawa_z: string | null;
+  wymaga_recznego_sprawdzenia?: boolean;
   historia?: HistoriaZnak[];
 }
 

@@ -8,6 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DATA_PATH = path.join(__dirname, '../artifacts/price-tracker/public/data/tracker-data.json');
 
+const BLOCKED_DOMAINS = ['allegro.pl', 'mediaexpert.pl', 'zalando.pl'];
+
 const USER_AGENTS = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -147,6 +149,7 @@ async function main() {
     checked: 0,
     success: 0,
     failed: 0,
+    skipped: 0,
     failedUrls: []
   };
 
@@ -156,6 +159,27 @@ async function main() {
         stats.checked++;
         console.log(`\nSprawdzam: ${product.nazwa} w ${oferta.sklep}... (${oferta.url})`);
         
+        try {
+          const u = new URL(oferta.url);
+          const domain = u.hostname.replace('www.', '').toLowerCase();
+          
+          if (BLOCKED_DOMAINS.some(d => domain.includes(d))) {
+            console.log(`[Pominięto] Domena blokująca scraper: ${domain}`);
+            stats.skipped++;
+            if (!oferta.wymaga_recznego_sprawdzenia) {
+              oferta.wymaga_recznego_sprawdzenia = true;
+              hasChanges = true;
+            }
+            continue;
+          }
+        } catch(e) {}
+        
+        // Jeśli wcześniej wymagała ręcznego sprawdzenia, a teraz to usunęliśmy z listy blokowanych
+        if (oferta.wymaga_recznego_sprawdzenia) {
+          oferta.wymaga_recznego_sprawdzenia = false;
+          hasChanges = true;
+        }
+
         const currentData = await fetchPrice(browser, oferta.url);
         
         if (currentData !== null && currentData.cena !== null) {
@@ -242,6 +266,7 @@ async function main() {
   console.log("\n--- PODSUMOWANIE SCRAPOWANIA ---");
   console.log(`Sprawdzono ofert: ${stats.checked}`);
   console.log(`Zakończono sukcesem: ${stats.success}`);
+  console.log(`Pominięto (znana blokada): ${stats.skipped}`);
   console.log(`Zakończono błędem: ${stats.failed}`);
   if (stats.failed > 0) {
     console.log("Nieudane adresy URL:");
