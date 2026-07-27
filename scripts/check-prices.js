@@ -89,7 +89,21 @@ async function fetchPrice(browser, url) {
         ogImage = document.querySelector('meta[name="twitter:image"]')?.getAttribute('content');
       }
 
-      return { cena: isNaN(cena) ? null : cena, method, raw: priceText, freeDeliveryThreshold, ogImage };
+      let fetchedTitle = document.querySelector('meta[property="og:title"]')?.getAttribute('content');
+      if (!fetchedTitle) {
+        let titleEl = document.querySelector('title');
+        if (titleEl && titleEl.innerText) {
+          fetchedTitle = titleEl.innerText.split('-')[0].trim();
+        }
+      }
+      if (!fetchedTitle) {
+        let h1 = document.querySelector('h1');
+        if (h1 && h1.innerText) {
+          fetchedTitle = h1.innerText.trim();
+        }
+      }
+
+      return { cena: isNaN(cena) ? null : cena, method, raw: priceText, freeDeliveryThreshold, ogImage, fetchedTitle };
     });
 
     const price = priceData.cena;
@@ -194,6 +208,12 @@ async function main() {
           if (!product.zdjecie_url && currentData.ogImage) {
             product.zdjecie_url = currentData.ogImage;
             console.log(`[Zaktualizowano zdjęcie] Pobrano zdjęcie ze sklepu: ${currentData.ogImage}`);
+            hasChanges = true;
+          }
+          
+          if (currentData.fetchedTitle && !oferta.nazwa_ze_sklepu) {
+            oferta.nazwa_ze_sklepu = currentData.fetchedTitle;
+            console.log(`[Zaktualizowano nazwę oferty] Pobrano nazwę ze sklepu: ${currentData.fetchedTitle}`);
             hasChanges = true;
           }
           

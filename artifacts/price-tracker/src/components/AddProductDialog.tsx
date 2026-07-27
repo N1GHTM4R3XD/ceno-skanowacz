@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import { triggerPriceCheckWorkflow } from "../lib/github";
 import {
   Dialog,
   DialogContent,
@@ -142,8 +141,6 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
         alert_wlaczony: form.alert_wlaczony,
         oferty,
       });
-      // Uruchomienie skryptu sprawdzającego ceny w tle po udanym dodaniu
-      triggerPriceCheckWorkflow();
       
       setForm(EMPTY);
       setErrors({});
