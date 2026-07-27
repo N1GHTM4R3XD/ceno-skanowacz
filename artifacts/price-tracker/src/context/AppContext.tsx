@@ -354,7 +354,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         updateProductAlert,
         updateManualPrice,
         updateProfileSettings,
-        updateAvatarColor,
         allTokens,
         syncMeta,
         removeProfile,
