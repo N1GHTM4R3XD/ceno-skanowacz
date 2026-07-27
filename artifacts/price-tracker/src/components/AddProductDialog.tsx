@@ -39,7 +39,7 @@ interface FormState {
   }>;
 }
 
-const EMPTY: FormState = {
+const getEmptyFormState = (): FormState => ({
   nazwa: "",
   zdjecie_url: "",
   kategoria: "Inne",
@@ -47,7 +47,7 @@ const EMPTY: FormState = {
   oferty: [
     { sklep: "", url: "", cena: "", koszt_dostawy: "" }
   ],
-};
+});
 
 function getShopNameFromUrl(url: string) {
   try {
@@ -61,17 +61,19 @@ function getShopNameFromUrl(url: string) {
 
 export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) {
   const { addProduct } = useAppContext();
-  const [form, setForm] = useState<FormState>(EMPTY);
+  const [form, setForm] = useState<FormState>(getEmptyFormState());
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTakingLong, setIsTakingLong] = useState(false);
 
   React.useEffect(() => {
     if (open) {
-      setForm(EMPTY);
+      setForm(getEmptyFormState());
       setErrors({});
       setIsAdvancedMode(false);
       setIsSubmitting(false);
+      setIsTakingLong(false);
     }
   }, [open]);
 
@@ -108,6 +110,9 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
     if (!validate()) return;
     
     setIsSubmitting(true);
+    setIsTakingLong(false);
+    const longTimer = setTimeout(() => setIsTakingLong(true), 3000);
+    
     const oferty: Oferta[] = form.oferty.map((o, index) => {
       let cena = parseFloat(o.cena.replace(",", "."));
       let dostawaStr = o.koszt_dostawy.trim().replace(",", ".");
@@ -125,7 +130,7 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
         id: `off${Date.now()}${index}`,
         sklep,
         url: o.url.trim(),
-        cena: isNaN(cena) ? 0 : cena,
+        cena: isNaN(cena) ? null : cena,
         koszt_dostawy: dostawa,
         darmowa_dostawa_z: dostawa === 0 ? "" : null,
       };
@@ -142,19 +147,21 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
         oferty,
       });
       
-      setForm(EMPTY);
+      setForm(getEmptyFormState());
       setErrors({});
       setIsAdvancedMode(false);
       onOpenChange(false);
     } catch (error) {
       // Błąd jest już obsługiwany przez toast w AppContext
     } finally {
+      clearTimeout(longTimer);
       setIsSubmitting(false);
+      setIsTakingLong(false);
     }
   };
 
   const handleClose = () => {
-    setForm(EMPTY);
+    setForm(getEmptyFormState());
     setErrors({});
     setIsAdvancedMode(false);
     onOpenChange(false);
@@ -361,11 +368,22 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
           </div>
         </div>
 
-        <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={handleClose} className="flex-1" disabled={isSubmitting}>
+        <DialogFooter className="flex flex-col sm:flex-row gap-2 mt-4 items-center">
+          <div className="flex-1 flex items-center justify-start text-sm text-muted-foreground w-full">
+            {isTakingLong && (
+              <span className="flex items-center gap-2 animate-pulse text-primary font-medium">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Synchronizowanie z bazą, to może chwilę potrwać...
+              </span>
+            )}
+          </div>
+          <Button type="button" variant="ghost" onClick={handleClose} disabled={isSubmitting}>
             Anuluj
           </Button>
-          <Button onClick={handleSubmit} className="flex-1" disabled={isSubmitting}>
+          <Button type="button" disabled={isSubmitting} onClick={handleSubmit}>
             {isSubmitting ? "Zapisywanie..." : "Dodaj produkt"}
           </Button>
         </DialogFooter>
