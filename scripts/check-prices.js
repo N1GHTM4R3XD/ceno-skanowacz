@@ -108,8 +108,8 @@ async function fetchPrice(browser, url) {
       let freeDeliveryThreshold = null;
       const freeDeliveryRegex = /(darmow|bezpłatn)[a-ząćęłńóśźż]*\s+(dostaw|wysyłk)[a-ząćęłńóśźż]*\s+od\s+(\d+[ ,.]?\d*)\s?(zł|pln)/i;
       const deliveryMatch = document.body.innerText.match(freeDeliveryRegex);
-      if (deliveryMatch) {
-        freeDeliveryThreshold = `od ${deliveryMatch[3]} zł`;
+      if (deliveryMatch && deliveryMatch[3]) {
+        freeDeliveryThreshold = deliveryMatch[3].replace(/[^\d.,]/g, '').replace(',', '.');
       }
 
       let ogImage = document.querySelector('meta[property="og:image"]')?.getAttribute('content');
@@ -200,16 +200,29 @@ async function main() {
     failedUrls: []
   };
   const aggregatedEmails = {};
+  const queue = [];
 
   for (const [token, profile] of Object.entries(profiles)) {
     if (!profile.produkty || !Array.isArray(profile.produkty)) continue;
-    
     for (const product of profile.produkty) {
       for (const oferta of product.oferty || []) {
-        stats.checked++;
-        console.log(`\nSprawdzam: ${product.nazwa} w ${oferta.sklep}... (${oferta.url})`);
-        
-        try {
+        queue.push({ profile, product, oferta });
+      }
+    }
+  }
+
+  const MAX_CONCURRENT_JOBS = 2;
+
+  async function worker(workerId) {
+    while (queue.length > 0) {
+      const task = queue.shift();
+      if (!task) continue;
+      
+      const { profile, product, oferta } = task;
+      stats.checked++;
+      console.log(`\n[Wątek ${workerId}] Sprawdzam: ${product.nazwa} w ${oferta.sklep}... (${oferta.url})`);
+      
+      try {
           const u = new URL(oferta.url);
           const domain = u.hostname.replace('www.', '').toLowerCase();
           
@@ -222,8 +235,11 @@ async function main() {
             }
             continue;
           }
-        } catch(e) {}
-        
+      } catch(e) {
+        console.error(`[Wątek ${workerId}] Błąd podczas sprawdzania blokad dla ${oferta.url}:`, e);
+      }
+      
+      try {
         if (oferta.wymaga_recznego_sprawdzenia) {
           oferta.wymaga_recznego_sprawdzenia = false;
           hasChanges = true;
@@ -296,15 +312,33 @@ async function main() {
           stats.failed++;
           stats.failedUrls.push(oferta.url);
         }
-        
-        // Losowe opóźnienie anty-ban (3 do 8 sekund)
-        const delayMs = Math.floor(Math.random() * 5000) + 3000;
-        console.log(`Odczekuję ${delayMs}ms...`);
-        await delay(delayMs, delayMs);
+      } catch (err) {
+        console.error(`[Wątek ${workerId}] Krytyczny błąd podczas przetwarzania oferty ${oferta.url}:`, err);
+        stats.failed++;
+        stats.failedUrls.push(oferta.url);
       }
       
-      // Aktualizuj trend i historię
-      if (hasChanges && product.oferty && product.oferty.length > 0) {
+      // Losowe opóźnienie anty-ban (3 do 8 sekund) dla TEGO workera
+      const delayMs = Math.floor(Math.random() * 5000) + 3000;
+      console.log(`[Wątek ${workerId}] Odczekuję ${delayMs}ms...`);
+      await delay(delayMs, delayMs);
+    }
+  }
+
+  // Uruchom max 2 workery
+  const numWorkers = Math.min(queue.length, MAX_CONCURRENT_JOBS);
+  const workerPromises = [];
+  for (let i = 1; i <= numWorkers; i++) {
+    workerPromises.push(worker(i));
+  }
+  await Promise.all(workerPromises);
+  
+  // Aktualizuj trend i historię po zakończeniu pobierania cen
+  for (const [token, profile] of Object.entries(profiles)) {
+    if (!profile.produkty || !Array.isArray(profile.produkty)) continue;
+    for (const product of profile.produkty) {
+      
+      if (product.oferty && product.oferty.length > 0) {
         const lowestOffer = product.oferty.reduce((min, o) => 
           (o.cena + o.koszt_dostawy < min.cena + min.koszt_dostawy) ? o : min, product.oferty[0]);
         const minTotal = lowestOffer.cena + lowestOffer.koszt_dostawy;
@@ -312,17 +346,21 @@ async function main() {
         if (!product.historia) product.historia = [];
         const lastHistory = product.historia.length > 0 ? product.historia[product.historia.length - 1] : null;
         
-        if (!lastHistory || lastHistory.data !== today || lastHistory.cena !== minTotal) {
+        // Oblicz trend, o ile mamy z czym porównać
+        if (lastHistory) {
+          if (minTotal < lastHistory.cena) product.trend = "spadek";
+          else if (minTotal > lastHistory.cena) product.trend = "wzrost";
+          else product.trend = "brak_zmian";
+        }
+        
+        // Jeśli ceny się różnią LUB brakuje historii na dziś, modyfikujemy historię
+        if (!lastHistory || lastHistory.cena !== minTotal) {
            if (lastHistory && lastHistory.data === today) {
              lastHistory.cena = minTotal;
            } else {
              product.historia.push({ data: today, cena: minTotal });
            }
-           if (lastHistory) {
-             if (minTotal < lastHistory.cena) product.trend = "spadek";
-             else if (minTotal > lastHistory.cena) product.trend = "wzrost";
-             else product.trend = "brak_zmian";
-           }
+           hasChanges = true;
         }
       }
     }

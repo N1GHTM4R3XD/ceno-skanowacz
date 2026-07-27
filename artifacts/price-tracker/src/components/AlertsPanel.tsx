@@ -97,7 +97,14 @@ function AlertsContent({
       ) : (
         <div className="max-h-[300px] overflow-y-auto">
           {activeAlerts.map((produkt) => {
-            const savings = produkt.cena_poprzednia - produkt.cena_obecna;
+            const histLen = produkt.historia?.length || 0;
+            const cena_obecna = histLen > 0 ? produkt.historia![histLen - 1].cena : 0;
+            // Jeśli historia ma tylko 1 wpis, oznacza to, że nie mamy wprost zapisanej poprzedniej ceny, 
+            // ale jeśli trend to "spadek", musiała spaść. W ramach fallbacku można użyć ceny z najlepszej oferty,
+            // ale bezpieczniej po prostu wyświetlić obecną. Idealnie by było mieć minimum 2 wpisy dla "spadku".
+            const cena_poprzednia = histLen > 1 ? produkt.historia![histLen - 2].cena : cena_obecna;
+            const savings = Math.max(0, cena_poprzednia - cena_obecna);
+            
             return (
               <DropdownMenuItem
                 key={produkt.id}
@@ -105,16 +112,20 @@ function AlertsContent({
               >
                 <span className="font-medium text-sm line-clamp-1">{produkt.nazwa}</span>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground w-full">
-                  <span className="line-through">
-                    {produkt.cena_poprzednia} {produkt.waluta}
-                  </span>
+                  {histLen > 1 && (
+                    <span className="line-through">
+                      {cena_poprzednia} {produkt.waluta}
+                    </span>
+                  )}
                   <ArrowDown className="h-3 w-3 text-emerald-500" />
                   <span className="text-emerald-500 font-semibold">
-                    {produkt.cena_obecna} {produkt.waluta}
+                    {cena_obecna} {produkt.waluta}
                   </span>
-                  <span className="ml-auto text-emerald-600 bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-400 px-1.5 py-0.5 rounded font-medium">
-                    -{savings} {produkt.waluta}
-                  </span>
+                  {savings > 0 && (
+                    <span className="ml-auto text-emerald-600 bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-400 px-1.5 py-0.5 rounded font-medium">
+                      -{savings.toFixed(2)} {produkt.waluta}
+                    </span>
+                  )}
                 </div>
               </DropdownMenuItem>
             );
