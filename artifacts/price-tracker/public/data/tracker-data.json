@@ -93,6 +93,25 @@
           }
         ],
         "id": "pms31jw2c"
+      },
+      {
+        "nazwa": "buty",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
+          {
+            "id": "off17851455426630",
+            "sklep": "Zalando.pl",
+            "url": "https://www.zalando.pl/nike-performance-downshifter-obuwie-do-biegania-treningowe-whitewhite-cucumber-calmillusion-greenblack-n1241a1g4-a15.html",
+            "cena": 0,
+            "koszt_dostawy": 0,
+            "darmowa_dostawa_z": ""
+          }
+        ],
+        "id": "pms31kc93"
       }
     ]
   }
