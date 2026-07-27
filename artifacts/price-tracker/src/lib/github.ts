@@ -67,3 +67,30 @@ export async function saveDataToGitHub(
     throw new Error(errorData.message || `Błąd podczas zapisu: ${putRes.status}`);
   }
 }
+
+export async function triggerPriceCheckWorkflow(): Promise<void> {
+  if (!GITHUB_TOKEN) return;
+
+  const url = `https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/check-prices.yml/dispatches`;
+  const headers = {
+    Authorization: `Bearer ${GITHUB_TOKEN}`,
+    Accept: "application/vnd.github.v3+json",
+    "Content-Type": "application/json",
+  };
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ ref: "main" }),
+    });
+
+    if (!res.ok) {
+      console.warn("Nie udało się wyzwolić workflow:", await res.text());
+    } else {
+      console.log("Pomyślnie wyzwolono workflow check-prices.yml");
+    }
+  } catch (e) {
+    console.warn("Błąd sieciowy przy próbie wyzwolenia workflow:", e);
+  }
+}

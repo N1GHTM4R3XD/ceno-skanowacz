@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAppContext } from "../context/AppContext";
+import { triggerPriceCheckWorkflow } from "../lib/github";
 import {
   Dialog,
   DialogContent,
@@ -66,6 +67,15 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  React.useEffect(() => {
+    if (open) {
+      setForm(EMPTY);
+      setErrors({});
+      setIsAdvancedMode(false);
+      setIsSubmitting(false);
+    }
+  }, [open]);
+
   const set = (field: keyof FormState, value: string | boolean) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
@@ -130,6 +140,9 @@ export function AddProductDialog({ open, onOpenChange }: AddProductDialogProps) 
         alert_wlaczony: form.alert_wlaczony,
         oferty,
       });
+      // Uruchomienie skryptu sprawdzającego ceny w tle po udanym dodaniu
+      triggerPriceCheckWorkflow();
+      
       setForm(EMPTY);
       setErrors({});
       setIsAdvancedMode(false);
