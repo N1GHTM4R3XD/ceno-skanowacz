@@ -36,10 +36,17 @@ async function fetchPrice(browser, url) {
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
     
+    console.log(`[Debug] Tytuł strony: ${await page.title()}`);
+    // Zrzuty ekranu i HTML można włączyć lokalnie odkomentowując poniższe linie:
+    // await page.screenshot({ path: `debug_${Date.now()}.png`, fullPage: true });
+    // const html = await page.content();
+    // require("fs").writeFileSync(`debug_${Date.now()}.html`, html);
+
     // Evaluate logic directly in browser
-    const price = await page.evaluate(() => {
+    const priceData = await page.evaluate(() => {
       const urlString = window.location.href;
       let priceText = null;
+      let method = 'selector';
       
       if (urlString.includes('allegro.pl')) {
         const el = document.querySelector('div[aria-label^="cena"] > span') || document.querySelector('meta[itemprop="price"]');
@@ -52,11 +59,25 @@ async function fetchPrice(browser, url) {
         if (el) priceText = el.innerText;
       }
 
-      if (!priceText) return null;
+      // Mechanizm ratunkowy: regex (szukanie czegokolwiek co wygląda jak cena w treści strony)
+      if (!priceText) {
+        const regex = /\d+[ ,.]\d{2}\s?(zł|PLN)?/gi;
+        const matches = document.body.innerText.match(regex);
+        if (matches && matches.length > 0) {
+          // Bierzemy pierwszą pasującą cenę.
+          priceText = matches[0];
+          method = 'regex';
+        }
+      }
+
+      if (!priceText) return { cena: null, method: 'none', debugText: document.body.innerText.substring(0, 200) };
       const cleaned = priceText.replace(/[^\d.,]/g, '').replace(',', '.');
       const cena = parseFloat(cleaned);
-      return isNaN(cena) ? null : cena;
+      return { cena: isNaN(cena) ? null : cena, method, raw: priceText };
     });
+
+    const price = priceData.cena;
+    console.log(`[Debug] Metoda znalezienia ceny: ${priceData.method}${priceData.raw ? ` (surowy tekst: ${priceData.raw})` : ''}`);
 
     await context.close();
     if (price === null) {
