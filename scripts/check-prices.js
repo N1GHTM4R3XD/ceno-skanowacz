@@ -86,13 +86,18 @@ async function fetchPrice(browser, url) {
       // Mechanizm ratunkowy: regex
       if (!priceText || !/\d/.test(priceText)) {
         const priceContainer = document.querySelector('.product-price, .price, [class*="price"], [itemprop="offers"]');
-        const textToSearch = priceContainer ? priceContainer.innerText : document.body.innerText;
-        
         const regex = /\d{1,5}(?:[,.]\d{2})?\s?(?:zł|pln)/gi;
-        const matches = textToSearch.match(regex);
+        
+        let matches = priceContainer ? priceContainer.innerText.match(regex) : null;
         if (matches && matches.length > 0) {
           priceText = matches[0];
-          method = priceContainer ? 'regex-container' : 'regex-body';
+          method = 'regex-container';
+        } else {
+          matches = document.body.innerText.match(regex);
+          if (matches && matches.length > 0) {
+            priceText = matches[0];
+            method = 'regex-body';
+          }
         }
       }
 
