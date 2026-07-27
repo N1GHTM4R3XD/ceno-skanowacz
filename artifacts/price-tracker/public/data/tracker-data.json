@@ -20,10 +20,17 @@
             "url": "https://allegro.pl/oferta/runianka-japonska-green-carpet-okrywowa-9535016289?utm_feed=aa34192d-eee2-4419-9a9a-de66b9dfae24&utm_content=supercena&utm_source=google&utm_medium=cpc&utm_campaign=_dio_ogrod_pla_ss_sc&ev_adgr=_dio_ogrod_sc&ev_campaign_id=22386243109&gad_source=1&gad_campaignid=22386243109&gbraid=0AAAAAD24kbN0I27dIQSNDZAAnArfytKi_&gclid=EAIaIQobChMIzvjC3fqclQMVEWiRBR3PZiysEAQYAiABEgJCRfD_BwE&dd_referrer=https%3A%2F%2Fwww.google.com%2F",
             "cena": 0,
             "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
+            "darmowa_dostawa_z": "",
+            "wymaga_recznego_sprawdzenia": true
           }
         ],
-        "id": "pms27hpxz"
+        "id": "pms27hpxz",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 0
+          }
+        ]
       },
       {
         "nazwa": "trawa",
@@ -39,7 +46,8 @@
             "url": "https://www.amazon.pl/Trixie-Tx-4235-Kocia-Trawa-Zielony/dp/B000WFG714/ref=sr_1_6?__mk_pl_PL=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3JM0TB20AI5CP&keywords=cat+bowl&qid=1694602938&s=pet-supplies&sprefix=cat+bowl%2Cpets%2C91&sr=1-6",
             "cena": 8.99,
             "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
+            "darmowa_dostawa_z": "",
+            "nazwa_ze_sklepu": "Trixie Tx"
           }
         ],
         "id": "pms287nws",
@@ -52,7 +60,7 @@
       },
       {
         "nazwa": "sukienka",
-        "zdjecie_url": "",
+        "zdjecie_url": "https://reneecdn.aza.moda/pdp-catalog/31/00/00/34/64/3100003464001/8.jpg",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -64,7 +72,8 @@
             "url": "https://www.renee.pl/czarna-sukienka-z-bawelny-na-ramiaczkach-o-rozkloszowanym-kroju-z-marszczona-gora-christten?utm_source=google&utm_medium=cpc&utm_campaign=PMax%20%3E%20Wszystkie%20kategorie%20%3E%20product_push%20%3E%20lato&device=c&utm_id=22165849107&campaign_id=22165849107&gad_source=1&gad_campaignid=22176048886&gbraid=0AAAAADM70hMoZuRK56BMcvaneS_arcX6r&gclid=EAIaIQobChMIn7n-3pHxlQMViheiAx0SaSjBEAQYAiABEgIByvD_BwE",
             "cena": 49.99,
             "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
+            "darmowa_dostawa_z": "",
+            "nazwa_ze_sklepu": "Renee"
           }
         ],
         "id": "pms288dy9",
@@ -89,7 +98,8 @@
             "url": "https://www.mediaexpert.pl/agd-male/ekspresy-i-kawa/ekspresy-cisnieniowe/ekspres-saeco-xelsis-deluxe-sm8782-30",
             "cena": 0,
             "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
+            "darmowa_dostawa_z": "",
+            "wymaga_recznego_sprawdzenia": true
           }
         ],
         "id": "pms31jw2c",
@@ -114,7 +124,8 @@
             "url": "https://www.zalando.pl/nike-performance-downshifter-obuwie-do-biegania-treningowe-whitewhite-cucumber-calmillusion-greenblack-n1241a1g4-a15.html",
             "cena": 0,
             "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
+            "darmowa_dostawa_z": "",
+            "wymaga_recznego_sprawdzenia": true
           }
         ],
         "id": "pms31kc93",
@@ -127,7 +138,7 @@
       },
       {
         "nazwa": "ksiazka",
-        "zdjecie_url": "",
+        "zdjecie_url": "https://ecsmedia.pl/c/bezprawie-ebook-epub-b-iext229925446.jpg",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -137,16 +148,23 @@
             "id": "off17851468943170",
             "sklep": "Empik.com",
             "url": "https://www.empik.com/bezprawie-mroz-remigiusz,p1756220043,ebooki-i-mp3-p",
-            "cena": 0,
+            "cena": 60,
             "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
+            "darmowa_dostawa_z": "",
+            "nazwa_ze_sklepu": "Bezprawie - ebook EPUB"
           }
         ],
-        "id": "pms32db71"
+        "id": "pms32db71",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 60
+          }
+        ]
       },
       {
         "nazwa": "answear koszula",
-        "zdjecie_url": "",
+        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -156,16 +174,23 @@
             "id": "off17851470078940",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/medicine-kamizelka-jednorzedowa-damska-biala-1702611",
-            "cena": 0,
+            "cena": 159.9,
             "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
+            "darmowa_dostawa_z": "od 280  zł",
+            "nazwa_ze_sklepu": "Medicine kamizelka jednorzędowa damska biała | Answear.com"
           }
         ],
-        "id": "pms32fqty"
+        "id": "pms32fqty",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 159.9
+          }
+        ]
       },
       {
         "nazwa": "medicine blusja",
-        "zdjecie_url": "",
+        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.med.png",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -175,12 +200,19 @@
             "id": "off17851470330490",
             "sklep": "Wearmedicine.com",
             "url": "https://wearmedicine.com/p/bluzka-hiszpanka-damska-w-kratke-czarna-rs26-bkdc01-1053662",
-            "cena": 0,
+            "cena": 89.9,
             "koszt_dostawy": 0,
-            "darmowa_dostawa_z": ""
+            "darmowa_dostawa_z": "",
+            "nazwa_ze_sklepu": "Bluzka hiszpanka damska w kratkę - MEDICINE"
           }
         ],
-        "id": "pms32ga8p"
+        "id": "pms32ga8p",
+        "historia": [
+          {
+            "data": "2026-07-27",
+            "cena": 89.9
+          }
+        ]
       }
     ]
   },
