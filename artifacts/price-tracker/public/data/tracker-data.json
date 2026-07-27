@@ -1,8 +1,8 @@
 {
   "joms27cmxh": {
-    "imie": "jo",
-    "email": "",
-    "powiadomieniaEmail": false,
+    "imie": "Jo",
+    "email": "molizzipl@gmail.com",
+    "powiadomieniaEmail": true,
     "globalneAlerty": true,
     "avatarColor": "#059669",
     "produkty": [
@@ -161,7 +161,8 @@
           }
         ]
       }
-    ]
+    ],
+    "avatarUrl": ""
   },
   "mamams34v99l": {
     "imie": "Mama",
