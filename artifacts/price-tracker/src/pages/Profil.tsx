@@ -8,17 +8,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { AvatarPicker } from "../components/AvatarPicker";
-import { User, Mail, Bell, ShieldAlert, Save, Info, Palette } from "lucide-react";
+import { User, Mail, Bell, ShieldAlert, Save, Info, Palette, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { DEFAULT_AVATAR_COLOR } from "../data/avatarOptions";
 
 export function Profil() {
-  const { userProfile, updateProfileSettings, updateAvatarColor, selectedToken } = useAppContext();
+  const { userProfile, updateProfileSettings, updateAvatarColor, selectedToken, removeProfile } = useAppContext();
   const { toast } = useToast();
 
   const [email, setEmail] = useState(userProfile?.email || "");
@@ -27,6 +36,8 @@ export function Profil() {
   const [avatarColor, setAvatarColor] = useState(
     userProfile?.avatarColor || DEFAULT_AVATAR_COLOR
   );
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   if (!userProfile) return null;
 
@@ -38,6 +49,17 @@ export function Profil() {
       description: "Twoje ustawienia profilu zostały zaktualizowane.",
       duration: 3000,
     });
+  };
+
+  const handleDeleteProfile = async () => {
+    if (!selectedToken) return;
+    setIsDeleting(true);
+    try {
+      await removeProfile(selectedToken);
+    } catch {
+      setIsDeleting(false);
+      setConfirmDeleteOpen(false);
+    }
   };
 
   return (
@@ -84,6 +106,10 @@ export function Profil() {
                 placeholder="twoj@email.pl"
               />
             </div>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <Info className="w-3 h-3 flex-shrink-0" />
+              Powiadomienia o spadkach cen będą wysyłane na ten adres.
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -155,14 +181,6 @@ export function Profil() {
               />
             </div>
           </div>
-
-          <div className="bg-blue-50 dark:bg-blue-950/30 text-blue-800 dark:text-blue-300 p-3 rounded-lg flex gap-2.5 text-xs border border-blue-100 dark:border-blue-900">
-            <Info className="w-4 h-4 shrink-0 mt-0.5" />
-            <p>
-              Wysyłka e-maili jest w fazie przygotowania. Ustawienia są zapisywane w interfejsie,
-              ale e-maile nie są jeszcze fizycznie wysyłane.
-            </p>
-          </div>
         </CardContent>
         <CardFooter className="bg-muted/30 border-t py-4">
           <Button
@@ -174,6 +192,54 @@ export function Profil() {
           </Button>
         </CardFooter>
       </Card>
+
+      {/* Delete profile card */}
+      <Card className="border-destructive/30">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg text-destructive">
+            <Trash2 className="w-5 h-5" />
+            Usuń profil
+          </CardTitle>
+          <CardDescription>
+            Trwale usuwa profil i wszystkie obserwowane produkty. Tej operacji nie można cofnąć.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            variant="destructive"
+            className="flex items-center gap-2 min-h-[44px]"
+            onClick={() => setConfirmDeleteOpen(true)}
+          >
+            <Trash2 className="w-4 h-4" />
+            Usuń profil
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Delete confirmation dialog */}
+      <AlertDialog open={confirmDeleteOpen} onOpenChange={setConfirmDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Usunąć profil?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Profil <strong>{userProfile.imie}</strong> oraz wszystkie{" "}
+              <strong>{userProfile.produkty.length}</strong> obserwowanych produktów zostaną
+              trwale usunięte. Tej operacji nie można cofnąć.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Anuluj</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              disabled={isDeleting}
+              onClick={handleDeleteProfile}
+              className="min-h-[40px]"
+            >
+              {isDeleting ? "Usuwanie..." : "Tak, usuń profil"}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

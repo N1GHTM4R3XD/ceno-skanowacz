@@ -48,6 +48,7 @@ export function ProductCard({ produkt }: ProductCardProps) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSavingAlert, setIsSavingAlert] = useState(false);
 
   // Zabezpieczenie przed pustymi ofertami
   const oferty = produkt.oferty || [];
@@ -229,7 +230,11 @@ export function ProductCard({ produkt }: ProductCardProps) {
                 <Switch
                   id={`alert-${produkt.id}`}
                   checked={produkt.alert_wlaczony}
-                  onCheckedChange={(v) => updateProductAlert(produkt.id, v)}
+                  disabled={isSavingAlert}
+                  onCheckedChange={async (v) => {
+                    setIsSavingAlert(true);
+                    try { await updateProductAlert(produkt.id, v); } finally { setIsSavingAlert(false); }
+                  }}
                   className="data-[state=checked]:bg-primary"
                 />
                 <Label

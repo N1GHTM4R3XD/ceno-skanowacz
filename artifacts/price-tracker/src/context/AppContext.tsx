@@ -19,6 +19,7 @@ interface AppContextType {
   updateManualPrice: (productId: string, offerId: string, newPrice: number) => Promise<void>;
   updateProfileSettings: (email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean) => Promise<void>;
   updateAvatarColor: (color: string) => Promise<void>;
+  removeProfile: (token: string) => Promise<void>;
   allTokens: string[];
   syncMeta: SyncMeta | null;
 }
@@ -314,6 +315,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const removeProfile = async (token: string) => {
+    try {
+      const newProfiles = { ...profiles };
+      delete newProfiles[token];
+      await saveDataToGitHub(newProfiles, `Usunięto profil`);
+      setProfiles(newProfiles);
+      if (selectedToken === token) {
+        setSelectedToken(null);
+        setUserProfile(null);
+      }
+      toast({ title: "Usunięto", description: "Profil został trwale usunięty." });
+    } catch (err: any) {
+      toast({ title: "Błąd", description: err.message, variant: "destructive" });
+      throw err;
+    }
+  };
+
   if (!isLoaded) {
     return <div className="flex h-screen items-center justify-center">Ładowanie...</div>;
   }
@@ -338,6 +356,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         updateAvatarColor,
         allTokens,
         syncMeta,
+        removeProfile,
       }}
     >
       {children}
