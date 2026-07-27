@@ -12,7 +12,7 @@
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
-        "alert_wlaczony": true,
+        "alert_wlaczony": false,
         "oferty": [
           {
             "id": "off17850950319590",
@@ -31,7 +31,7 @@
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
-        "alert_wlaczony": false,
+        "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17850962423800",
