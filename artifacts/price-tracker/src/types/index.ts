@@ -3,6 +3,7 @@ export type Trend = "spadek" | "wzrost" | "brak_zmian";
 export interface HistoriaZnak {
   data: string;
   cena: number;
+  zrodlo?: "reczne" | "scraper";
 }
 
 export interface Oferta {

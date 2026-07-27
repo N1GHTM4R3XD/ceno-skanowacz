@@ -15,6 +15,7 @@ interface AppContextType {
   addProduct: (product: Omit<Produkt, "id">) => Promise<void>;
   removeProduct: (productId: string) => Promise<void>;
   updateProductAlert: (productId: string, alert_wlaczony: boolean) => Promise<void>;
+  updateManualPrice: (productId: string, offerId: string, newPrice: number) => Promise<void>;
   updateProfileSettings: (email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean) => Promise<void>;
   updateAvatarColor: (color: string) => Promise<void>;
   allTokens: string[];
@@ -146,6 +147,73 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateManualPrice = async (productId: string, offerId: string, newPrice: number) => {
+    if (!selectedToken) return;
+    try {
+      const profile = profiles[selectedToken];
+      const product = profile.produkty.find(p => p.id === productId);
+      if (!product) return;
+      
+      const oldOffer = product.oferty.find(o => o.id === offerId);
+      const oldPrice = oldOffer ? oldOffer.cena : 0;
+      
+      const updatedOferty = product.oferty.map(o => 
+        o.id === offerId ? { ...o, cena: newPrice } : o
+      );
+      
+      const validOffers = updatedOferty.filter(o => o.cena > 0);
+      const bestOffer = validOffers.length > 0 
+        ? validOffers.reduce((min, o) => (o.cena + (o.koszt_dostawy || 0) < min.cena + (min.koszt_dostawy || 0)) ? o : min, validOffers[0])
+        : (updatedOferty.length > 0 ? updatedOferty[0] : null);
+        
+      const currentTotal = bestOffer ? bestOffer.cena + (bestOffer.koszt_dostawy || 0) : 0;
+      
+      let updatedHistoria = [...(product.historia || [])];
+      const today = new Date().toISOString().split("T")[0];
+      const lastHistory = updatedHistoria.length > 0 ? updatedHistoria[updatedHistoria.length - 1] : null;
+      
+      let trend = product.trend;
+      if (!lastHistory || lastHistory.data !== today) {
+         updatedHistoria.push({ data: today, cena: currentTotal, zrodlo: "reczne" });
+         if (lastHistory) {
+           if (currentTotal < lastHistory.cena) trend = "spadek";
+           else if (currentTotal > lastHistory.cena) trend = "wzrost";
+           else trend = "brak_zmian";
+         }
+      } else {
+         if (lastHistory.cena !== currentTotal) {
+            updatedHistoria[updatedHistoria.length - 1] = { ...lastHistory, cena: currentTotal, zrodlo: "reczne" };
+            const prevHistory = updatedHistoria.length > 1 ? updatedHistoria[updatedHistoria.length - 2] : null;
+            if (prevHistory) {
+              if (currentTotal < prevHistory.cena) trend = "spadek";
+              else if (currentTotal > prevHistory.cena) trend = "wzrost";
+              else trend = "brak_zmian";
+            }
+         }
+      }
+      
+      const updatedProfile = {
+        ...profile,
+        produkty: profile.produkty.map(p => 
+          p.id === productId ? { ...p, oferty: updatedOferty, historia: updatedHistoria, trend } : p
+        )
+      };
+      
+      const newProfiles = { ...profiles, [selectedToken]: updatedProfile };
+      await saveDataToGitHub(newProfiles, `Ręczna aktualizacja ceny: ${product.nazwa}`);
+      setProfiles(newProfiles);
+      setUserProfile(updatedProfile);
+      
+      if (newPrice < oldPrice && oldPrice !== 0 && product.alert_wlaczony && profile.globalneAlerty) {
+        toast({ title: "Spadek ceny!", description: `Ręcznie wprowadzona cena jest niższa od poprzedniej.`, variant: "default" });
+      } else {
+        toast({ title: "Zapisano", description: "Cena została zaktualizowana ręcznie." });
+      }
+    } catch (err: any) {
+      toast({ title: "Błąd zapisu", description: err.message, variant: "destructive" });
+    }
+  };
+
   const updateProfileSettings = async (
     email: string,
     powiadomieniaEmail: boolean,
@@ -206,6 +274,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         addProduct,
         removeProduct,
         updateProductAlert,
+        updateManualPrice,
         updateProfileSettings,
         updateAvatarColor,
         allTokens,

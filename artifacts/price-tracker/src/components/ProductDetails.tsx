@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Produkt } from "../types";
+import { useAppContext } from "../context/AppContext";
 import {
   LineChart,
   Line,
@@ -10,14 +11,34 @@ import {
 } from "recharts";
 import { format, parseISO } from "date-fns";
 import { pl } from "date-fns/locale";
-import { ExternalLink, Truck } from "lucide-react";
+import { ExternalLink, Truck, Edit2, Check, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface ProductDetailsProps {
   produkt: Produkt;
 }
 
 export function ProductDetails({ produkt }: ProductDetailsProps) {
+  const { updateManualPrice } = useAppContext();
+  const [editingOfferId, setEditingOfferId] = useState<string | null>(null);
+  const [manualPrice, setManualPrice] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleManualPriceSubmit = async (offerId: string) => {
+    const numPrice = parseFloat(manualPrice.replace(",", "."));
+    if (isNaN(numPrice) || numPrice < 0) return;
+    
+    setIsSubmitting(true);
+    try {
+      await updateManualPrice(produkt.id, offerId, numPrice);
+      setEditingOfferId(null);
+      setManualPrice("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   const chartData = useMemo(() => {
     // Ensure data is sorted by date ascending for the chart
     return [...(produkt.historia || [])].sort(
@@ -80,9 +101,58 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
                 
                 <div className="flex flex-col items-end gap-1">
                   {oferta.wymaga_recznego_sprawdzenia ? (
-                    <Badge variant="outline" className="text-[10px] border-orange-200 bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:border-orange-800 dark:text-orange-400 mt-1 mb-1">
-                      Sprawdź ręcznie
-                    </Badge>
+                    editingOfferId === oferta.id ? (
+                      <div className="flex items-center gap-1 mt-1 mb-1">
+                        <Input 
+                          type="text" 
+                          value={manualPrice}
+                          onChange={(e) => setManualPrice(e.target.value)}
+                          className="h-6 w-16 text-[10px] px-1 text-center"
+                          placeholder="Cena"
+                          autoFocus
+                          onKeyDown={(e) => e.key === 'Enter' && handleManualPriceSubmit(oferta.id)}
+                        />
+                        <Button 
+                          size="icon" 
+                          variant="ghost" 
+                          className="h-6 w-6" 
+                          onClick={() => handleManualPriceSubmit(oferta.id)}
+                          disabled={isSubmitting}
+                        >
+                          <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        </Button>
+                        <Button 
+                          size="icon" 
+                          variant="ghost" 
+                          className="h-6 w-6" 
+                          onClick={() => setEditingOfferId(null)}
+                          disabled={isSubmitting}
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1 mt-1 mb-1">
+                        <Badge variant="outline" className="text-[10px] border-orange-200 bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:border-orange-800 dark:text-orange-400 cursor-help" title="Sklep blokuje automatyczne odczytywanie. Wpisz cenę ręcznie.">
+                          Sprawdź ręcznie
+                        </Badge>
+                        <button 
+                          onClick={() => {
+                            setEditingOfferId(oferta.id);
+                            setManualPrice(oferta.cena > 0 ? oferta.cena.toString() : "");
+                          }}
+                          className="text-muted-foreground hover:text-primary transition-colors p-1"
+                          title="Wpisz cenę ręcznie"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        {oferta.cena > 0 && (
+                          <div className="font-bold text-sm ml-1 text-foreground">
+                            {totalPrice} {produkt.waluta}
+                          </div>
+                        )}
+                      </div>
+                    )
                   ) : (
                     <div className="font-bold text-sm">
                       {totalPrice} {produkt.waluta}
