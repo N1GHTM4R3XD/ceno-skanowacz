@@ -194,6 +194,7 @@ async function main() {
     skipped: 0,
     failedUrls: []
   };
+  const aggregatedEmails = {};
 
   for (const [token, profile] of Object.entries(profiles)) {
     if (!profile.produkty || !Array.isArray(profile.produkty)) continue;
@@ -265,25 +266,19 @@ async function main() {
           if (currentScrapedPrice !== oferta.cena) {
             console.log(`Znalazłem nową cenę! Stara: ${oferta.cena}, Nowa: ${currentScrapedPrice}`);
             
-            // Ignorujemy pierwszą zmianę z 0 (gdy użytkownik dodał ofertę z samej wklejki)
-            if (currentScrapedPrice < oferta.cena && oferta.cena !== 0) {
+            // Ignorujemy pierwszą zmianę z 0 (lub null)
+            if (currentScrapedPrice < oferta.cena && oferta.cena !== 0 && oferta.cena !== null) {
               if (profile.email && profile.powiadomieniaEmail && profile.globalneAlerty && product.alert_wlaczony) {
-                console.log(`Wysyłam powiadomienie do ${profile.email}...`);
-                if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-                  try {
-                    await transporter.sendMail({
-                      from: `"Price Tracker" <${process.env.GMAIL_USER}>`,
-                      to: profile.email,
-                      subject: `Spadek ceny! ${product.nazwa}`,
-                      text: `Dobra wiadomość!\nCena produktu ${product.nazwa} w sklepie ${oferta.sklep} spadła z ${oferta.cena} PLN na ${currentScrapedPrice} PLN.\n\nLink do oferty: ${oferta.url}`
-                    });
-                    console.log("Wysłano e-mail pomyślnie.");
-                  } catch (e) {
-                    console.error("Błąd wysyłania e-maila:", e.message);
-                  }
-                } else {
-                  console.log("Pominięto wysyłkę e-mail: Brak konfiguracji GMAIL (secrets).");
+                if (!aggregatedEmails[profile.email]) {
+                  aggregatedEmails[profile.email] = [];
                 }
+                aggregatedEmails[profile.email].push({
+                  nazwa: product.nazwa,
+                  sklep: oferta.sklep,
+                  staraCena: oferta.cena,
+                  nowaCena: currentScrapedPrice,
+                  url: oferta.url
+                });
               }
             }
   
@@ -341,6 +336,55 @@ async function main() {
     stats.failedUrls.forEach(url => console.log(` - ${url}`));
   }
   console.log("--------------------------------\n");
+
+  // Wysyłanie zbiorczych powiadomień e-mail
+  if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+    const emailEntries = Object.entries(aggregatedEmails);
+    if (emailEntries.length === 0) {
+      console.log("Nie wykryto promocji – wiadomość nie została wysłana.");
+    } else {
+      for (const [email, drops] of emailEntries) {
+        if (drops.length === 0) continue;
+        
+        console.log(`Wykryto ${drops.length} promocje(ji) dla ${email} – wysyłanie zbiorczego e-maila.`);
+        
+        const count = drops.length;
+        const lastDigit = count % 10;
+        const lastTwo = count % 100;
+        let odmiana = 'obniżek cen';
+        if (count === 1) odmiana = 'obniżkę ceny';
+        else if (lastDigit >= 2 && lastDigit <= 4 && (lastTwo < 10 || lastTwo >= 20)) odmiana = 'obniżki cen';
+        
+        const subject = `🔔 Wykryto ${count} ${odmiana}`;
+        
+        let text = `Dobra wiadomość! Wykryliśmy spadki cen dla Twoich obserwowanych produktów:\n\n`;
+        drops.forEach((drop, idx) => {
+          text += `${idx + 1}. ${drop.nazwa}\n`;
+          text += `   Sklep: ${drop.sklep}\n`;
+          text += `   Cena: spadła z ${drop.staraCena} PLN na ${drop.nowaCena} PLN\n`;
+          text += `   Link: ${drop.url}\n\n`;
+        });
+        
+        text += `---\nJest to automatyczne powiadomienie wygenerowane przez aplikację Price Tracker.`;
+        
+        try {
+          await transporter.sendMail({
+            from: `"Price Tracker" <${process.env.GMAIL_USER}>`,
+            to: email,
+            subject,
+            text
+          });
+          console.log("Zbiorczy e-mail został wysłany pomyślnie.");
+        } catch (e) {
+          console.error(`Błąd wysyłania e-maila do ${email}:`, e.message);
+        }
+      }
+    }
+  } else if (Object.keys(aggregatedEmails).length > 0) {
+    console.log("Pominięto wysyłkę e-mail: Brak konfiguracji GMAIL (secrets).");
+  } else {
+    console.log("Nie wykryto promocji – wiadomość nie została wysłana.");
+  }
 
   // Zapisz metadane ostatniej synchronizacji (zawsze, niezależnie od zmian cen)
   const allSucceeded = stats.failed === 0;
