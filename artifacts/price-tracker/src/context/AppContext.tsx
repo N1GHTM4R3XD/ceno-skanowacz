@@ -17,7 +17,7 @@ interface AppContextType {
   updateProductAlert: (productId: string, alert_wlaczony: boolean) => Promise<void>;
   updateProductInfo: (productId: string, newName: string, newImageUrl: string) => Promise<void>;
   updateManualPrice: (productId: string, offerId: string, newPrice: number) => Promise<void>;
-  updateProfileSettings: (email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean) => Promise<void>;
+  updateProfileSettings: (imie: string, email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean, avatarUrl?: string) => Promise<void>;
   updateAvatarColor: (color: string) => Promise<void>;
   removeProfile: (token: string) => Promise<void>;
   allTokens: string[];
@@ -288,17 +288,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateProfileSettings = async (
+    imie: string,
     email: string,
     powiadomieniaEmail: boolean,
-    globalneAlerty: boolean
+    globalneAlerty: boolean,
+    avatarUrl?: string
   ) => {
     if (!selectedToken) return;
     try {
       const updatedProfile = {
         ...profiles[selectedToken],
+        imie,
         email,
         powiadomieniaEmail,
         globalneAlerty,
+        avatarUrl,
       };
       const newProfiles = { ...profiles, [selectedToken]: updatedProfile };
       await saveDataToGitHub(newProfiles, `Zaktualizowano ustawienia profilu`);

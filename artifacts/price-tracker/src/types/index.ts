@@ -39,6 +39,7 @@ export interface UserProfile {
   powiadomieniaEmail: boolean;
   globalneAlerty: boolean;
   avatarColor?: string;
+  avatarUrl?: string;
   produkty: Produkt[];
 }
 

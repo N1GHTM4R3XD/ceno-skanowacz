@@ -113,12 +113,21 @@ export function ProfilePicker() {
                 whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.96 }}
               >
-                <div
-                  className="w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-md transition-transform duration-200 group-hover:scale-105 flex-shrink-0"
-                  style={{ backgroundColor: avatarColor, width: "4rem", height: "4rem" }}
-                >
-                  {getInitial(profile.imie)}
-                </div>
+                {profile.avatarUrl ? (
+                  <img
+                    src={profile.avatarUrl}
+                    alt={profile.imie}
+                    className="w-16 h-16 sm:w-[4rem] sm:h-[4rem] rounded-full object-cover shadow-md transition-transform duration-200 group-hover:scale-105 flex-shrink-0"
+                    style={{ width: "4rem", height: "4rem" }}
+                  />
+                ) : (
+                  <div
+                    className="w-16 h-16 sm:w-[4rem] sm:h-[4rem] rounded-full flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-md transition-transform duration-200 group-hover:scale-105 flex-shrink-0"
+                    style={{ backgroundColor: avatarColor, width: "4rem", height: "4rem" }}
+                  >
+                    {getInitial(profile.imie)}
+                  </div>
+                )}
                 <span className="text-base sm:text-lg font-semibold text-center leading-tight">
                   {profile.imie}
                 </span>

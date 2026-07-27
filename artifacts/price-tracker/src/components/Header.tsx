@@ -66,12 +66,20 @@ export function Header() {
             className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg border text-xs sm:text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors min-h-[36px] sm:min-h-[40px]"
             title="Zmień profil"
           >
-            <span
-              className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-white text-[10px] sm:text-xs font-bold flex-shrink-0"
-              style={{ backgroundColor: selectedToken ? (mockData[selectedToken]?.avatarColor ?? "#7C3AED") : "#7C3AED" }}
-            >
-              {userProfile.imie.charAt(0).toUpperCase()}
-            </span>
+            {userProfile.avatarUrl ? (
+              <img 
+                src={userProfile.avatarUrl} 
+                alt="Avatar" 
+                className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover flex-shrink-0 border border-border" 
+              />
+            ) : (
+              <span
+                className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-white text-[10px] sm:text-xs font-bold flex-shrink-0"
+                style={{ backgroundColor: userProfile.avatarColor ?? "#7C3AED" }}
+              >
+                {userProfile.imie.charAt(0).toUpperCase()}
+              </span>
+            )}
             <span className="hidden sm:inline">{userProfile.imie}</span>
             <ChevronDown className="h-3 w-3 opacity-60" />
           </button>

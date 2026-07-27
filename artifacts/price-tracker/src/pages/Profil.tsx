@@ -30,7 +30,9 @@ export function Profil() {
   const { userProfile, updateProfileSettings, updateAvatarColor, selectedToken, removeProfile } = useAppContext();
   const { toast } = useToast();
 
+  const [imie, setImie] = useState(userProfile?.imie || "");
   const [email, setEmail] = useState(userProfile?.email || "");
+  const [avatarUrl, setAvatarUrl] = useState(userProfile?.avatarUrl || "");
   const [emailAlerts, setEmailAlerts] = useState(userProfile?.powiadomieniaEmail || false);
   const [globalAlerts, setGlobalAlerts] = useState(userProfile?.globalneAlerty ?? true);
   const [avatarColor, setAvatarColor] = useState(
@@ -42,7 +44,7 @@ export function Profil() {
   if (!userProfile) return null;
 
   const handleSave = () => {
-    updateProfileSettings(email, emailAlerts, globalAlerts);
+    updateProfileSettings(imie, email, emailAlerts, globalAlerts, avatarUrl);
     updateAvatarColor(avatarColor);
     toast({
       title: "Zapisano zmiany",
@@ -83,7 +85,7 @@ export function Profil() {
         <CardContent className="space-y-4">
           <div className="space-y-1.5">
             <Label>Imię</Label>
-            <Input value={userProfile.imie} disabled className="bg-muted" />
+            <Input value={imie} onChange={(e) => setImie(e.target.value)} />
           </div>
           <div className="space-y-1.5">
             <Label>Identyfikator profilu</Label>
@@ -123,12 +125,30 @@ export function Profil() {
           </CardTitle>
           <CardDescription>Zmień kolor swojego awatara na ekranie wyboru profilu.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <AvatarPicker
-            selected={avatarColor}
-            onChange={setAvatarColor}
-            name={userProfile.imie}
-          />
+        <CardContent className="space-y-6">
+          <div className="space-y-1.5">
+            <Label>Własne zdjęcie profilowe (URL)</Label>
+            <Input
+              value={avatarUrl}
+              onChange={(e) => setAvatarUrl(e.target.value)}
+              placeholder="https://... (zostaw puste aby używać kolorowego kółka z literą)"
+            />
+            {avatarUrl && (
+              <div className="mt-3">
+                <p className="text-xs text-muted-foreground mb-2">Podgląd:</p>
+                <img src={avatarUrl} alt="Avatar" className="w-16 h-16 rounded-full object-cover shadow-sm border" />
+              </div>
+            )}
+          </div>
+          
+          <div className="border-t pt-5">
+            <h4 className="text-sm font-medium mb-3">Kolor bazowy (używany, gdy brak zdjęcia)</h4>
+            <AvatarPicker
+              selected={avatarColor}
+              onChange={setAvatarColor}
+              name={imie}
+            />
+          </div>
         </CardContent>
       </Card>
 
