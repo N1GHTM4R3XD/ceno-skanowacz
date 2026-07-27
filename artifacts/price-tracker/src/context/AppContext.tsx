@@ -17,6 +17,8 @@ interface AppContextType {
   updateProductAlert: (productId: string, alert_wlaczony: boolean) => Promise<void>;
   updateProductInfo: (productId: string, newName: string, newImageUrl: string) => Promise<void>;
   updateManualPrice: (productId: string, offerId: string, newPrice: number) => Promise<void>;
+  addOfferToProduct: (productId: string, offer: import("../types").Oferta) => Promise<void>;
+  removeOfferFromProduct: (productId: string, offerId: string) => Promise<void>;
   updateProfileSettings: (imie: string, email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean, avatarUrl: string | undefined, avatarColor: string) => Promise<void>;
   removeProfile: (token: string) => Promise<void>;
   allTokens: string[];
@@ -301,6 +303,57 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const addOfferToProduct = async (productId: string, offer: import("../types").Oferta) => {
+    if (!selectedToken) return;
+    try {
+      const profile = profiles[selectedToken];
+      const product = profile.produkty.find(p => p.id === productId);
+      if (!product) return;
+      
+      const newOffer = { ...offer, id: "off" + Date.now() + Math.floor(Math.random() * 1000) };
+      const updatedProfile = {
+        ...profile,
+        produkty: profile.produkty.map(p => 
+          p.id === productId ? { ...p, oferty: [...p.oferty, newOffer] } : p
+        )
+      };
+      
+      const newProfiles = { ...profiles, [selectedToken]: updatedProfile };
+      await saveDataToGitHub(newProfiles, `Dodano ofertę do produktu`);
+      setProfiles(newProfiles);
+      setUserProfile(updatedProfile);
+      toast({ title: "Zapisano", description: "Oferta została dodana." });
+    } catch (err: any) {
+      toast({ title: "Błąd zapisu", description: err.message, variant: "destructive" });
+      throw err;
+    }
+  };
+
+  const removeOfferFromProduct = async (productId: string, offerId: string) => {
+    if (!selectedToken) return;
+    try {
+      const profile = profiles[selectedToken];
+      const product = profile.produkty.find(p => p.id === productId);
+      if (!product) return;
+      
+      const updatedProfile = {
+        ...profile,
+        produkty: profile.produkty.map(p => 
+          p.id === productId ? { ...p, oferty: p.oferty.filter(o => o.id !== offerId) } : p
+        )
+      };
+      
+      const newProfiles = { ...profiles, [selectedToken]: updatedProfile };
+      await saveDataToGitHub(newProfiles, `Usunięto ofertę z produktu`);
+      setProfiles(newProfiles);
+      setUserProfile(updatedProfile);
+      toast({ title: "Zapisano", description: "Oferta została usunięta." });
+    } catch (err: any) {
+      toast({ title: "Błąd zapisu", description: err.message, variant: "destructive" });
+      throw err;
+    }
+  };
+
   const updateProfileSettings = async (
     imie: string,
     email: string,
@@ -368,6 +421,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         updateProductInfo,
         updateProductAlert,
         updateManualPrice,
+        addOfferToProduct,
+        removeOfferFromProduct,
         updateProfileSettings,
         allTokens,
         syncMeta,

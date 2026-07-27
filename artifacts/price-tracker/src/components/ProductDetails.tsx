@@ -11,9 +11,10 @@ import {
 } from "recharts";
 import { format, parseISO } from "date-fns";
 import { pl } from "date-fns/locale";
-import { ExternalLink, Truck, Edit2, Check, X } from "lucide-react";
+import { ExternalLink, Truck, Edit2, Check, X, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 interface ProductDetailsProps {
@@ -21,10 +22,41 @@ interface ProductDetailsProps {
 }
 
 export function ProductDetails({ produkt }: ProductDetailsProps) {
-  const { updateManualPrice } = useAppContext();
+  const { updateManualPrice, addOfferToProduct, removeOfferFromProduct } = useAppContext();
   const [editingOfferId, setEditingOfferId] = useState<string | null>(null);
   const [manualPrice, setManualPrice] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAddOffer, setShowAddOffer] = useState(false);
+  const [newOffer, setNewOffer] = useState({ sklep: "", url: "", cena: "", koszt_dostawy: "", darmowa_dostawa_z: "" });
+
+  const handleAddOfferSubmit = async () => {
+    if (!newOffer.sklep || !newOffer.url) return;
+    setIsSubmitting(true);
+    try {
+      await addOfferToProduct(produkt.id, {
+        sklep: newOffer.sklep,
+        url: newOffer.url,
+        cena: parseFloat(newOffer.cena.replace(",", ".")) || 0,
+        koszt_dostawy: newOffer.koszt_dostawy ? parseFloat(newOffer.koszt_dostawy.replace(",", ".")) : null,
+        darmowa_dostawa_z: newOffer.darmowa_dostawa_z || null,
+        wymaga_recznego_sprawdzenia: false,
+      });
+      setShowAddOffer(false);
+      setNewOffer({ sklep: "", url: "", cena: "", koszt_dostawy: "", darmowa_dostawa_z: "" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteOffer = async (offerId: string) => {
+    if (!window.confirm("Czy na pewno chcesz usunąć tę ofertę?")) return;
+    setIsSubmitting(true);
+    try {
+      await removeOfferFromProduct(produkt.id, offerId);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleManualPriceSubmit = async (offerId: string) => {
     const numPrice = parseFloat(manualPrice.replace(",", "."));
@@ -68,7 +100,47 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
     <div className="p-4 space-y-6">
       {/* Oferty Section */}
       <div className="space-y-3">
-        <h4 className="text-sm font-semibold">Wszystkie oferty</h4>
+        <div className="flex items-center justify-between">
+          <h4 className="text-sm font-semibold">Wszystkie oferty</h4>
+          <Button variant="ghost" size="sm" onClick={() => setShowAddOffer(!showAddOffer)} className="h-7 px-2 text-xs">
+             <Plus className="w-3.5 h-3.5 mr-1" /> Dodaj ofertę
+          </Button>
+        </div>
+        
+        {showAddOffer && (
+          <div className="p-3 border rounded-lg bg-muted/20 space-y-3 mb-4">
+            <h5 className="text-xs font-semibold">Nowa oferta</h5>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className="space-y-1">
+                <Label className="text-[10px]">Sklep *</Label>
+                <Input className="h-7 text-xs" value={newOffer.sklep} onChange={(e) => setNewOffer({...newOffer, sklep: e.target.value})} placeholder="np. Amazon" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[10px]">Cena</Label>
+                <Input className="h-7 text-xs" type="number" step="0.01" value={newOffer.cena} onChange={(e) => setNewOffer({...newOffer, cena: e.target.value})} placeholder="0.00" />
+              </div>
+              <div className="space-y-1 col-span-2">
+                <Label className="text-[10px]">URL *</Label>
+                <Input className="h-7 text-xs" value={newOffer.url} onChange={(e) => setNewOffer({...newOffer, url: e.target.value})} placeholder="https://..." />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[10px]">Koszt dostawy</Label>
+                <Input className="h-7 text-xs" type="number" step="0.01" value={newOffer.koszt_dostawy} onChange={(e) => setNewOffer({...newOffer, koszt_dostawy: e.target.value})} placeholder="0.00" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[10px]">Darmowa dostawa od</Label>
+                <Input className="h-7 text-xs" value={newOffer.darmowa_dostawa_z} onChange={(e) => setNewOffer({...newOffer, darmowa_dostawa_z: e.target.value})} placeholder="np. od 100 zł" />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-2">
+              <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => setShowAddOffer(false)}>Anuluj</Button>
+              <Button size="sm" className="h-7 text-xs" disabled={isSubmitting || !newOffer.sklep || !newOffer.url} onClick={handleAddOfferSubmit}>
+                Zapisz
+              </Button>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-2">
           {sortedOffers.map((oferta, index) => {
             const isBest = index === 0;
@@ -162,14 +234,26 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
                       {totalPrice} {produkt.waluta}
                     </div>
                   )}
-                  <a
-                    href={oferta.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[10px] font-medium text-primary hover:underline flex items-center gap-1"
-                  >
-                    Przejdź do sklepu <ExternalLink className="w-2.5 h-2.5" />
-                  </a>
+                  <div className="flex items-center gap-2 mt-0.5 justify-end">
+                    <a
+                      href={oferta.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[10px] font-medium text-primary hover:underline flex items-center gap-1"
+                    >
+                      Przejdź do sklepu <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                    {sortedOffers.length > 1 && (
+                      <button
+                        onClick={() => handleDeleteOffer(oferta.id)}
+                        disabled={isSubmitting}
+                        className="text-muted-foreground hover:text-destructive transition-colors ml-1"
+                        title="Usuń ofertę"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             );
