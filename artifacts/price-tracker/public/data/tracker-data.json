@@ -18,7 +18,7 @@
             "id": "off17850950319590",
             "sklep": "Allegro.pl",
             "url": "https://allegro.pl/oferta/runianka-japonska-green-carpet-okrywowa-9535016289?utm_feed=aa34192d-eee2-4419-9a9a-de66b9dfae24&utm_content=supercena&utm_source=google&utm_medium=cpc&utm_campaign=_dio_ogrod_pla_ss_sc&ev_adgr=_dio_ogrod_sc&ev_campaign_id=22386243109&gad_source=1&gad_campaignid=22386243109&gbraid=0AAAAAD24kbN0I27dIQSNDZAAnArfytKi_&gclid=EAIaIQobChMIzvjC3fqclQMVEWiRBR3PZiysEAQYAiABEgJCRfD_BwE&dd_referrer=https%3A%2F%2Fwww.google.com%2F",
-            "cena": 0,
+            "cena": 12.99,
             "koszt_dostawy": 0,
             "darmowa_dostawa_z": "",
             "wymaga_recznego_sprawdzenia": true
@@ -28,7 +28,8 @@
         "historia": [
           {
             "data": "2026-07-27",
-            "cena": 0
+            "cena": 12.99,
+            "zrodlo": "reczne"
           }
         ]
       },
