@@ -126,5 +126,13 @@
         ]
       }
     ]
+  },
+  "toms328478": {
+    "imie": "to",
+    "email": "",
+    "powiadomieniaEmail": false,
+    "globalneAlerty": true,
+    "avatarColor": "#7C3AED",
+    "produkty": []
   }
 }
