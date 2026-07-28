@@ -33,6 +33,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const { toast } = useToast();
 
+  const [selectedToken, setSelectedToken] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
     
@@ -120,8 +123,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     };
   }, [selectedToken]);
 
-  const [selectedToken, setSelectedToken] = useState<string | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [theme, setTheme] = useState<Theme>(() => {
     try {
       const saved = localStorage.getItem("price-tracker-theme");
