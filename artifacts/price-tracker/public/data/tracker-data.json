@@ -7,32 +7,6 @@
     "avatarColor": "#059669",
     "produkty": [
       {
-        "nazwa": "Bluzka hiszpanka damska w kratkę - MEDICINE",
-        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.med.png",
-        "kategoria": "Inne",
-        "waluta": "PLN",
-        "trend": "brak_zmian",
-        "alert_wlaczony": false,
-        "oferty": [
-          {
-            "id": "off17851470330490",
-            "sklep": "Wearmedicine.com",
-            "url": "https://wearmedicine.com/p/bluzka-hiszpanka-damska-w-kratke-czarna-rs26-bkdc01-1053662",
-            "cena": 89.9,
-            "koszt_dostawy": null,
-            "darmowa_dostawa_z": "",
-            "nazwa_ze_sklepu": "Bluzka hiszpanka damska w kratkę - MEDICINE"
-          }
-        ],
-        "id": "pms32ga8p",
-        "historia": [
-          {
-            "data": "2026-07-27",
-            "cena": 89.9
-          }
-        ]
-      },
-      {
         "nazwa": "Piżama damska bawełniana z nadrukiem - MEDICINE",
         "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.med.png",
         "kategoria": "Inne",
