@@ -63,14 +63,14 @@
         "zdjecie_url": "https://ecsmedia.pl/c/bezprawie-ebook-epub-b-iext229925446.jpg",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "brak_zmian",
+        "trend": "spadek",
         "alert_wlaczony": false,
         "oferty": [
           {
             "id": "off17851468943170",
             "sklep": "Empik.com",
             "url": "https://www.empik.com/bezprawie-mroz-remigiusz,p1756220043,ebooki-i-mp3-p",
-            "cena": 30.99,
+            "cena": 28.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "",
             "nazwa_ze_sklepu": "Bezprawie - ebook EPUB"
@@ -81,6 +81,10 @@
           {
             "data": "2026-07-27",
             "cena": 30.99
+          },
+          {
+            "data": "2026-07-28",
+            "cena": 28.99
           }
         ]
       },
@@ -98,7 +102,7 @@
             "url": "https://answear.com/p/medicine-kamizelka-jednorzedowa-damska-biala-1702611",
             "cena": 159.9,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": "od 280  zł",
+            "darmowa_dostawa_z": "280",
             "nazwa_ze_sklepu": "Medicine kamizelka jednorzędowa damska biała | Answear.com"
           }
         ],
@@ -185,7 +189,7 @@
             "url": "https://www.rossmann.pl/Produkt/Lakiery-klasyczne/Orly-Breathable-lakier-do-paznokci-Heart-Beet-11-ml,2075021,13035?srsltid=AfmBOor7VLFKHJUMiqdvUOKOanjuJFlas4r5vL8W2Mz3tYyW2C_PzLHf",
             "cena": 51.99,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": "od 199  zł"
+            "darmowa_dostawa_z": "199"
           },
           {
             "id": "off17851511885811",
@@ -216,7 +220,7 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-27T19:46:48.325Z",
+    "ostatnia_synchronizacja": "2026-07-28T08:49:02.538Z",
     "status": "czesciowy_blad",
     "sprawdzono": 9,
     "sukces": 7,
