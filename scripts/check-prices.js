@@ -36,7 +36,11 @@ async function fetchPrice(browser, url) {
   const page = await context.newPage();
   
   try {
-    await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+    try {
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    } catch (gotoErr) {
+      console.warn(`[!] page.goto timeout dla ${url}, próbuję dalej z załadowanym stanem DOM...`);
+    }
     await page.waitForTimeout(4000); // Oczekujemy dodatkowe sekundy na wyrenderowanie JS i challenge Cloudflare
     
     console.log(`[Debug] Tytuł strony: ${await page.title()}`);
