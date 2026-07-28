@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DATA_PATH = path.join(__dirname, '../artifacts/price-tracker/public/data/tracker-data.json');
 
-const BLOCKED_DOMAINS = ['allegro.pl', 'mediaexpert.pl', 'zalando.pl'];
+const BLOCKED_DOMAINS = ['allegro.pl', 'mediaexpert.pl', 'zalando.pl', 'drmax.pl'];
 
 const USER_AGENTS = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
