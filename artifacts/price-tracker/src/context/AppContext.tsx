@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { UserProfile, Theme, Produkt, SyncMeta } from "../types";
+import { UserProfile, Theme, Produkt, SyncMeta, Oferta } from "../types";
 import { saveDataToGitHub } from "../lib/github";
 import { useToast } from "@/hooks/use-toast";
 
@@ -17,7 +17,7 @@ interface AppContextType {
   updateProductAlert: (productId: string, alert_wlaczony: boolean) => Promise<void>;
   updateProductInfo: (productId: string, newName: string, newImageUrl: string) => Promise<void>;
   updateManualPrice: (productId: string, offerId: string, newPrice: number) => Promise<void>;
-  addOfferToProduct: (productId: string, offer: import("../types").Oferta) => Promise<void>;
+  addOfferToProduct: (productId: string, offer: Oferta) => Promise<void>;
   removeOfferFromProduct: (productId: string, offerId: string) => Promise<void>;
   updateProfileSettings: (imie: string, email: string, powiadomieniaEmail: boolean, globalneAlerty: boolean, avatarUrl: string | undefined, avatarColor: string) => Promise<void>;
   removeProfile: (token: string) => Promise<void>;
@@ -340,7 +340,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const addOfferToProduct = async (productId: string, offer: import("../types").Oferta) => {
+  const addOfferToProduct = async (productId: string, offer: Oferta) => {
     if (!selectedToken) return;
     try {
       const profile = profiles[selectedToken];
