@@ -34,54 +34,91 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/tracker-data.json?t=${Date.now()}`, { cache: "no-store" })
-      .then((res) => res.json())
-      .then((data) => {
-        let finalData = data || {};
-        try {
-          const cacheTsStr = localStorage.getItem("tracker-profiles-cache-ts");
-          const cacheDataStr = localStorage.getItem("tracker-profiles-cache");
-          if (cacheTsStr && cacheDataStr) {
-            const cacheTs = parseInt(cacheTsStr, 10);
-            // Czas ostatniej synchronizacji scrapera z pobranego pliku
-            const scraperSyncTs = data?._meta?.ostatnia_synchronizacja
-              ? new Date(data._meta.ostatnia_synchronizacja).getTime()
-              : 0;
-            // Użyj cache'u TYLKO jeśli:
-            // 1. Zapis cache'u jest świeższy niż 5 minut (okno propagacji GitHub Pages)
-            // 2. ORAZ zapis cache'u jest nowszy niż ostatnia synchronizacja scrapera
-            //    (żeby nie ukrywać nowych danych ze scrapera)
-            const cacheIsRecent = !isNaN(cacheTs) && Date.now() - cacheTs < 5 * 60 * 1000;
-            const cacheIsNewerThanScraper = cacheTs > scraperSyncTs;
-            if (cacheIsRecent && cacheIsNewerThanScraper) {
-              finalData = JSON.parse(cacheDataStr);
-              console.log("Użyto lokalnego cache (nowszy niż dane ze scrapera).");
-            } else if (scraperSyncTs > cacheTs) {
-              // Scraper zaktualizował dane – usuń stary cache żeby nie używać go przy kolejnym załadowaniu
-              localStorage.removeItem("tracker-profiles-cache");
-              localStorage.removeItem("tracker-profiles-cache-ts");
-              console.log("Użyto danych ze scrapera (nowsze niż cache).");
+    let timeoutId: ReturnType<typeof setTimeout>;
+    
+    const loadData = () => {
+      fetch(`${import.meta.env.BASE_URL}data/tracker-data.json?t=${Date.now()}`, { cache: "no-store" })
+        .then((res) => res.json())
+        .then((data) => {
+          let finalData = data || {};
+          try {
+            const cacheTsStr = localStorage.getItem("tracker-profiles-cache-ts");
+            const cacheDataStr = localStorage.getItem("tracker-profiles-cache");
+            if (cacheTsStr && cacheDataStr) {
+              const cacheTs = parseInt(cacheTsStr, 10);
+              const scraperSyncTs = data?._meta?.ostatnia_synchronizacja
+                ? new Date(data._meta.ostatnia_synchronizacja).getTime()
+                : 0;
+              const cacheIsRecent = !isNaN(cacheTs) && Date.now() - cacheTs < 5 * 60 * 1000;
+              const cacheIsNewerThanScraper = cacheTs > scraperSyncTs;
+              
+              if (cacheIsRecent && cacheIsNewerThanScraper) {
+                finalData = JSON.parse(cacheDataStr);
+                console.log("Użyto lokalnego cache (nowszy niż dane ze scrapera).");
+              } else if (scraperSyncTs > cacheTs) {
+                localStorage.removeItem("tracker-profiles-cache");
+                localStorage.removeItem("tracker-profiles-cache-ts");
+                console.log("Użyto danych ze scrapera (nowsze niż cache).");
+              }
             }
-          }
-        } catch (e) {}
+          } catch (e) {}
 
-        if (finalData._meta) {
-          setSyncMeta(finalData._meta);
-        }
-        setProfiles(finalData);
-        setIsLoaded(true);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch tracker-data.json", err);
-        try {
-          const cacheDataStr = localStorage.getItem("tracker-profiles-cache");
-          if (cacheDataStr) {
-            setProfiles(JSON.parse(cacheDataStr));
+          if (finalData._meta) {
+            setSyncMeta(finalData._meta);
           }
-        } catch (e) {}
-        setIsLoaded(true);
-      });
-  }, []);
+          setProfiles(finalData);
+          
+          // Update selected user profile if token is set
+          setProfiles((prevProfiles) => {
+            if (selectedToken && prevProfiles[selectedToken]) {
+              setUserProfile(prevProfiles[selectedToken]);
+            }
+            return prevProfiles;
+          });
+          
+          setIsLoaded(true);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch tracker-data.json", err);
+          try {
+            const cacheDataStr = localStorage.getItem("tracker-profiles-cache");
+            if (cacheDataStr) {
+              const parsed = JSON.parse(cacheDataStr);
+              setProfiles(parsed);
+              if (selectedToken && parsed[selectedToken]) {
+                setUserProfile(parsed[selectedToken]);
+              }
+            }
+          } catch (e) {}
+          setIsLoaded(true);
+        });
+    };
+
+    // Initial load
+    loadData();
+
+    // Poll every 5 minutes
+    const intervalId = setInterval(loadData, 5 * 60 * 1000);
+
+    // Refresh on window focus
+    const handleFocus = () => {
+      // Small delay to prevent spamming
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(loadData, 500);
+    };
+    
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") handleFocus();
+    });
+
+    return () => {
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("visibilitychange", handleFocus);
+    };
+  }, [selectedToken]);
 
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
