@@ -215,6 +215,25 @@
             "cena": 0
           }
         ]
+      },
+      {
+        "nazwa": "Alopexy",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
+          {
+            "id": "off17852600334820",
+            "sklep": "Drmax.pl",
+            "url": "https://www.drmax.pl/alopexy-plyn-5-3-but-a-60ml",
+            "cena": 0,
+            "koszt_dostawy": null,
+            "darmowa_dostawa_z": null
+          }
+        ],
+        "id": "pms4xq9xm"
       }
     ],
     "avatarUrl": ""
