@@ -23,7 +23,13 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53mv8n"
+        "id": "pms53mv8n",
+        "historia": [
+          {
+            "data": "2026-07-28",
+            "cena": 0
+          }
+        ]
       },
       {
         "nazwa": "Koszulka spiderman",
@@ -42,7 +48,13 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53o89v"
+        "id": "pms53o89v",
+        "historia": [
+          {
+            "data": "2026-07-28",
+            "cena": 0
+          }
+        ]
       },
       {
         "nazwa": "Koszulka spiderman2",
@@ -61,7 +73,13 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53owao"
+        "id": "pms53owao",
+        "historia": [
+          {
+            "data": "2026-07-28",
+            "cena": 0
+          }
+        ]
       }
     ],
     "avatarUrl": "https://media1.tenor.com/m/TYraeFkQyXcAAAAC/sebastian-solace-pressure.gif"
@@ -118,11 +136,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-28T17:36:33.757Z",
+    "ostatnia_synchronizacja": "2026-07-28T20:26:28.377Z",
     "status": "czesciowy_blad",
-    "sprawdzono": 10,
-    "sukces": 8,
-    "bledy": 2,
+    "sprawdzono": 6,
+    "sukces": 2,
+    "bledy": 4,
     "pominieto": 0
   }
 }
