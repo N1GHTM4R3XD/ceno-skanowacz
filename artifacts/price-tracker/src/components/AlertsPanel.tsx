@@ -21,8 +21,9 @@ export function AlertsPanel({ mobileMode = false }: AlertsPanelProps) {
 
   if (!userProfile) return null;
 
+  // Show all products with price drop regardless of per-product email toggle
   const activeAlerts = userProfile.produkty.filter(
-    (p) => p.trend === "spadek" && p.alert_wlaczony && userProfile.globalneAlerty
+    (p) => p.trend === "spadek" && userProfile.globalneAlerty
   );
 
   const hasAlerts = activeAlerts.length > 0;

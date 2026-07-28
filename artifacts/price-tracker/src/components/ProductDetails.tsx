@@ -7,7 +7,11 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Area,
+  AreaChart,
+  ReferenceLine,
+  Dot,
 } from "recharts";
 import { format, parseISO } from "date-fns";
 import { pl } from "date-fns/locale";
@@ -72,15 +76,45 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
     }
   };
   const chartData = useMemo(() => {
-    // Ensure data is sorted by date ascending for the chart
-    return [...(produkt.historia || [])].sort(
+    const sorted = [...(produkt.historia || [])].sort(
       (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()
-    ).map(entry => ({
-      ...entry,
-      formattedDate: format(parseISO(entry.data), 'd MMM', { locale: pl }),
-      fullDate: format(parseISO(entry.data), 'd MMMM yyyy', { locale: pl })
-    }));
+    );
+    return sorted.map((entry, i) => {
+      const prev = i > 0 ? sorted[i - 1].cena : null;
+      let direction: "spadek" | "wzrost" | "brak_zmian" | "first" = "first";
+      if (prev !== null) {
+        if (entry.cena < prev) direction = "spadek";
+        else if (entry.cena > prev) direction = "wzrost";
+        else direction = "brak_zmian";
+      }
+      return {
+        ...entry,
+        direction,
+        formattedDate: format(parseISO(entry.data), 'd MMM', { locale: pl }),
+        fullDate: format(parseISO(entry.data), 'd MMMM yyyy', { locale: pl }),
+      };
+    });
   }, [produkt.historia]);
+
+  const chartTrend = produkt.trend;
+  const gradientId = `grad-${produkt.id}`;
+  const gradientColor =
+    chartTrend === "spadek"
+      ? "#10b981" // emerald-500
+      : chartTrend === "wzrost"
+      ? "#ef4444" // red-500
+      : "#6b7280"; // gray-500
+
+  const renderDot = (props: any) => {
+    const { cx, cy, payload } = props;
+    const color =
+      payload.direction === "spadek"
+        ? "#10b981"
+        : payload.direction === "wzrost"
+        ? "#ef4444"
+        : "#6b7280";
+    return <circle key={`dot-${cx}-${cy}`} cx={cx} cy={cy} r={4} fill={color} stroke="none" />;
+  };
 
   const historyList = useMemo(() => {
     if (!produkt.historia) return [];
@@ -270,42 +304,64 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
           <span>Historia cen</span>
           <span className="text-xs font-normal text-muted-foreground">3 miesiące</span>
         </h4>
-        <div className="h-[120px] w-full -ml-4">
+        <div className="h-[130px] w-full -ml-4">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
-              <XAxis 
-                dataKey="formattedDate" 
+            <AreaChart data={chartData} margin={{ top: 8, right: 10, left: 10, bottom: 0 }}>
+              <defs>
+                <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={gradientColor} stopOpacity={0.25} />
+                  <stop offset="95%" stopColor={gradientColor} stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis
+                dataKey="formattedDate"
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
                 dy={10}
               />
-              <YAxis 
-                domain={['dataMin - 50', 'dataMax + 50']} 
-                hide 
-              />
+              <YAxis domain={["dataMin - 5", "dataMax + 5"]} hide />
               <Tooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
+                    const d = payload[0].payload;
+                    const dirColor =
+                      d.direction === "spadek"
+                        ? "#10b981"
+                        : d.direction === "wzrost"
+                        ? "#ef4444"
+                        : "#6b7280";
+                    const dirLabel =
+                      d.direction === "spadek"
+                        ? "↓ Spadek"
+                        : d.direction === "wzrost"
+                        ? "↑ Wzrost"
+                        : d.direction === "first"
+                        ? "Pierwsza cena"
+                        : "Bez zmian";
                     return (
                       <div className="bg-popover text-popover-foreground border border-border shadow-md rounded-md p-2 text-xs">
-                        <div className="font-medium mb-1">{payload[0].payload.fullDate}</div>
-                        <div className="font-bold">{payload[0].value} {produkt.waluta}</div>
+                        <div className="font-medium mb-1">{d.fullDate}</div>
+                        <div className="font-bold text-sm">{d.cena} {produkt.waluta}</div>
+                        <div style={{ color: dirColor }} className="text-[10px] mt-0.5 font-medium">{dirLabel}</div>
                       </div>
                     );
                   }
                   return null;
                 }}
               />
-              <Line
+              <Area
                 type="monotone"
                 dataKey="cena"
-                stroke={produkt.trend === "spadek" ? "hsl(142.1, 76.2%, 36.3%)" : "hsl(215.4, 16.3%, 46.9%)"}
+                stroke={gradientColor}
                 strokeWidth={2}
-                dot={{ r: 3, fill: "currentColor", strokeWidth: 0 }}
-                isAnimationActive={false}
+                fill={`url(#${gradientId})`}
+                dot={renderDot}
+                activeDot={{ r: 5, strokeWidth: 0 }}
+                isAnimationActive={true}
+                animationDuration={600}
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
