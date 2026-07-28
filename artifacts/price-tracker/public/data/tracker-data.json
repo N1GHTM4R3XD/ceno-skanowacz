@@ -63,7 +63,7 @@
         "zdjecie_url": "https://ecsmedia.pl/c/bezprawie-ebook-epub-b-iext229925446.jpg",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "spadek",
+        "trend": "brak_zmian",
         "alert_wlaczony": false,
         "oferty": [
           {
@@ -233,16 +233,22 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms4xq9xm"
+        "id": "pms4xq9xm",
+        "historia": [
+          {
+            "data": "2026-07-28",
+            "cena": 0
+          }
+        ]
       }
     ],
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-28T08:49:02.538Z",
+    "ostatnia_synchronizacja": "2026-07-28T17:36:33.757Z",
     "status": "czesciowy_blad",
-    "sprawdzono": 9,
-    "sukces": 7,
+    "sprawdzono": 10,
+    "sukces": 8,
     "bledy": 2,
     "pominieto": 0
   }
