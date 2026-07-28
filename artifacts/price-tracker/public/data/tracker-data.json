@@ -43,6 +43,25 @@
           }
         ],
         "id": "pms53o89v"
+      },
+      {
+        "nazwa": "Koszulka spiderman2",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
+          {
+            "id": "off17852700468480",
+            "sklep": "Bershka.com",
+            "url": "https://www.bershka.com/pl/koszulka-z-kr%C3%B3tkim-r%C4%99kawem-spider-man-c0p229737212.html?colorId=810",
+            "cena": 0,
+            "koszt_dostawy": null,
+            "darmowa_dostawa_z": null
+          }
+        ],
+        "id": "pms53owao"
       }
     ],
     "avatarUrl": "https://media1.tenor.com/m/TYraeFkQyXcAAAAC/sebastian-solace-pressure.gif"
