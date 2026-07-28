@@ -7,32 +7,6 @@
     "avatarColor": "#059669",
     "produkty": [
       {
-        "nazwa": "Medicine kamizelka jednorzędowa damska biała | Answear.com",
-        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
-        "kategoria": "Inne",
-        "waluta": "PLN",
-        "trend": "brak_zmian",
-        "alert_wlaczony": false,
-        "oferty": [
-          {
-            "id": "off17851470078940",
-            "sklep": "Answear.com",
-            "url": "https://answear.com/p/medicine-kamizelka-jednorzedowa-damska-biala-1702611",
-            "cena": 159.9,
-            "koszt_dostawy": null,
-            "darmowa_dostawa_z": "280",
-            "nazwa_ze_sklepu": "Medicine kamizelka jednorzędowa damska biała | Answear.com"
-          }
-        ],
-        "id": "pms32fqty",
-        "historia": [
-          {
-            "data": "2026-07-27",
-            "cena": 159.9
-          }
-        ]
-      },
-      {
         "nazwa": "Bluzka hiszpanka damska w kratkę - MEDICINE",
         "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.med.png",
         "kategoria": "Inne",
