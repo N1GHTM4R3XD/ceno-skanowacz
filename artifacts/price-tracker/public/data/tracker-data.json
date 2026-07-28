@@ -245,11 +245,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-28T17:36:33.757Z",
+    "ostatnia_synchronizacja": "2026-07-28T18:06:05.065Z",
     "status": "czesciowy_blad",
     "sprawdzono": 10,
-    "sukces": 8,
-    "bledy": 2,
+    "sukces": 7,
+    "bledy": 3,
     "pominieto": 0
   }
 }
