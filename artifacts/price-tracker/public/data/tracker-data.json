@@ -81,6 +81,25 @@
           }
         ],
         "id": "pms60nodw"
+      },
+      {
+        "nazwa": "Czapka mc",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
+          {
+            "id": "off17853254371960",
+            "sklep": "Answear.com",
+            "url": "https://answear.com/p/herschel-czapka-minecraft-elmer-granatowa-50769-07615-1714635",
+            "cena": 0,
+            "koszt_dostawy": null,
+            "darmowa_dostawa_z": null
+          }
+        ],
+        "id": "pms60o3rg"
       }
     ],
     "avatarUrl": "https://media1.tenor.com/m/TYraeFkQyXcAAAAC/sebastian-solace-pressure.gif"
