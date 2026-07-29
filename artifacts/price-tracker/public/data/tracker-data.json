@@ -23,13 +23,7 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53mv8n",
-        "historia": [
-          {
-            "data": "2026-07-28",
-            "cena": 0
-          }
-        ]
+        "id": "pms53mv8n"
       },
       {
         "nazwa": "Koszulka spiderman",
@@ -48,13 +42,7 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53o89v",
-        "historia": [
-          {
-            "data": "2026-07-28",
-            "cena": 0
-          }
-        ]
+        "id": "pms53o89v"
       },
       {
         "nazwa": "Koszulka spiderman2",
@@ -73,13 +61,26 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53owao",
-        "historia": [
+        "id": "pms53owao"
+      },
+      {
+        "nazwa": "Plecak mc",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
           {
-            "data": "2026-07-28",
-            "cena": 0
+            "id": "off17853254172680",
+            "sklep": "Answear.com",
+            "url": "https://answear.com/p/herschel-plecak-szkolny-minecraft-classictm-granatowy-11864-07615-1713756",
+            "cena": 0,
+            "koszt_dostawy": null,
+            "darmowa_dostawa_z": null
           }
-        ]
+        ],
+        "id": "pms60nodw"
       }
     ],
     "avatarUrl": "https://media1.tenor.com/m/TYraeFkQyXcAAAAC/sebastian-solace-pressure.gif"
@@ -136,11 +137,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-29T06:39:00.832Z",
+    "ostatnia_synchronizacja": "2026-07-28T17:36:33.757Z",
     "status": "czesciowy_blad",
-    "sprawdzono": 6,
-    "sukces": 2,
-    "bledy": 4,
+    "sprawdzono": 10,
+    "sukces": 8,
+    "bledy": 2,
     "pominieto": 0
   }
 }
