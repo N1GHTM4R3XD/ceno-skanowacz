@@ -192,7 +192,7 @@
     "avatarColor": "#D97706",
     "produkty": [
       {
-        "nazwa": "ORLY",
+        "nazwa": "Orly Breathable  lakier do paznokci, Heart Beet",
         "zdjecie_url": "https://pro-fra-s3-productsassets.rossmann.pl/product_1_large/2075021_1280_720_1727388665.webp",
         "kategoria": "Inne",
         "waluta": "PLN",
@@ -203,7 +203,7 @@
             "id": "off17851511885810",
             "sklep": "Rossmann.pl",
             "url": "https://www.rossmann.pl/Produkt/Lakiery-klasyczne/Orly-Breathable-lakier-do-paznokci-Heart-Beet-11-ml,2075021,13035?srsltid=AfmBOor7VLFKHJUMiqdvUOKOanjuJFlas4r5vL8W2Mz3tYyW2C_PzLHf",
-            "cena": 51.99,
+            "cena": 28.49,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "199"
           },
@@ -236,11 +236,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-29T15:54:54.829Z",
+    "ostatnia_synchronizacja": "2026-07-30T06:35:44.935Z",
     "status": "czesciowy_blad",
     "sprawdzono": 10,
-    "sukces": 6,
-    "bledy": 4,
+    "sukces": 3,
+    "bledy": 7,
     "pominieto": 0
   }
 }
