@@ -23,13 +23,7 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53mv8n",
-        "historia": [
-          {
-            "data": "2026-07-29",
-            "cena": 0
-          }
-        ]
+        "id": "pms53mv8n"
       },
       {
         "nazwa": "Koszulka spiderman",
@@ -48,13 +42,7 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53o89v",
-        "historia": [
-          {
-            "data": "2026-07-29",
-            "cena": 0
-          }
-        ]
+        "id": "pms53o89v"
       },
       {
         "nazwa": "Koszulka spiderman2",
@@ -73,17 +61,11 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms53owao",
-        "historia": [
-          {
-            "data": "2026-07-29",
-            "cena": 0
-          }
-        ]
+        "id": "pms53owao"
       },
       {
-        "nazwa": "Herschel plecak szkolny Minecraft Classic™ granatowy 11864-07615 | Answear.com",
-        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
+        "nazwa": "Plecak mc",
+        "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -93,22 +75,16 @@
             "id": "off17853254172680",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-plecak-szkolny-minecraft-classictm-granatowy-11864-07615-1713756",
-            "cena": 299.99,
+            "cena": 0,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": "280"
+            "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms60nodw",
-        "historia": [
-          {
-            "data": "2026-07-29",
-            "cena": 299.99
-          }
-        ]
+        "id": "pms60nodw"
       },
       {
-        "nazwa": "Herschel czapka Minecraft Elmer granatowa 50769-07615 | Answear.com",
-        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
+        "nazwa": "Czapka mc",
+        "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -118,22 +94,16 @@
             "id": "off17853254371960",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-czapka-minecraft-elmer-granatowa-50769-07615-1714635",
-            "cena": 169.99,
+            "cena": 0,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": "280"
+            "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms60o3rg",
-        "historia": [
-          {
-            "data": "2026-07-29",
-            "cena": 169.99
-          }
-        ]
+        "id": "pms60o3rg"
       },
       {
-        "nazwa": "Herschel czapka bejsbolówka bawełniana Minecraft Sylas granatowa 50770-07615 | Answear.com",
-        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
+        "nazwa": "Czapka z daszkiem mc",
+        "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -143,22 +113,16 @@
             "id": "off17853254600010",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-czapka-bejsbolowka-bawelniana-minecraft-sylas-granatowa-50770-07615-1716338",
-            "cena": 169.99,
+            "cena": 0,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": "280"
+            "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms60olcx",
-        "historia": [
-          {
-            "data": "2026-07-29",
-            "cena": 169.99
-          }
-        ]
+        "id": "pms60olcx"
       },
       {
-        "nazwa": "Herschel czapka Minecraft Elmer zielona 50769-07614 | Answear.com",
-        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
+        "nazwa": "Czapka mc creeper",
+        "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -168,18 +132,31 @@
             "id": "off17853255056240",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-czapka-minecraft-elmer-zielona-50769-07614-1714087",
-            "cena": 169.99,
+            "cena": 0,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": "280"
+            "darmowa_dostawa_z": null
           }
         ],
-        "id": "pms60pkk8",
-        "historia": [
+        "id": "pms60pkk8"
+      },
+      {
+        "nazwa": "Brelok lol",
+        "zdjecie_url": "",
+        "kategoria": "Inne",
+        "waluta": "PLN",
+        "trend": "brak_zmian",
+        "alert_wlaczony": true,
+        "oferty": [
           {
-            "data": "2026-07-29",
-            "cena": 169.99
+            "id": "off17854436162900",
+            "sklep": "Housebrand.com",
+            "url": "https://www.housebrand.com/pl/pl/brelok-z-portfelem-league-of-legends-236jl-mlc?utm_source=facebook&utm_medium=dpa&utm_content=6541997715243&utm_campaign=E_PL_HO_FB_Perf_DPA_BA_New-Arrivals&utm_term=RH&utm_id=6541997722643",
+            "cena": 0,
+            "koszt_dostawy": null,
+            "darmowa_dostawa_z": null
           }
-        ]
+        ],
+        "id": "pms7z13c2"
       }
     ],
     "avatarUrl": "https://media1.tenor.com/m/TYraeFkQyXcAAAAC/sebastian-solace-pressure.gif"
@@ -203,7 +180,7 @@
             "id": "off17851511885810",
             "sklep": "Rossmann.pl",
             "url": "https://www.rossmann.pl/Produkt/Lakiery-klasyczne/Orly-Breathable-lakier-do-paznokci-Heart-Beet-11-ml,2075021,13035?srsltid=AfmBOor7VLFKHJUMiqdvUOKOanjuJFlas4r5vL8W2Mz3tYyW2C_PzLHf",
-            "cena": 28.49,
+            "cena": 51.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "199"
           },
@@ -236,11 +213,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-30T15:56:14.217Z",
+    "ostatnia_synchronizacja": "2026-07-28T17:36:33.757Z",
     "status": "czesciowy_blad",
     "sprawdzono": 10,
-    "sukces": 6,
-    "bledy": 4,
+    "sukces": 8,
+    "bledy": 2,
     "pominieto": 0
   }
 }
