@@ -82,20 +82,20 @@
         ]
       },
       {
-        "nazwa": "Plecak mc",
-        "zdjecie_url": "",
+        "nazwa": "Herschel plecak szkolny Minecraft Classic™ granatowy 11864-07615 | Answear.com",
+        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "brak_zmian",
+        "trend": "wzrost",
         "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17853254172680",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-plecak-szkolny-minecraft-classictm-granatowy-11864-07615-1713756",
-            "cena": 0,
+            "cena": 369.99,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": "280"
           }
         ],
         "id": "pms60nodw",
@@ -103,24 +103,28 @@
           {
             "data": "2026-07-30",
             "cena": 0
+          },
+          {
+            "data": "2026-07-31",
+            "cena": 369.99
           }
         ]
       },
       {
-        "nazwa": "Czapka mc",
-        "zdjecie_url": "",
+        "nazwa": "Herschel czapka Minecraft Elmer granatowa 50769-07615 | Answear.com",
+        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "brak_zmian",
+        "trend": "wzrost",
         "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17853254371960",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-czapka-minecraft-elmer-granatowa-50769-07615-1714635",
-            "cena": 0,
+            "cena": 169.99,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": "280"
           }
         ],
         "id": "pms60o3rg",
@@ -128,24 +132,28 @@
           {
             "data": "2026-07-30",
             "cena": 0
+          },
+          {
+            "data": "2026-07-31",
+            "cena": 169.99
           }
         ]
       },
       {
-        "nazwa": "Czapka z daszkiem mc",
-        "zdjecie_url": "",
+        "nazwa": "Herschel czapka bejsbolówka bawełniana Minecraft Sylas granatowa 50770-07615 | Answear.com",
+        "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "brak_zmian",
+        "trend": "wzrost",
         "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17853254600010",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-czapka-bejsbolowka-bawelniana-minecraft-sylas-granatowa-50770-07615-1716338",
-            "cena": 0,
+            "cena": 169.99,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": "280"
           }
         ],
         "id": "pms60olcx",
@@ -153,6 +161,10 @@
           {
             "data": "2026-07-30",
             "cena": 0
+          },
+          {
+            "data": "2026-07-31",
+            "cena": 169.99
           }
         ]
       },
@@ -261,11 +273,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-07-30T20:36:25.487Z",
+    "ostatnia_synchronizacja": "2026-07-31T06:52:07.429Z",
     "status": "czesciowy_blad",
     "sprawdzono": 11,
-    "sukces": 4,
-    "bledy": 7,
+    "sukces": 7,
+    "bledy": 4,
     "pominieto": 0
   }
 }
