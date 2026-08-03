@@ -86,14 +86,14 @@
         "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "spadek",
+        "trend": "wzrost",
         "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17853254172680",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-plecak-szkolny-minecraft-classictm-granatowy-11864-07615-1713756",
-            "cena": 299.99,
+            "cena": 639.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "280"
           }
@@ -115,10 +115,6 @@
           {
             "data": "2026-08-02",
             "cena": 639.99
-          },
-          {
-            "data": "2026-08-03",
-            "cena": 299.99
           }
         ]
       },
@@ -211,7 +207,7 @@
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
-        "alert_wlaczony": true,
+        "alert_wlaczony": false,
         "oferty": [
           {
             "id": "off17854436162900",
@@ -285,7 +281,7 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-08-03T07:37:05.814Z",
+    "ostatnia_synchronizacja": "2026-08-02T15:09:07.105Z",
     "status": "czesciowy_blad",
     "sprawdzono": 11,
     "sukces": 7,
