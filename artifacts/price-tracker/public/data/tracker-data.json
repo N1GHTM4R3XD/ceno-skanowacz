@@ -207,7 +207,7 @@
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
-        "alert_wlaczony": false,
+        "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17854436162900",
