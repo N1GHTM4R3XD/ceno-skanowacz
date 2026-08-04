@@ -86,7 +86,7 @@
         "zdjecie_url": "https://cdn.ans-media.com/assets/front/multi/static/images/logo_share.ans.png",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "spadek",
+        "trend": "brak_zmian",
         "alert_wlaczony": true,
         "oferty": [
           {
@@ -289,11 +289,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-08-04T06:35:09.171Z",
+    "ostatnia_synchronizacja": "2026-08-04T16:17:40.103Z",
     "status": "czesciowy_blad",
     "sprawdzono": 11,
-    "sukces": 7,
-    "bledy": 4,
+    "sukces": 3,
+    "bledy": 8,
     "pominieto": 0
   }
 }
