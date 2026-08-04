@@ -93,7 +93,7 @@
             "id": "off17853254172680",
             "sklep": "Answear.com",
             "url": "https://answear.com/p/herschel-plecak-szkolny-minecraft-classictm-granatowy-11864-07615-1713756",
-            "cena": 169.99,
+            "cena": 154.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "280"
           }
@@ -119,6 +119,10 @@
           {
             "data": "2026-08-03",
             "cena": 169.99
+          },
+          {
+            "data": "2026-08-04",
+            "cena": 154.99
           }
         ]
       },
@@ -285,7 +289,7 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-08-03T16:32:43.682Z",
+    "ostatnia_synchronizacja": "2026-08-04T06:35:09.171Z",
     "status": "czesciowy_blad",
     "sprawdzono": 11,
     "sukces": 7,
