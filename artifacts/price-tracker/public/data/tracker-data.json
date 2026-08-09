@@ -269,17 +269,17 @@
         "zdjecie_url": "https://uk.toonzshop.com/upload/image/topaaz--loose-and-reversible-strappy-jumpsuit--khaki-p-image-354216-moyenne.jpg",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "brak_zmian",
+        "trend": "wzrost",
         "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17862083340710",
             "sklep": "Uk.toonzshop.com",
             "url": "https://uk.toonzshop.com/topaaz-harem-pant-jumpsuit-khaki-en.html",
-            "cena": 100,
+            "cena": 54,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null,
-            "waluta": "USD"
+            "waluta": "PLN"
           }
         ],
         "id": "pmskmbnco",
@@ -287,6 +287,10 @@
           {
             "data": "2026-08-08",
             "cena": 0
+          },
+          {
+            "data": "2026-08-09",
+            "cena": 54
           }
         ]
       }
@@ -347,7 +351,7 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-08-09T09:06:56.853Z",
+    "ostatnia_synchronizacja": "2026-08-09T09:16:02.842Z",
     "status": "czesciowy_blad",
     "sprawdzono": 13,
     "sukces": 5,
