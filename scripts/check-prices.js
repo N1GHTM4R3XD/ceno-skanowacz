@@ -131,6 +131,15 @@ async function fetchPrice(browser, url) {
           const priceLink = links.find(a => /\d+[,.]\d{2}\s*(zł|pln)/i.test(a.innerText));
           if (priceLink) priceText = priceLink.innerText;
         }
+      } else if (urlString.includes('toonzshop.com')) {
+        const form = document.querySelector('form[action*="/cart/add"]');
+        const priceEl = form ? form.querySelector('[class*="price"]') : null;
+        if (priceEl) {
+          priceText = priceEl.innerText;
+        } else {
+          const el = document.querySelector('.price-item--sale, .price-item--regular, .product__price, [data-price], .price');
+          if (el) priceText = el.innerText;
+        }
       } else if (urlString.includes('wearmedicine.com')) {
         const el = document.querySelector('meta[itemprop="price"]')
           || document.querySelector('[class*="price"]')
@@ -150,10 +159,11 @@ async function fetchPrice(browser, url) {
           priceText = matches[0];
           method = 'regex-container';
         } else {
-          matches = document.body.innerText.match(regex);
+          let contentEl = document.querySelector('main, #MainContent, .main-content, article, #page-content, .product-single') || document.body;
+          matches = contentEl.innerText.match(regex);
           if (matches && matches.length > 0) {
             priceText = matches[0];
-            method = 'regex-body';
+            method = 'regex-body-main';
           }
         }
       }
@@ -411,7 +421,16 @@ async function main() {
     for (const product of profile.produkty) {
       
       if (product.oferty && product.oferty.length > 0) {
-        const offersInBaseCurrency = product.oferty.filter(o => !o.waluta || o.waluta === (product.waluta || 'PLN'));
+        if (!product.waluta) {
+          const firstOfferWithCurrency = product.oferty.find(o => o.waluta);
+          if (firstOfferWithCurrency) {
+            product.waluta = firstOfferWithCurrency.waluta;
+            hasChanges = true;
+          }
+        }
+        
+        const baseWaluta = product.waluta || 'PLN';
+        const offersInBaseCurrency = product.oferty.filter(o => !o.waluta || o.waluta === baseWaluta);
         
         if (offersInBaseCurrency.length > 0) {
           const lowestOffer = offersInBaseCurrency.reduce((min, o) => 
