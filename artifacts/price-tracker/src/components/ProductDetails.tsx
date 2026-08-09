@@ -125,10 +125,15 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
 
   const sortedOffers = useMemo(() => {
     if (!produkt.oferty) return [];
-    return [...produkt.oferty].sort(
-      (a, b) => (a.cena + (a.koszt_dostawy || 0)) - (b.cena + (b.koszt_dostawy || 0))
-    );
-  }, [produkt.oferty]);
+    const baseWaluta = produkt.waluta || 'PLN';
+    return [...produkt.oferty].sort((a, b) => {
+      const aBase = !a.waluta || a.waluta === baseWaluta;
+      const bBase = !b.waluta || b.waluta === baseWaluta;
+      if (aBase && !bBase) return -1;
+      if (!aBase && bBase) return 1;
+      return (a.cena + (a.koszt_dostawy || 0)) - (b.cena + (b.koszt_dostawy || 0));
+    });
+  }, [produkt.oferty, produkt.waluta]);
 
   return (
     <div className="p-4 space-y-6">
@@ -177,7 +182,8 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
 
         <div className="space-y-2">
           {sortedOffers.map((oferta, index) => {
-            const isBest = index === 0;
+            const isBaseCurrency = !oferta.waluta || oferta.waluta === (produkt.waluta || 'PLN');
+            const isBest = index === 0 && isBaseCurrency;
             const isFreeDelivery = oferta.koszt_dostawy === 0;
             const totalPrice = oferta.cena + (oferta.koszt_dostawy || 0);
             
@@ -199,7 +205,7 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
                           Darmowa dostawa
                         </span>
                       ) : oferta.koszt_dostawy !== null ? (
-                        <span>Dostawa: {oferta.koszt_dostawy} {produkt.waluta}</span>
+                        <span>Dostawa: {oferta.koszt_dostawy} {oferta.waluta || produkt.waluta}</span>
                       ) : (
                         <span className="text-emerald-500 dark:text-emerald-400 font-medium">
                           {oferta.darmowa_dostawa_z}
@@ -258,14 +264,14 @@ export function ProductDetails({ produkt }: ProductDetailsProps) {
                         </button>
                         {oferta.cena > 0 && (
                           <div className="font-bold text-sm ml-1 text-foreground">
-                            {totalPrice} {produkt.waluta}
+                            {totalPrice} {oferta.waluta || produkt.waluta}
                           </div>
                         )}
                       </div>
                     )
                   ) : (
                     <div className="font-bold text-sm">
-                      {totalPrice} {produkt.waluta}
+                      {totalPrice} {oferta.waluta || produkt.waluta}
                     </div>
                   )}
                   <div className="flex items-center gap-2 mt-0.5 justify-end">

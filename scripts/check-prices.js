@@ -143,7 +143,7 @@ async function fetchPrice(browser, url) {
       // Mechanizm ratunkowy: regex
       if (!priceText || !/\d/.test(priceText)) {
         const priceContainer = document.querySelector('.product-price, .price, [class*="price"], [itemprop="offers"]');
-        const regex = /\d{1,5}(?:[,.]\d{2})?\s?(?:zł|pln)/gi;
+        const regex = /(?:(?:€|\$|£|usd|eur|gbp)\s*\d{1,5}(?:[,.]\d{2})?)|(?:\d{1,5}(?:[,.]\d{2})?\s*(?:zł|pln|eur|usd|gbp|€|\$|£))/gi;
         
         let matches = priceContainer ? priceContainer.innerText.match(regex) : null;
         if (matches && matches.length > 0) {
@@ -159,6 +159,13 @@ async function fetchPrice(browser, url) {
       }
 
       if (!priceText) return { cena: null, method: 'none', debugText: document.body.innerText.substring(0, 200) };
+      
+      let waluta = 'PLN';
+      const priceLower = priceText.toLowerCase();
+      if (priceLower.includes('$') || priceLower.includes('usd')) waluta = 'USD';
+      else if (priceLower.includes('€') || priceLower.includes('eur')) waluta = 'EUR';
+      else if (priceLower.includes('£') || priceLower.includes('gbp')) waluta = 'GBP';
+
       const cleaned = priceText.replace(/[^\d.,]/g, '').replace(',', '.');
       const cena = parseFloat(cleaned);
       
@@ -188,7 +195,7 @@ async function fetchPrice(browser, url) {
         }
       }
 
-      return { cena: isNaN(cena) ? null : cena, method, raw: priceText, freeDeliveryThreshold, ogImage, fetchedTitle };
+      return { cena: isNaN(cena) ? null : cena, waluta, method, raw: priceText, freeDeliveryThreshold, ogImage, fetchedTitle };
     });
 
     const price = priceData.cena;
@@ -361,9 +368,17 @@ async function main() {
             }
   
             oferta.cena = currentScrapedPrice;
+            if (currentData.waluta) {
+              oferta.waluta = currentData.waluta;
+            }
             hasChanges = true;
           } else {
-            console.log(`Cena bez zmian (${currentScrapedPrice} PLN).`);
+            console.log(`Cena bez zmian (${currentScrapedPrice} ${currentData.waluta || 'PLN'}).`);
+            // Even if price hasn't changed, make sure currency is set correctly
+            if (currentData.waluta && oferta.waluta !== currentData.waluta) {
+              oferta.waluta = currentData.waluta;
+              hasChanges = true;
+            }
           }
         } else {
           stats.failed++;
@@ -396,28 +411,32 @@ async function main() {
     for (const product of profile.produkty) {
       
       if (product.oferty && product.oferty.length > 0) {
-        const lowestOffer = product.oferty.reduce((min, o) => 
-          (o.cena + o.koszt_dostawy < min.cena + min.koszt_dostawy) ? o : min, product.oferty[0]);
-        const minTotal = lowestOffer.cena + lowestOffer.koszt_dostawy;
+        const offersInBaseCurrency = product.oferty.filter(o => !o.waluta || o.waluta === (product.waluta || 'PLN'));
         
-        if (!product.historia) product.historia = [];
-        const lastHistory = product.historia.length > 0 ? product.historia[product.historia.length - 1] : null;
-        
-        // Oblicz trend, o ile mamy z czym porównać
-        if (lastHistory) {
-          if (minTotal < lastHistory.cena) product.trend = "spadek";
-          else if (minTotal > lastHistory.cena) product.trend = "wzrost";
-          else product.trend = "brak_zmian";
-        }
-        
-        // Jeśli ceny się różnią LUB brakuje historii na dziś, modyfikujemy historię
-        if (!lastHistory || lastHistory.cena !== minTotal) {
-           if (lastHistory && lastHistory.data === today) {
-             lastHistory.cena = minTotal;
-           } else {
-             product.historia.push({ data: today, cena: minTotal });
-           }
-           hasChanges = true;
+        if (offersInBaseCurrency.length > 0) {
+          const lowestOffer = offersInBaseCurrency.reduce((min, o) => 
+            (o.cena + o.koszt_dostawy < min.cena + min.koszt_dostawy) ? o : min, offersInBaseCurrency[0]);
+          const minTotal = lowestOffer.cena + lowestOffer.koszt_dostawy;
+          
+          if (!product.historia) product.historia = [];
+          const lastHistory = product.historia.length > 0 ? product.historia[product.historia.length - 1] : null;
+          
+          // Oblicz trend, o ile mamy z czym porównać
+          if (lastHistory) {
+            if (minTotal < lastHistory.cena) product.trend = "spadek";
+            else if (minTotal > lastHistory.cena) product.trend = "wzrost";
+            else product.trend = "brak_zmian";
+          }
+          
+          // Jeśli ceny się różnią LUB brakuje historii na dziś, modyfikujemy historię
+          if (!lastHistory || lastHistory.cena !== minTotal) {
+             if (lastHistory && lastHistory.data === today) {
+               lastHistory.cena = minTotal;
+             } else {
+               product.historia.push({ data: today, cena: minTotal });
+             }
+             hasChanges = true;
+          }
         }
       }
     }
