@@ -279,7 +279,7 @@
             "cena": 54,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null,
-            "waluta": "PLN"
+            "waluta": "USD"
           }
         ],
         "id": "pmskmbnco",
@@ -351,7 +351,7 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-08-09T09:16:02.842Z",
+    "ostatnia_synchronizacja": "2026-08-09T11:00:32.814Z",
     "status": "czesciowy_blad",
     "sprawdzono": 13,
     "sukces": 5,
