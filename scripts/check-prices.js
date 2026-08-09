@@ -36,22 +36,39 @@ async function tryAcceptCookies(page) {
       'button:has-text("Akceptuj wszystkie")',
       'button:has-text("Accept all")',
       'button:has-text("Accept and continue")',
-      'button:has-text("Accept")'
+      'button:has-text("Accept")',
+      'button:has-text("Continue to shop")',
+      'button:has-text("Close")',
+      'button:has-text("Zamknij")',
+      '[aria-label="Close"]',
+      '[class*="close-modal"]',
+      '[class*="close-button"]'
     ];
     
+    let clickedAny = false;
     for (const sel of selectors) {
       const btn = page.locator(sel).first();
       try {
-        if (await btn.isVisible({ timeout: 200 })) {
+        if (await btn.isVisible({ timeout: 150 })) {
           await btn.click({ timeout: 1000 });
-          console.log(`[Debug] Zaakceptowano baner cookies (selector: ${sel})`);
-          await page.waitForTimeout(1000); // Czas na zniknięcie banera
-          return; // Wychodzimy po udanym kliknięciu
+          console.log(`[Debug] Zamknięto baner (selector: ${sel})`);
+          clickedAny = true;
+          await page.waitForTimeout(500); // krótkie oczekiwanie między kliknięciami
         }
       } catch (e) {
         // Ignoruj błędy sprawdzania dla danego selektora
       }
     }
+
+    if (clickedAny) {
+       await page.waitForTimeout(1000); // dodatkowy czas na zniknięcie popupa
+    }
+
+    // Fallback: próba zamknięcia modalów klawiszem Escape
+    try {
+      await page.keyboard.press('Escape');
+    } catch(e) {}
+    
   } catch (err) {
     // Best effort - jeśli się nie uda, trudno
   }
