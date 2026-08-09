@@ -171,6 +171,16 @@ async function fetchPrice(browser, url) {
       if (!priceText) return { cena: null, method: 'none', debugText: document.body.innerText.substring(0, 200) };
       
       let waluta = 'PLN';
+      
+      // Próba odczytania waluty z metadanych lub dedykowanych elementów (np. Toonzshop ma .price_currency_code)
+      const currencyCodeEl = document.querySelector('.price_currency_code, [itemprop="priceCurrency"], meta[itemprop="priceCurrency"], meta[property="product:price:currency"]');
+      if (currencyCodeEl) {
+         const code = (currencyCodeEl.getAttribute('content') || currencyCodeEl.innerText || '').trim().toUpperCase();
+         if (['USD', 'EUR', 'GBP', 'PLN'].includes(code)) {
+            waluta = code;
+         }
+      }
+
       const priceLower = priceText.toLowerCase();
       if (priceLower.includes('$') || priceLower.includes('usd')) waluta = 'USD';
       else if (priceLower.includes('€') || priceLower.includes('eur')) waluta = 'EUR';
