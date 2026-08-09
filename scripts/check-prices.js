@@ -24,6 +24,39 @@ function getRandomUserAgent() {
 
 const delay = (min, max) => new Promise(r => setTimeout(r, Math.floor(Math.random() * (max - min + 1) + min)));
 
+async function tryAcceptCookies(page) {
+  try {
+    const selectors = [
+      '#axeptio_btn_acceptAll',
+      'button:has-text("Zaakceptuj")',
+      'button:has-text("Zgadzam się")',
+      'button:has-text("Akceptuję")',
+      'button:has-text("Rozumiem")',
+      'button:has-text("Przejdź do serwisu")',
+      'button:has-text("Akceptuj wszystkie")',
+      'button:has-text("Accept all")',
+      'button:has-text("Accept and continue")',
+      'button:has-text("Accept")'
+    ];
+    
+    for (const sel of selectors) {
+      const btn = page.locator(sel).first();
+      try {
+        if (await btn.isVisible({ timeout: 200 })) {
+          await btn.click({ timeout: 1000 });
+          console.log(`[Debug] Zaakceptowano baner cookies (selector: ${sel})`);
+          await page.waitForTimeout(1000); // Czas na zniknięcie banera
+          return; // Wychodzimy po udanym kliknięciu
+        }
+      } catch (e) {
+        // Ignoruj błędy sprawdzania dla danego selektora
+      }
+    }
+  } catch (err) {
+    // Best effort - jeśli się nie uda, trudno
+  }
+}
+
 async function fetchPrice(browser, url) {
   const userAgent = getRandomUserAgent();
   const context = await browser.newContext({
@@ -42,6 +75,9 @@ async function fetchPrice(browser, url) {
       console.warn(`[!] page.goto timeout dla ${url}, próbuję dalej z załadowanym stanem DOM...`);
     }
     await page.waitForTimeout(4000); // Oczekujemy dodatkowe sekundy na wyrenderowanie JS i challenge Cloudflare
+    
+    // Próba zamknięcia banera cookies
+    await tryAcceptCookies(page);
     
     console.log(`[Debug] Tytuł strony: ${await page.title()}`);
     // Zrzuty ekranu i HTML można włączyć lokalnie odkomentowując poniższe linie:
