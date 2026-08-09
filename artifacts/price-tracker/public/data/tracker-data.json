@@ -20,7 +20,8 @@
             "url": "https://www.bershka.com/pl/bluza-z-kapturem-i-nadrukiem-spider-man-c0p228633803.html?colorId=251",
             "cena": 0,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": null,
+            "wymaga_recznego_sprawdzenia": true
           }
         ],
         "id": "pms53mv8n",
@@ -45,7 +46,8 @@
             "url": "https://www.bershka.com/pl/koszulka-z-nadrukiem-spider-man-c0p226927190.html?colorId=600",
             "cena": 0,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": null,
+            "wymaga_recznego_sprawdzenia": true
           }
         ],
         "id": "pms53o89v",
@@ -70,7 +72,8 @@
             "url": "https://www.bershka.com/pl/koszulka-z-kr%C3%B3tkim-r%C4%99kawem-spider-man-c0p229737212.html?colorId=810",
             "cena": 0,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": null,
+            "wymaga_recznego_sprawdzenia": true
           }
         ],
         "id": "pms53owao",
@@ -223,7 +226,8 @@
             "url": "https://www.housebrand.com/pl/pl/brelok-z-portfelem-league-of-legends-236jl-mlc?utm_source=facebook&utm_medium=dpa&utm_content=6541997715243&utm_campaign=E_PL_HO_FB_Perf_DPA_BA_New-Arrivals&utm_term=RH&utm_id=6541997722643",
             "cena": 12.99,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": null,
+            "waluta": "PLN"
           }
         ],
         "id": "pms7z13c2",
@@ -248,7 +252,8 @@
             "url": "https://www.rossmann.pl/Produkt/Szampony-w-plynie/Hairmate-Hydrate-szampon-do-wlosow-nawilzajacy-250-ml,2072507,13177?utm_source=google&utm_medium=cpc&utm_campaign=Pmax_wlosy_SEM_rsm&utm_id=22389684451&gad_source=1&gad_campaignid=22379830977&gbraid=0AAAAACzelrSsdL31BiLOTAlYmRCuQcgut&gclid=EAIaIQobChMIj_rVo6CRlgMVlAuiAx3XARhbEAQYBCABEgLFs_D_BwE",
             "cena": 37.99,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": "199"
+            "darmowa_dostawa_z": "199",
+            "waluta": "PLN"
           }
         ],
         "id": "pmskh6f45",
@@ -260,8 +265,8 @@
         ]
       },
       {
-        "nazwa": "Kombinezon",
-        "zdjecie_url": "",
+        "nazwa": "\"Topäaz\" loose and reversible strappy jumpsuit, Khaki | Toonzshop",
+        "zdjecie_url": "https://uk.toonzshop.com/upload/image/topaaz--loose-and-reversible-strappy-jumpsuit--khaki-p-image-354216-moyenne.jpg",
         "kategoria": "Inne",
         "waluta": "PLN",
         "trend": "brak_zmian",
@@ -271,9 +276,10 @@
             "id": "off17862083340710",
             "sklep": "Uk.toonzshop.com",
             "url": "https://uk.toonzshop.com/topaaz-harem-pant-jumpsuit-khaki-en.html",
-            "cena": 0,
+            "cena": 100,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": null,
+            "waluta": "USD"
           }
         ],
         "id": "pmskmbnco",
@@ -308,7 +314,8 @@
             "url": "https://www.rossmann.pl/Produkt/Lakiery-klasyczne/Orly-Breathable-lakier-do-paznokci-Heart-Beet-11-ml,2075021,13035?srsltid=AfmBOor7VLFKHJUMiqdvUOKOanjuJFlas4r5vL8W2Mz3tYyW2C_PzLHf",
             "cena": 28.49,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": "199"
+            "darmowa_dostawa_z": "199",
+            "waluta": "PLN"
           },
           {
             "id": "off17851511885811",
@@ -316,7 +323,8 @@
             "url": "https://orlybeauty.pl/pl/p,1291-orly_breathable_20992_heart_beet",
             "cena": 49,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": null,
+            "waluta": "PLN"
           },
           {
             "id": "off17851511885812",
@@ -339,11 +347,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-08-09T08:11:46.351Z",
+    "ostatnia_synchronizacja": "2026-08-09T09:06:56.853Z",
     "status": "czesciowy_blad",
     "sprawdzono": 13,
-    "sukces": 4,
-    "bledy": 9,
-    "pominieto": 0
+    "sukces": 5,
+    "bledy": 5,
+    "pominieto": 3
   }
 }
