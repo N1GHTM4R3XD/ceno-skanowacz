@@ -137,20 +137,15 @@ async function fetchPrice(browser, url) {
           if (priceLink) priceText = priceLink.innerText;
         }
       } else if (urlString.includes('toonzshop.com')) {
-        const candidates = Array.from(document.querySelectorAll('.geProductPrice, .obj_prix_with_symbol, .price-item, .product__price, [data-price], .price, [class*="price"]'));
-        const visible = candidates.filter(el => {
-          const rect = el.getBoundingClientRect();
-          const style = window.getComputedStyle(el);
-          return rect.width > 0 && rect.height > 0 && 
-                 style.display !== 'none' && 
-                 style.visibility !== 'hidden' && 
-                 style.opacity !== '0' && 
-                 /\d/.test(el.innerText) &&
-                 !el.closest('.similar-products, .related-products, [class*="related"], [class*="similar"], footer, header');
-        });
-        
-        if (visible.length > 0) {
-           priceText = visible[0].innerText;
+        const mainContainer = document.querySelector('.fa_bloc_prix, [itemtype*="Product"], form[action*="/cart/add"]');
+        if (mainContainer) {
+           const metaPrice = mainContainer.querySelector('[itemprop="price"]');
+           if (metaPrice && metaPrice.getAttribute('content')) {
+              priceText = metaPrice.getAttribute('content');
+           } else {
+              const priceEl = mainContainer.querySelector('.obj_prix_with_symbol, .geProductPrice, .price, [class*="price"]');
+              if (priceEl) priceText = priceEl.innerText || priceEl.textContent;
+           }
         }
       } else if (urlString.includes('wearmedicine.com')) {
         const el = document.querySelector('meta[itemprop="price"]')
