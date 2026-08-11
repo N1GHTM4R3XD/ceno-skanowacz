@@ -87,7 +87,12 @@ async function fetchPrice(browser, url) {
   
   try {
     try {
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+      let finalUrl = url;
+      // Próba wymuszenia PLN dla Toonzshop, jeśli to możliwe
+      if (finalUrl.includes('toonzshop.com') && !finalUrl.includes('currency=')) {
+        finalUrl += (finalUrl.includes('?') ? '&' : '?') + 'currency=PLN';
+      }
+      await page.goto(finalUrl, { waitUntil: 'domcontentloaded', timeout: 25000 });
     } catch (gotoErr) {
       console.warn(`[!] page.goto timeout dla ${url}, próbuję dalej z załadowanym stanem DOM...`);
     }
@@ -132,13 +137,20 @@ async function fetchPrice(browser, url) {
           if (priceLink) priceText = priceLink.innerText;
         }
       } else if (urlString.includes('toonzshop.com')) {
-        const form = document.querySelector('form[action*="/cart/add"]');
-        const priceEl = form ? form.querySelector('[class*="price"]') : null;
-        if (priceEl) {
-          priceText = priceEl.innerText;
-        } else {
-          const el = document.querySelector('.price-item--sale, .price-item--regular, .product__price, [data-price], .price');
-          if (el) priceText = el.innerText;
+        const candidates = Array.from(document.querySelectorAll('.geProductPrice, .obj_prix_with_symbol, .price-item, .product__price, [data-price], .price, [class*="price"]'));
+        const visible = candidates.filter(el => {
+          const rect = el.getBoundingClientRect();
+          const style = window.getComputedStyle(el);
+          return rect.width > 0 && rect.height > 0 && 
+                 style.display !== 'none' && 
+                 style.visibility !== 'hidden' && 
+                 style.opacity !== '0' && 
+                 /\d/.test(el.innerText) &&
+                 !el.closest('.similar-products, .related-products, [class*="related"], [class*="similar"], footer, header');
+        });
+        
+        if (visible.length > 0) {
+           priceText = visible[0].innerText;
         }
       } else if (urlString.includes('wearmedicine.com')) {
         const el = document.querySelector('meta[itemprop="price"]')
