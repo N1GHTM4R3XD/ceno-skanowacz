@@ -311,7 +311,13 @@
             "darmowa_dostawa_z": null
           }
         ],
-        "id": "pmt7edcar"
+        "id": "pmt7edcar",
+        "historia": [
+          {
+            "data": "2026-08-25",
+            "cena": 0
+          }
+        ]
       }
     ],
     "avatarUrl": "https://media1.tenor.com/m/TYraeFkQyXcAAAAC/sebastian-solace-pressure.gif"
@@ -370,11 +376,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-08-24T14:51:03.091Z",
+    "ostatnia_synchronizacja": "2026-08-25T04:47:15.727Z",
     "status": "czesciowy_blad",
-    "sprawdzono": 13,
+    "sprawdzono": 14,
     "sukces": 5,
-    "bledy": 5,
+    "bledy": 6,
     "pominieto": 3
   }
 }
