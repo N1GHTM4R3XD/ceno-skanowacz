@@ -295,20 +295,21 @@
         ]
       },
       {
-        "nazwa": "Kobo Ereader",
+        "nazwa": "Kobo Jasny BW | eReader | 16\" bezdotykowy ekran dotykowy z ComfortLight Pro | Dark Mode Option | Audiobooks | Wodoodporny | 16 GB of Storage | czarny : Amazon.pl: Elektronika",
         "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "brak_zmian",
+        "trend": "wzrost",
         "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17875856981790",
             "sklep": "Amazon.pl",
             "url": "https://www.amazon.pl/Kobo-BW-bezdotykowy-ComfortLight-Wodoodporny/dp/B0CZXYV8GT/ref=sr_1_5?dib=eyJ2IjoiMSJ9.groEAFyHxU7PtXd8yAhZ5ank6suu2c9hil0VSynGPIe0FKVxsHc8bBO5QcWjhsa4M6BPraJyO7QOuneMP6wlTVncd0YNi28MQKRJwDo4wlX5SanWiKEnnK0fci2w70eZ9kpwDuKzymuI1_Sxb-oA79SKAaL1ZugF-IWu-QhH4-fGsfaYIoN4kuxj-6iYFsQt5DIdEOu0kNxDTF1tmP1Ord-UHdjQZzXhEYdnwfKSAJtx1WWyfFm9K6Jm3UOS3OclbagWo9RXmaaUMRM29zJi5TPtSxyBekUj1e-Gdjl5um0.xRAXz8XaygzgGM_8AIPVF9P9RDh1vbEzewmMTtG7fNA&dib_tag=se&qid=1787585585&refinements=p_4%3AKobo&s=electronics&sr=1-5",
-            "cena": 0,
+            "cena": 649,
             "koszt_dostawy": null,
-            "darmowa_dostawa_z": null
+            "darmowa_dostawa_z": null,
+            "waluta": "PLN"
           }
         ],
         "id": "pmt7edcar",
@@ -316,6 +317,10 @@
           {
             "data": "2026-08-25",
             "cena": 0
+          },
+          {
+            "data": "2026-08-26",
+            "cena": 649
           }
         ]
       }
@@ -376,11 +381,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-08-26T04:48:52.310Z",
+    "ostatnia_synchronizacja": "2026-08-26T14:53:15.378Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 5,
-    "bledy": 6,
+    "sukces": 6,
+    "bledy": 5,
     "pominieto": 3
   }
 }
