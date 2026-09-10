@@ -243,14 +243,14 @@
         "zdjecie_url": "https://pro-fra-s3-productsassets.rossmann.pl/product_1_large/2072507_1280_720_1785437612.webp",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "brak_zmian",
+        "trend": "spadek",
         "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17861996920370",
             "sklep": "Rossmann.pl",
             "url": "https://www.rossmann.pl/Produkt/Szampony-w-plynie/Hairmate-Hydrate-szampon-do-wlosow-nawilzajacy-250-ml,2072507,13177?utm_source=google&utm_medium=cpc&utm_campaign=Pmax_wlosy_SEM_rsm&utm_id=22389684451&gad_source=1&gad_campaignid=22379830977&gbraid=0AAAAACzelrSsdL31BiLOTAlYmRCuQcgut&gclid=EAIaIQobChMIj_rVo6CRlgMVlAuiAx3XARhbEAQYBCABEgLFs_D_BwE",
-            "cena": 37.99,
+            "cena": 24.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "199",
             "waluta": "PLN"
@@ -261,6 +261,10 @@
           {
             "data": "2026-08-08",
             "cena": 37.99
+          },
+          {
+            "data": "2026-09-10",
+            "cena": 24.99
           }
         ]
       },
@@ -389,7 +393,7 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-09-09T08:54:34.151Z",
+    "ostatnia_synchronizacja": "2026-09-10T08:53:51.262Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
     "sukces": 5,
