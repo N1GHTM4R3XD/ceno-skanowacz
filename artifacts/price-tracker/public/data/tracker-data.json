@@ -393,11 +393,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-09-11T08:50:52.231Z",
+    "ostatnia_synchronizacja": "2026-09-11T17:43:11.460Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 6,
-    "bledy": 5,
+    "sukces": 5,
+    "bledy": 6,
     "pominieto": 3
   }
 }
