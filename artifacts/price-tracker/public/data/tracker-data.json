@@ -362,7 +362,7 @@
             "id": "off17851511885810",
             "sklep": "Rossmann.pl",
             "url": "https://www.rossmann.pl/Produkt/Lakiery-klasyczne/Orly-Breathable-lakier-do-paznokci-Heart-Beet-11-ml,2075021,13035?srsltid=AfmBOor7VLFKHJUMiqdvUOKOanjuJFlas4r5vL8W2Mz3tYyW2C_PzLHf",
-            "cena": 51.99,
+            "cena": 34.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "199",
             "waluta": "PLN"
@@ -397,11 +397,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-09-16T18:06:33.190Z",
+    "ostatnia_synchronizacja": "2026-09-17T09:22:40.521Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 5,
-    "bledy": 6,
+    "sukces": 6,
+    "bledy": 5,
     "pominieto": 3
   }
 }
