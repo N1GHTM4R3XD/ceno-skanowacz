@@ -311,14 +311,14 @@
         "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "brak_zmian",
+        "trend": "spadek",
         "alert_wlaczony": true,
         "oferty": [
           {
             "id": "off17875856981790",
             "sklep": "Amazon.pl",
             "url": "https://www.amazon.pl/Kobo-BW-bezdotykowy-ComfortLight-Wodoodporny/dp/B0CZXYV8GT/ref=sr_1_5?dib=eyJ2IjoiMSJ9.groEAFyHxU7PtXd8yAhZ5ank6suu2c9hil0VSynGPIe0FKVxsHc8bBO5QcWjhsa4M6BPraJyO7QOuneMP6wlTVncd0YNi28MQKRJwDo4wlX5SanWiKEnnK0fci2w70eZ9kpwDuKzymuI1_Sxb-oA79SKAaL1ZugF-IWu-QhH4-fGsfaYIoN4kuxj-6iYFsQt5DIdEOu0kNxDTF1tmP1Ord-UHdjQZzXhEYdnwfKSAJtx1WWyfFm9K6Jm3UOS3OclbagWo9RXmaaUMRM29zJi5TPtSxyBekUj1e-Gdjl5um0.xRAXz8XaygzgGM_8AIPVF9P9RDh1vbEzewmMTtG7fNA&dib_tag=se&qid=1787585585&refinements=p_4%3AKobo&s=electronics&sr=1-5",
-            "cena": 669,
+            "cena": 649.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null,
             "waluta": "PLN"
@@ -361,6 +361,10 @@
           {
             "data": "2026-09-30",
             "cena": 669
+          },
+          {
+            "data": "2026-10-04",
+            "cena": 649.99
           }
         ]
       }
@@ -421,11 +425,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-10-04T10:31:43.876Z",
+    "ostatnia_synchronizacja": "2026-10-04T18:06:03.549Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 5,
-    "bledy": 6,
+    "sukces": 6,
+    "bledy": 5,
     "pominieto": 3
   }
 }
