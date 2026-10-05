@@ -287,7 +287,7 @@
             "cena": 85,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null,
-            "waluta": "USD"
+            "waluta": "EUR"
           }
         ],
         "id": "pmskmbnco",
@@ -311,7 +311,7 @@
         "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "spadek",
+        "trend": "brak_zmian",
         "alert_wlaczony": true,
         "oferty": [
           {
@@ -425,11 +425,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-10-04T18:06:03.549Z",
+    "ostatnia_synchronizacja": "2026-10-05T11:21:51.349Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 6,
-    "bledy": 5,
+    "sukces": 5,
+    "bledy": 6,
     "pominieto": 3
   }
 }
