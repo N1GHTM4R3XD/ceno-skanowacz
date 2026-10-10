@@ -311,7 +311,7 @@
         "zdjecie_url": "",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "spadek",
+        "trend": "brak_zmian",
         "alert_wlaczony": true,
         "oferty": [
           {
@@ -429,7 +429,7 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-10-10T10:32:52.523Z",
+    "ostatnia_synchronizacja": "2026-10-10T18:25:09.714Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
     "sukces": 6,
