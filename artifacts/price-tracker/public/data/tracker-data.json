@@ -284,7 +284,7 @@
             "id": "off17862083340710",
             "sklep": "Uk.toonzshop.com",
             "url": "https://uk.toonzshop.com/topaaz-harem-pant-jumpsuit-khaki-en.html",
-            "cena": 84,
+            "cena": 85,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null,
             "waluta": "USD"
@@ -383,7 +383,7 @@
     "avatarColor": "#D97706",
     "produkty": [
       {
-        "nazwa": "Orly Breathable  lakier do paznokci, Heart Beet",
+        "nazwa": "ORLY",
         "zdjecie_url": "https://pro-fra-s3-productsassets.rossmann.pl/product_1_large/2075021_1280_720_1727388665.webp",
         "kategoria": "Inne",
         "waluta": "PLN",
@@ -429,7 +429,7 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-10-13T20:11:07.618Z",
+    "ostatnia_synchronizacja": "2026-10-14T09:26:14.334Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
     "sukces": 6,
