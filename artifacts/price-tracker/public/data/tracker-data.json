@@ -383,7 +383,7 @@
     "avatarColor": "#D97706",
     "produkty": [
       {
-        "nazwa": "Orly Breathable  lakier do paznokci, Heart Beet",
+        "nazwa": "ORLY",
         "zdjecie_url": "https://pro-fra-s3-productsassets.rossmann.pl/product_1_large/2075021_1280_720_1727388665.webp",
         "kategoria": "Inne",
         "waluta": "PLN",
@@ -429,11 +429,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-10-18T08:47:06.286Z",
+    "ostatnia_synchronizacja": "2026-10-18T17:14:08.097Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 6,
-    "bledy": 5,
+    "sukces": 5,
+    "bledy": 6,
     "pominieto": 3
   }
 }
