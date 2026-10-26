@@ -429,11 +429,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-10-25T17:34:11.664Z",
+    "ostatnia_synchronizacja": "2026-10-26T10:13:11.959Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 5,
-    "bledy": 6,
+    "sukces": 6,
+    "bledy": 5,
     "pominieto": 3
   }
 }
