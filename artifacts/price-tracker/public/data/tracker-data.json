@@ -243,7 +243,7 @@
         "zdjecie_url": "https://pro-fra-s3-productsassets.rossmann.pl/product_1_large/2072507_1280_720_1785437612.webp",
         "kategoria": "Inne",
         "waluta": "PLN",
-        "trend": "spadek",
+        "trend": "brak_zmian",
         "alert_wlaczony": true,
         "oferty": [
           {
@@ -433,11 +433,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-10-29T10:50:02.146Z",
+    "ostatnia_synchronizacja": "2026-10-29T19:31:00.315Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 5,
-    "bledy": 6,
+    "sukces": 6,
+    "bledy": 5,
     "pominieto": 3
   }
 }
