@@ -433,11 +433,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-11-11T11:48:06.160Z",
+    "ostatnia_synchronizacja": "2026-11-11T21:13:19.761Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 6,
-    "bledy": 5,
+    "sukces": 5,
+    "bledy": 6,
     "pominieto": 3
   }
 }
