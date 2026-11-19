@@ -292,7 +292,7 @@
             "id": "off17862083340710",
             "sklep": "Uk.toonzshop.com",
             "url": "https://uk.toonzshop.com/topaaz-harem-pant-jumpsuit-khaki-en.html",
-            "cena": 83,
+            "cena": 71,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null,
             "waluta": "USD"
@@ -402,7 +402,7 @@
             "id": "off17851511885810",
             "sklep": "Rossmann.pl",
             "url": "https://www.rossmann.pl/Produkt/Lakiery-klasyczne/Orly-Breathable-lakier-do-paznokci-Heart-Beet-11-ml,2075021,13035?srsltid=AfmBOor7VLFKHJUMiqdvUOKOanjuJFlas4r5vL8W2Mz3tYyW2C_PzLHf",
-            "cena": 28.49,
+            "cena": 51.99,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": "199",
             "waluta": "PLN"
@@ -437,11 +437,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-11-18T21:47:33.388Z",
+    "ostatnia_synchronizacja": "2026-11-19T12:45:48.951Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 6,
-    "bledy": 5,
+    "sukces": 5,
+    "bledy": 6,
     "pominieto": 3
   }
 }
