@@ -292,7 +292,7 @@
             "id": "off17862083340710",
             "sklep": "Uk.toonzshop.com",
             "url": "https://uk.toonzshop.com/topaaz-harem-pant-jumpsuit-khaki-en.html",
-            "cena": 71,
+            "cena": 70,
             "koszt_dostawy": null,
             "darmowa_dostawa_z": null,
             "waluta": "USD"
@@ -437,11 +437,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-11-19T22:04:50.805Z",
+    "ostatnia_synchronizacja": "2026-11-20T12:42:28.876Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 5,
-    "bledy": 6,
+    "sukces": 6,
+    "bledy": 5,
     "pominieto": 3
   }
 }
