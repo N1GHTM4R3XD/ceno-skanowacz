@@ -437,11 +437,11 @@
     "avatarUrl": ""
   },
   "_meta": {
-    "ostatnia_synchronizacja": "2026-11-21T20:27:43.549Z",
+    "ostatnia_synchronizacja": "2026-11-22T12:26:49.336Z",
     "status": "czesciowy_blad",
     "sprawdzono": 14,
-    "sukces": 5,
-    "bledy": 6,
+    "sukces": 6,
+    "bledy": 5,
     "pominieto": 3
   }
 }
